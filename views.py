@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.views.generic import ListView
 
@@ -7,6 +8,9 @@ class NotificationsView(ListView):
     """View for notifications for clients/mechanics."""
 
     model = Notification
+    context_object_name = 'notifications_list'
+    
+    paginate_by = getattr(settings, 'PAGINATE_BY', None)
 
     def get_queryset(self):
         """Filter notifications by currently logged in user."""
