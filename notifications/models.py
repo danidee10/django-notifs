@@ -13,7 +13,7 @@ class NotificationManager(models.Manager):
         return queryset.filter(is_read=False).order_by('-create_date')
 
 
-class Notification(TrackDates):
+class Notification(models.Model):
     """Model for notifications."""
 
     source = models.ForeignKey(User)

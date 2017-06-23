@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(name='django-notifs',
-      version='1.0',
+      version='1.1',
       description='Re-usable notification app for Django',
       url='https://github.com/danidee10/django-notifs',
       author='Osaetin Daniel',
