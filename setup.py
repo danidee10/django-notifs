@@ -9,6 +9,7 @@ setup(name='django-notifs',
       author='Osaetin Daniel',
       author_email='osaetindaniel@gmail.com',
       license='GPL',
+      packages=['.'],
       install_requires=[
           'django',
       ],

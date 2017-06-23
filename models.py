@@ -3,9 +3,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from ogamechanic.helpers import TrackDates
-
-
 class NotificationManager(models.Manager):
     """Custom manager to add extra functionality."""
 
@@ -27,6 +24,9 @@ class Notification(TrackDates):
     obj = models.IntegerField()  # id of the object
     url = models.URLField()  # by default is absolute_url of the object
     is_read = models.BooleanField(default=False)
+
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
 
     # e.g 'a New Quote'
     short_description = models.CharField(max_length=100)
