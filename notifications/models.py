@@ -16,8 +16,8 @@ class NotificationManager(models.Manager):
 class Notification(models.Model):
     """Model for notifications."""
 
-    source = models.ForeignKey(User)
-    source_display_name = models.CharField(max_length=150)
+    source = models.ForeignKey(User, null=True)
+    source_display_name = models.CharField(max_length=150, null=True)
     recipent = models.ForeignKey(User, related_name='notifications')
     action = models.CharField(max_length=50)  # e.g 'Created'
     category = models.CharField(max_length=50)
@@ -35,10 +35,13 @@ class Notification(models.Model):
     objects = NotificationManager()
 
     def __str__(self):
-        res = '{}: {} {} {} => {}'.format(
-            self.category, self.source, self.action,
-            self.short_description, self.recipent
+        if self.source:
+            res = '{}: {} {} {} => {}'.format(
+                self.category, self.source, self.action,
+                self.short_description, self.recipent
             )
+        else:
+            self.short_description
 
         return res
 
