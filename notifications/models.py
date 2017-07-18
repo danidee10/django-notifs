@@ -41,7 +41,7 @@ class Notification(models.Model):
                 self.short_description, self.recipent
             )
         else:
-            self.short_description
+            res = self.short_description
 
         return res
 
