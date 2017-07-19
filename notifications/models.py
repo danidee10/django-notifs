@@ -16,6 +16,10 @@ class NotificationManager(models.Manager):
 class Notification(models.Model):
     """Model for notifications."""
 
+    class Meta:
+        """Specify ordering for objects."""
+        ordering = ('-create_date',)
+
     source = models.ForeignKey(User, null=True)
     source_display_name = models.CharField(max_length=150, null=True)
     recipent = models.ForeignKey(User, related_name='notifications')
