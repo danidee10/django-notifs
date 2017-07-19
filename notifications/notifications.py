@@ -5,7 +5,7 @@ To include the notifications varialbe in all templates
 
 
 def notifications(request):
-    """Get the total number of unread notifications for authenticated users."""
+    """Make notifications available in all templates."""
     if not request.user.is_authenticated:
         return {}
 
