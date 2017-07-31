@@ -18,7 +18,7 @@ class Notification(models.Model):
 
     class Meta:
         """Specify ordering for objects."""
-        ordering = ('-create_date',)
+        ordering = ('-id',)
 
     source = models.ForeignKey(User, null=True)
     source_display_name = models.CharField(max_length=150, null=True)

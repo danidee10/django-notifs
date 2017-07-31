@@ -14,7 +14,7 @@ def package_files(directory):
 extra_files = package_files('notifications')
 
 setup(name='django-notifs',
-      version='1.4',
+      version='1.5',
       description='Re-usable notification app for Django',
       url='https://github.com/danidee10/django-notifs',
       author='Osaetin Daniel',
