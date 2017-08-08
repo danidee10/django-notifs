@@ -10,7 +10,7 @@ class NotificationManager(models.Manager):
         """Return all unread notifications."""
         queryset = self.get_queryset()
 
-        return queryset.filter(is_read=False).order_by('-create_date')
+        return queryset.filter(is_read=False)
 
 
 class Notification(models.Model):
