@@ -3,14 +3,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class NotificationManager(models.Manager):
-    """Custom manager to add extra functionality."""
+class NotificationQuerySet(models.QuerySet):
+    """Custom manager to add extra methods to Notification queryset."""
 
-    def unread(self):
+    def all_unread(self):
         """Return all unread notifications."""
-        queryset = self.get_queryset()
 
-        return queryset.filter(is_read=False)
+        return self.filter(is_read=False)
+
+    def all_read(self):
+        """Return all read notifications."""
+
+        return self.filter(is_read=True)
 
 
 class Notification(models.Model):
@@ -36,7 +40,7 @@ class Notification(models.Model):
     short_description = models.CharField(max_length=100)
 
     # register queryset
-    objects = NotificationManager()
+    objects = NotificationQuerySet.as_manager()
 
     def __str__(self):
         if self.source:
