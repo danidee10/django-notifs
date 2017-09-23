@@ -25,13 +25,15 @@ class Notification(models.Model):
         """Specify ordering for objects."""
         ordering = ('-id',)
 
-    source = models.ForeignKey(User, null=True)
+    source = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     source_display_name = models.CharField(max_length=150, null=True)
-    recipent = models.ForeignKey(User, related_name='notifications')
+    recipent = models.ForeignKey(
+        User, related_name='notifications', on_delete=models.CASCADE
+        )
     action = models.CharField(max_length=50)  # e.g 'Created'
     category = models.CharField(max_length=50)
     obj = models.IntegerField()  # id of the object
-    url = models.URLField()  # TODO default is absolute_url of the object
+    url = models.URLField()  # url of the object (E.g calling obj.absolute_url)
     is_read = models.BooleanField(default=False)
 
     create_date = models.DateTimeField(auto_now_add=True)
