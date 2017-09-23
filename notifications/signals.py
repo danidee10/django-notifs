@@ -6,9 +6,10 @@ from django.dispatch import Signal, receiver
 from django.conf import settings
 
 from .models import Notification
+from . import NotificationError
 
 notify = Signal(providing_args=('user', 'actor', 'action' 'obj', 'url'))
-read = Signal(providing_args=('notify_id'))
+read = Signal(providing_args=('notify_id', 'recipent'))
 
 
 def import_attr(path):
@@ -33,7 +34,17 @@ def create_notification(sender, **kwargs):
 
 @receiver(read)
 def read_notification(sender, **kwargs):
-    """Mark notification as read."""
+    """
+    Mark notification as read.
+
+    Raises NotificationError if the user doesn't have access
+    to read the notification
+    """
     notify_id = kwargs['notify_id']
-    notify_obj = Notification.objects.get(id=notify_id)
-    notify_obj.read()
+    recipent = kwargs['recipent']
+    notification = Notification.objects.get(id=notify_id)
+
+    if recipent != notification.recipent:
+        raise NotificationError('You cannot read this notification')
+
+    notification.read()

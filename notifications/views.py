@@ -9,7 +9,7 @@ class NotificationsView(ListView):
 
     model = Notification
     context_object_name = 'notifications_list'
-    
+
     paginate_by = getattr(settings, 'PAGINATE_BY', None)
 
     def get_queryset(self):

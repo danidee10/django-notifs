@@ -3,8 +3,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class NotificationQuerySet(models.QuerySet):
-    """Custom manager to add extra methods to Notification queryset."""
+    """Notifications QuerySet."""
 
     def all_unread(self):
         """Return all unread notifications."""
@@ -30,7 +31,7 @@ class Notification(models.Model):
     action = models.CharField(max_length=50)  # e.g 'Created'
     category = models.CharField(max_length=50)
     obj = models.IntegerField()  # id of the object
-    url = models.URLField()  # by default is absolute_url of the object
+    url = models.URLField()  # TODO default is absolute_url of the object
     is_read = models.BooleanField(default=False)
 
     create_date = models.DateTimeField(auto_now_add=True)
