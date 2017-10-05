@@ -28,7 +28,7 @@ class NotificationSignalTestCase(TestCase):
         # Create NOtification for User2
         notification = Notification.objects.create(
             source=self.user1, source_display_name='User 1',
-            recipent=self.user2, action='Notified',
+            recipient=self.user2, action='Notified',
             category='General notification', obj=1, url='http://example.com',
             is_read=False
         )
@@ -39,7 +39,7 @@ class NotificationSignalTestCase(TestCase):
 
             read.send,
             sender=self.__class__, notify_id=notification.id,
-            recipent=self.user1
+            recipient=self.user1
             )
 
     def test_user_can_read_notifications(self):
@@ -47,7 +47,7 @@ class NotificationSignalTestCase(TestCase):
         # Create NOtification for User1
         notification = Notification.objects.create(
             source=self.user2, source_display_name='User 2',
-            recipent=self.user1, action='Notified',
+            recipient=self.user1, action='Notified',
             category='General notification', obj=1, url='http://example.com',
             is_read=False
         )
@@ -55,7 +55,7 @@ class NotificationSignalTestCase(TestCase):
         # Try and Read the notification as user1
         read.send(
             sender=self.__class__, notify_id=notification.id,
-            recipent=self.user1
+            recipient=self.user1
             )
 
         notification.refresh_from_db()
