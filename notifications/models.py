@@ -27,7 +27,7 @@ class Notification(models.Model):
 
     source = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     source_display_name = models.CharField(max_length=150, null=True)
-    recipent = models.ForeignKey(
+    recipient = models.ForeignKey(
         User, related_name='notifications', on_delete=models.CASCADE
         )
     action = models.CharField(max_length=50)  # e.g 'Created'
@@ -49,7 +49,7 @@ class Notification(models.Model):
         if self.source:
             res = '{}: {} {} {} => {}'.format(
                 self.category, self.source, self.action,
-                self.short_description, self.recipent
+                self.short_description, self.recipient
             )
         else:
             res = self.short_description

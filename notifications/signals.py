@@ -9,7 +9,7 @@ from .models import Notification
 from . import NotificationError
 
 notify = Signal(providing_args=('user', 'actor', 'action' 'obj', 'url'))
-read = Signal(providing_args=('notify_id', 'recipent'))
+read = Signal(providing_args=('notify_id', 'recipient'))
 
 
 def import_attr(path):
@@ -41,10 +41,10 @@ def read_notification(sender, **kwargs):
     to read the notification
     """
     notify_id = kwargs['notify_id']
-    recipent = kwargs['recipent']
+    recipient = kwargs['recipient']
     notification = Notification.objects.get(id=notify_id)
 
-    if recipent != notification.recipent:
+    if recipient != notification.recipient:
         raise NotificationError('You cannot read this notification')
 
     notification.read()

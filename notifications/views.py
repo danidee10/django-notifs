@@ -16,4 +16,4 @@ class NotificationsView(ListView):
         """Filter notifications by currently logged in user."""
         queryset = super().get_queryset()
 
-        return queryset.filter(recipent=self.request.user)
+        return queryset.filter(recipient=self.request.user)
