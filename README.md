@@ -74,7 +74,7 @@ The fields in the `args` dictionary map to the fields in the `Notification` mode
 The values of the fields can easily be used to construct the notification message.
 
 
-### Reading notification
+### Reading notifications
 To read a notification simply send the read signal like this
 
 ```python
@@ -92,3 +92,14 @@ if notify_id:
 
 It's really important to pass the correct recipient to the read signal, Internally it's used to check if the user has the right to read the notification. If you pass in the wrong recipient or you omit it entirely, `django-notifs` would raise a
 `NotificationError`
+
+### Accessing Notifications in templates
+django-notifs comes with a Context manager that you can use to display notifications in your templates. Include it with
+
+'context_processors': [
+    ...
+    'notifications.notifications.notifications',
+    ...
+],
+
+This makes a user's notifications available in all templates as a template variable named "notifications"
