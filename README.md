@@ -96,10 +96,12 @@ It's really important to pass the correct recipient to the read signal, Internal
 ### Accessing Notifications in templates
 django-notifs comes with a Context manager that you can use to display notifications in your templates. Include it with
 
+ ```bash
 'context_processors': [
     ...
     'notifications.notifications.notifications',
     ...
 ],
+```
 
 This makes a user's notifications available in all templates as a template variable named "notifications"
