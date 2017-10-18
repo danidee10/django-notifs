@@ -66,6 +66,7 @@ The fields in the `args` dictionary map to the fields in the `Notification` mode
   #### source: A ForeignKey to Django's User model (Can be null if it's not a User to User Notification)
   #### source_display_name: A User Friendly name for the source of the notification.
   #### recipient: The Recipient of the notification. It's a ForeignKey to Django's User model
+  #### category: Arbitrary category that can be used to group messages.
   #### action: Verbal action for the notification E.g Sent, Cancelled, Bought e.t.c
   #### obj: The id of the object associated with the notification (Can be null)
   #### short_description: The body of the notification.
@@ -105,3 +106,7 @@ django-notifs comes with a Context manager that you can use to display notificat
 ```
 
 This makes a user's notifications available in all templates as a template variable named "notifications"
+
+
+## TODO
+Add Websocket Support
