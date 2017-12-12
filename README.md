@@ -1,6 +1,6 @@
 Notifications (InApp, Email, SMS, CustomBackend) for Django
 
-# This Repo is currently in Beta (Which means certain things can change without prior notice). Though i currently use it in production. You're welcome to try it and drop your feeback.
+## This Repo is currently in Beta (Which means certain things can change without prior notice). Though i currently use it in production. You're welcome to try it and drop your feeback.
 
 django-notifs is a notifications app for Django. Basically it allows you to notify users about events that occur in your application E.g
 
