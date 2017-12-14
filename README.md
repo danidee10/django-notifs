@@ -109,7 +109,7 @@ This makes a user's notifications available in all templates as a template varia
 
 
 ## Sending Emails in the background
-That is beyond the scope of this project, though it can easily be achieved with a third party extension (django-celery-email)[https://github.com/pmclanahan/django-celery-email] after the installation it's as easy as setting
+That is beyond the scope of this project, though it can easily be achieved with a third party extension [django-celery-email](https://github.com/pmclanahan/django-celery-email) after the installation it's as easy as setting
 
 ```bash
 EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
