@@ -114,7 +114,7 @@ That is beyond the scope of this project, though it can easily be achieved with 
 ```bash
 EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 ```
-in your applications settings
+in your application's settings.
 
 ## TODO
 Add Websocket Support
