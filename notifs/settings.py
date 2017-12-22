@@ -119,9 +119,6 @@ USE_L10N = True
 USE_TZ = True
 
 # Notifications
-NOTIFICATION_ADAPTERS = [
-    'notifications.adapters.EmailAdapter', 'notifications.adapters.SMSAdapter'
-    ]
 PAGINATE_BY = 15
 
 # Static files (CSS, JavaScript, Images)
