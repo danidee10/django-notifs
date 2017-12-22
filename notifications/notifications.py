@@ -1,6 +1,7 @@
-"""Custom context processor.
+"""
+Context Processor
 
-To include the notifications varialbe in all templates
+To include the notifications varialbe in all templates.
 """
 
 

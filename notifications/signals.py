@@ -2,11 +2,12 @@
 
 import importlib
 
-from django.dispatch import Signal, receiver
 from django.conf import settings
+from django.dispatch import Signal, receiver
 
-from .models import Notification
 from . import NotificationError
+from .models import Notification
+
 
 notify = Signal(providing_args=('user', 'actor', 'action' 'obj', 'url'))
 read = Signal(providing_args=('notify_id', 'recipient'))
@@ -18,8 +19,9 @@ def import_attr(path):
 
     return getattr(importlib.import_module(package), attr)
 
+
 @receiver(notify)
-def create_notification(sender, **kwargs):
+def create_notification(**kwargs):
     """Notify signal receiver."""
     # make fresh copy and retain kwargs
     params = kwargs.copy()
@@ -32,8 +34,9 @@ def create_notification(sender, **kwargs):
         adapter = import_attr(adapter_path)
         adapter(**kwargs).notify()
 
+
 @receiver(read)
-def read_notification(sender, **kwargs):
+def read_notification(**kwargs):
     """
     Mark notification as read.
 

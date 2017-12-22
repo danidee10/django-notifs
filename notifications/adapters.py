@@ -1,5 +1,7 @@
 """Adapters to send notification with different mediums."""
+
 import abc
+
 
 class BaseAdapter(metaclass=abc.ABCMeta):
     """Base adapter for sending notifications."""
