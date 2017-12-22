@@ -1,27 +1,28 @@
+"""Tests."""
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from .models import Notification
 from .signals import read
 from . import NotificationError
-
-
-User = get_user_model()
+from .models import Notification
 
 
 class NotificationSignalTestCase(TestCase):
     """Tests for the notifications app."""
 
+    User = get_user_model()
+
     @classmethod
     def setUpTestData(cls):
         """Create Users."""
-        cls.user1 = User.objects.create_user(
+        cls.user1 = cls.User.objects.create_user(
             username='user1@gmail.com', password='password'
-            )
+        )
 
-        cls.user2 = User.objects.create(
+        cls.user2 = cls.User.objects.create(
             username='user2@gmail.com', password='password'
-            )
+        )
 
     def test_user_cant_read_others_notifications(self):
         """A user should only be able to read THEIR notifications."""
@@ -40,7 +41,7 @@ class NotificationSignalTestCase(TestCase):
             read.send,
             sender=self.__class__, notify_id=notification.id,
             recipient=self.user1
-            )
+        )
 
     def test_user_can_read_notifications(self):
         """A user can read their notification"""
@@ -56,7 +57,7 @@ class NotificationSignalTestCase(TestCase):
         read.send(
             sender=self.__class__, notify_id=notification.id,
             recipient=self.user1
-            )
+        )
 
         notification.refresh_from_db()
         self.assertEqual(notification.is_read, True)
