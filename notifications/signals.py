@@ -1,6 +1,9 @@
 """Defines and listens to notification signals."""
 
 import importlib
+from json import dumps
+
+import pika
 
 from django.conf import settings
 from django.dispatch import Signal, receiver
@@ -26,13 +29,17 @@ def create_notification(**kwargs):
     # make fresh copy and retain kwargs
     params = kwargs.copy()
     del params['signal']
+    del params['sender']
 
-    Notification.objects.create(**params)
+    notification = Notification.objects.create(**params)
 
     # send via custom adapters
     for adapter_path in getattr(settings, 'NOTIFICATION_ADAPTERS', []):
         adapter = import_attr(adapter_path)
         adapter(**kwargs).notify()
+
+    if getattr(settings, 'NOTIFICATION_WEBSOCKET', False):
+        send_to_queue(notification)
 
 
 @receiver(read)
@@ -51,3 +58,24 @@ def read_notification(**kwargs):
         raise NotificationError('You cannot read this notification')
 
     notification.read()
+
+
+def send_to_queue(notification):
+    """
+    Puts a new message on the queue.
+    
+    The queue is named after the username (for Uniqueness)
+    """
+    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    channel = connection.channel()
+
+    channel.queue_declare(queue=notification.source.username)
+
+    jsonified_messasge = dumps(notification.to_json())
+    channel.basic_publish(
+        exchange='', routing_key=notification.source.username,
+        body=jsonified_messasge
+    )
+    print("Sent '{}'".format(jsonified_messasge))
+
+    connection.close()

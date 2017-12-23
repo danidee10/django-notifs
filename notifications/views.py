@@ -1,14 +1,18 @@
 """views.py."""
 
-import pika
 from json import loads
+
+import pika
 
 from django.conf import settings
 from django.http import JsonResponse
+from django.contrib.auth import get_user_model
 from django.views.generic import ListView, View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.core.exceptions import ObjectDoesNotExist
 
+from .signals import notify
 from .models import Notification
 
 
@@ -46,17 +50,26 @@ class GenerateNotification(View):
         data = loads(request.body)
         message = data['message']
 
-        connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-        channel = connection.channel()
+        # Create/retrieve the user
+        User = get_user_model()
 
-        channel.queue_declare(queue='notifications')
+        try:
+            user = User.objects.get(username='demouser')
+        except ObjectDoesNotExist:
+            user = User.objects.create_user(
+                username='demouser', email='example@gmail.com',
+                password='mypassword'
+            )
 
-        channel.basic_publish(
-            exchange='', routing_key='notifications', body=message
-        )
-        print("Sent '{}'".format(message))
-
-        connection.close()
+        # notification
+        args = {
+            'source': user, 'source_display_name': user.get_full_name(),
+            'recipient': user, 'category': 'Quote', 'action': 'Sent',
+            'obj': user.id,
+            'short_description': 'You a message: {}'.format(message),
+            'url': 'http://example.com'
+        }
+        notify.send(sender=self.__class__, **args)
 
         response = JsonResponse({'message': 'Notification generated'})
 

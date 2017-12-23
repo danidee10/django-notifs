@@ -34,5 +34,5 @@ def application(env, start_response):
             print('Could not send message over the websocket')
             channel.close()
 
-    channel.basic_consume(callback, queue='notifications', no_ack=True)
+    channel.basic_consume(callback, queue='demouser', no_ack=True)
     channel.start_consuming()
