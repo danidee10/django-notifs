@@ -9,5 +9,6 @@ app_name = 'notifications'
 
 urlpatterns = [
     url(r'^$', views.NotificationsView.as_view(),
-        name='notifications_view')
+        name='notifications_view'),
+    url(r'^generate-notification/$', views.GenerateNotification.as_view())
 ]
