@@ -1,0 +1,103 @@
+ <!DOCTYPE html>
+
+<html>
+  <meta charset="utf-8" />
+  <title>WebSocket Test</title>
+
+  <head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <script language="javascript" type="text/javascript">
+
+      // request permission on page load
+      document.addEventListener('DOMContentLoaded', function () {
+        if (!Notification) {
+          alert('Desktop notifications not available in your browser. Try Chromium.'); 
+          return;
+        }
+
+        if (Notification.permission !== "granted")
+          Notification.requestPermission();
+      });
+
+      function notifyMe(title, body) {
+        if (Notification.permission !== "granted")
+          Notification.requestPermission();
+        else {
+          var notification = new Notification(title, {
+            icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
+            body: body,
+          });
+
+          notification.onclick = function () {
+            window.open("http://stackoverflow.com/a/13328397/1269037");      
+          };
+        }
+      }
+
+    var wsUri = "ws://localhost:8080/";
+    var output;
+
+    function init() {
+      output = document.getElementById("output");
+      testWebSocket();
+    }
+
+    function testWebSocket() {
+      websocket = new WebSocket(wsUri);
+      websocket.onopen = function(evt) { onOpen(evt) };
+      websocket.onclose = function(evt) { onClose(evt) };
+      websocket.onmessage = function(evt) { onMessage(evt) };
+      websocket.onerror = function(evt) { onError(evt) };
+    }
+
+    function onOpen(evt) {
+      writeToScreen('<strong style="color: green;">CONNECTED</storng>');
+    }
+
+    function onClose(evt) {
+      writeToScreen('<strong style="color: red;">DISCONNECTED</storng>');
+    }
+
+    function onMessage(evt) {
+      notifyMe('Notification', evt.data);
+    }
+
+    function onError(evt) {
+      writeToScreen('<strong style="color: red;">ERROR:</strong> ' + evt.data);
+    }
+
+    function writeToScreen(message) {
+      var pre = document.createElement("p");
+      pre.style.wordWrap = "break-word";
+      pre.innerHTML = message;
+      output.appendChild(pre);
+    }
+
+    function generateNotification() {
+      var text = document.getElementById('input-text').value;
+
+      $.ajax({
+        url: 'http://localhost:8000/notifications/generate-notification/',
+        data: JSON.stringify({message: text}),
+        method: 'POST',
+        dataType: 'json'
+      })
+    }
+
+    window.addEventListener("load", init, false);
+
+    </script>
+  </head>
+
+  <body>
+
+    <h1>WebSocket Test</h1>
+
+    <input id="input-text" type="text" />
+    <button onclick="generateNotification()"> Send notification </button>
+
+    <div id="output"></div>
+
+  </body>
+</html>
