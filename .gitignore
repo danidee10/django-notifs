@@ -1,0 +1,5 @@
+*.pyc
+*.coverage
+*.sqlite3
+/dist
+*.egg-info
