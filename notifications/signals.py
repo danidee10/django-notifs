@@ -73,7 +73,7 @@ def send_to_queue(notification):
 
     jsonified_messasge = dumps(notification.to_json())
     channel.basic_publish(
-        exchange='', routing_key=notification.source.username,
+        exchange='', routing_key=notification.recipient.username,
         body=jsonified_messasge
     )
     print("Sent '{}'".format(jsonified_messasge))
