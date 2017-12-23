@@ -61,3 +61,24 @@ class NotificationSignalTestCase(TestCase):
 
         notification.refresh_from_db()
         self.assertEqual(notification.is_read, True)
+
+    def test_to_json(self):
+        """Test JSON Representation."""
+        # Create notification
+        notification = Notification.objects.create(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='General notification', obj=1, url='http://example.com',
+            short_description='Short Description', is_read=False
+        )
+
+        self.assertEqual(
+            notification.to_json(),
+            {
+                'source': 'user2@gmail.com', 'source_display_name': 'User 2',
+                'recipient': 'user1@gmail.com', 'action': 'Notified',
+                'category': 'General notification', 'obj': 1,
+                'short_description': 'Short Description',
+                'url': 'http://example.com', 'is_read': False
+            }
+        )
