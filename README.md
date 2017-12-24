@@ -1,6 +1,6 @@
 Notifications (InApp, Email, SMS, CustomBackend) for Django
 
-## This Repo is currently in Beta (Which means certain things can change without prior notice). Though i currently use it in production. You're welcome to try it and drop your feeback.
+## This Repo is currently in Beta (Which means certain things can change without prior notice). Though i currently use it in production. You're welcome to try it and drop your feedback.
 
 django-notifs is a notifications app for Django. Basically it allows you to notify users about events that occur in your application E.g
 
@@ -116,5 +116,20 @@ EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 ```
 in your application's settings.
 
-## TODO
-Add Websocket Support
+## Websockets
+This is the coolest part of this library, Unlike other django notification libraries that provide a JavaScript API that the client call poll at regular intervals, django-notifs supports websockets (thanks to `uWSGI`). This means you can easily alert your users when events occur in your application, You can use it to build a chat application etc
+
+To actually deliver notifications, `django-notifs` uses rabbitmq (No Redis support yet) as a message queue to store notifications which are then consumed and sent over the websocket to the client.
+
+
+### Running the websocket server
+To enable the Websocket functionality simply set `NOTIFICATION_WEBSOCKET = True`. This will tell django-notifs to publish messages to the rabbitmq queue.
+
+Due to the fact that Django itself doesn't support websockets, The Websocket server has to be started separately from your main application with uwsgi. e.g
+
+```bash
+uwsgi --http :8080 --http-websockets --wsgi-file websocket.py --threads 2 --workers 2 --processes 2 --thunder-lock --master
+```
+
+There is a sample implementation of a websocket server in `websocket.py` and there's a `websocket.html` file that you can use to test the websocket.
+
