@@ -38,7 +38,7 @@ def create_notification(**kwargs):
         adapter = import_attr(adapter_path)
         adapter(**kwargs).notify()
 
-    if getattr(settings, 'NOTIFICATION_WEBSOCKET', False):
+    if getattr(settings, 'NOTIFICATIONS_WEBSOCKET', False):
         send_to_queue(notification)
 
 
@@ -66,7 +66,12 @@ def send_to_queue(notification):
     
     The queue is named after the username (for Uniqueness)
     """
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    rabbit_mq_url = getattr(
+        settings, 'NOTIFICATIONS_RABBIT_MQ_URL', 'amqp://guest:guest@localhost:5672'
+    )
+    connection = pika.BlockingConnection(
+        pika.connection.URLParameters(rabbit_mq_url)
+    )
     channel = connection.channel()
 
     channel.queue_declare(queue=notification.source.username)
