@@ -26,13 +26,19 @@ def application(env, start_response):
         env.get('HTTP_ORIGIN', '')
     )
 
+    def keepalive():
+        """Keep the websocket connection alive (called each minute)."""
+        print('PING/PONG...')
+        uwsgi.websocket_recv_nb()
+        connection.add_timeout(60, keepalive)
+
     def callback(ch, method, properties, body):
         """Callback called when a message has been received."""
         try:
             uwsgi.websocket_send(body)
-        except OSError:
-            print('Could not send message over the websocket')
-            channel.close()
+        except OSError as error:
+            print('Could not send message over the websocket', error)
 
+    keepalive()
     channel.basic_consume(callback, queue='demouser', no_ack=True)
     channel.start_consuming()
