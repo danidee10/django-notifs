@@ -123,7 +123,19 @@ To actually deliver notifications, `django-notifs` uses rabbitmq (No Redis suppo
 
 
 ### Running the websocket server
-To enable the Websocket functionality simply set `NOTIFICATION_WEBSOCKET = True`. This will tell django-notifs to publish messages to the rabbitmq queue.
+To enable the Websocket functionality simply set 
+
+```bash
+NOTIFICATIONS_WEBSOCKET = True
+```
+
+and set the URL to your RabbitMQ Server with:
+
+```bash
+NOTIFICATIONS_RABBIT_MQ = 'YOUR RABBIT MQ SERVER'
+```
+
+This will tell django-notifs to publish messages to the rabbitmq queue.
 
 Due to the fact that Django itself doesn't support websockets, The Websocket server has to be started separately from your main application with uwsgi. e.g
 
