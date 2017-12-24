@@ -71,11 +71,17 @@ def send_to_queue(notification):
 
     channel.queue_declare(queue=notification.source.username)
 
+    channel.confirm_delivery()
+
     jsonified_messasge = dumps(notification.to_json())
-    channel.basic_publish(
+    published = channel.basic_publish(
         exchange='', routing_key=notification.recipient.username,
         body=jsonified_messasge
     )
-    print("Sent '{}'".format(jsonified_messasge))
+
+    if published:
+        print("Sent '{}'".format(jsonified_messasge))
+    else:
+        print('Message was not delivered')
 
     connection.close()

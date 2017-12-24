@@ -60,6 +60,9 @@
 
     function onClose(evt) {
       writeToScreen('<strong style="color: red;">DISCONNECTED</strong>');
+
+      // Reconnect back to the server
+      testWebSocket();
     }
 
     function onMessage(evt) {
