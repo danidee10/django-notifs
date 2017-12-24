@@ -22,7 +22,7 @@ class NotificationsView(ListView):
     model = Notification
     context_object_name = 'notifications_list'
 
-    paginate_by = getattr(settings, 'PAGINATE_BY', None)
+    paginate_by = getattr(settings, 'NOTIFICATIONS_PAGINATE_BY', None)
 
     def get_queryset(self):
         """Filter notifications by currently logged in user."""

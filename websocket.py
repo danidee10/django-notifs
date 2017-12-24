@@ -8,15 +8,22 @@ import pika
 import uwsgi
 
 import django
+from django.conf import settings
 
 
 # Setup Django and load apps
 django.setup()
 
+RABBIT_MQ_URL = getattr(
+    settings, 'NOTIFICATIONS_RABBIT_MQ_URL', 'amqp://guest:guest@localhost:5672'
+)
+
 
 def application(env, start_response):
     """Setup the Websocket Server and read messages off the queue."""
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    connection = pika.BlockingConnection(
+        pika.connection.URLParameters(RABBIT_MQ_URL)
+    )
     channel = connection.channel()
 
     channel.queue_declare(queue='notifications')
@@ -40,5 +47,7 @@ def application(env, start_response):
             print('Could not send message over the websocket', error)
 
     keepalive()
-    channel.basic_consume(callback, queue='demouser', no_ack=True)
+
+    queue = env['PATH_INFO'].replace('/', '')
+    channel.basic_consume(callback, queue=queue, no_ack=True)
     channel.start_consuming()
