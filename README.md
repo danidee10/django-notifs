@@ -1,6 +1,4 @@
-Notifications (InApp, Email, SMS, CustomBackend) for Django
-
-## This Repo is currently in Beta (Which means certain things can change without prior notice). Though i currently use it in production. You're welcome to try it and drop your feedback.
+Notifications (InApp, Email, SMS, CustomBackend) for Django.
 
 django-notifs is a notifications app for Django. Basically it allows you to notify users about events that occur in your application E.g
 
@@ -145,10 +143,10 @@ uwsgi --http :8080 --http-websockets --wsgi-file websocket.py --threads 2 --work
 
 There is a sample implementation of a websocket server in `websocket.py` and there's a `websocket.html` file that you can use to test the websocket.
 
-### How are notifications private?
+### How to listen to notifications
 At the backend, A Rabbitmq queue is created for each user based on the username, so when you're connecting to the websocket server you have to pass the username in the websocket url. For example to listen to messages for a username `danidee` connect to this url (Assuming the websocket server is running on `localhost` and port `8080`)
 
 ```JavaScript
-var websocket = new Websocket('ws://localhost:8080/danidee')
+var websocket = new WebSocket('ws://localhost:8080/danidee')
 ```
 
