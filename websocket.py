@@ -4,6 +4,8 @@ Implements a websocket based on uWSGI
 Consumes messages from a RabbitMQ Queue.
 """
 
+import sys
+
 import pika
 import uwsgi
 
@@ -25,8 +27,10 @@ def application(env, start_response):
         pika.connection.URLParameters(RABBIT_MQ_URL)
     )
     channel = connection.channel()
-
-    channel.queue_declare(queue='notifications')
+   
+    queue = env['PATH_INFO'].replace('/', '')
+    
+    channel.queue_declare(queue=queue)
 
     uwsgi.websocket_handshake(
         env['HTTP_SEC_WEBSOCKET_KEY'],
@@ -36,8 +40,12 @@ def application(env, start_response):
     def keepalive():
         """Keep the websocket connection alive (called each minute)."""
         print('PING/PONG...')
-        uwsgi.websocket_recv_nb()
-        connection.add_timeout(60, keepalive)
+        try:
+            uwsgi.websocket_recv_nb()
+            connection.add_timeout(60, keepalive)
+        except OSError as error:
+            print('Killing the connection...')
+            sys.exit(0)
 
     def callback(ch, method, properties, body):
         """Callback called when a message has been received."""
@@ -45,9 +53,8 @@ def application(env, start_response):
             uwsgi.websocket_send(body)
         except OSError as error:
             print('Could not send message over the websocket', error)
+            sys.exit(0)
 
     keepalive()
-
-    queue = env['PATH_INFO'].replace('/', '')
     channel.basic_consume(callback, queue=queue, no_ack=True)
     channel.start_consuming()
