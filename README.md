@@ -145,3 +145,10 @@ uwsgi --http :8080 --http-websockets --wsgi-file websocket.py --threads 2 --work
 
 There is a sample implementation of a websocket server in `websocket.py` and there's a `websocket.html` file that you can use to test the websocket.
 
+### How are notifications private?
+At the backend, A Rabbitmq queue is created for each user based on the username, so when you're connecting to the websocket server you have to pass the username in the websocket url. For example to listen to messages for a username `danidee` connect to this url (Assuming the websocket server is running on `localhost` and port `8080`)
+
+```JavaScript
+var websocket = new Websocket('ws://localhost:8080/danidee')
+```
+
