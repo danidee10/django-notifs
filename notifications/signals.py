@@ -2,6 +2,7 @@
 
 import importlib
 from json import dumps
+from contextlib import suppress
 
 import pika
 
@@ -12,7 +13,10 @@ from . import NotificationError
 from .models import Notification
 
 
-notify = Signal(providing_args=('user', 'actor', 'action' 'obj', 'url'))
+notify = Signal(providing_args=(
+    'source', 'source_display_name', 'recipient', 'action', 'category' 'obj',
+    'url', 'short_description', 'silent'
+))
 read = Signal(providing_args=('notify_id', 'recipient'))
 
 
@@ -30,8 +34,16 @@ def create_notification(**kwargs):
     params = kwargs.copy()
     del params['signal']
     del params['sender']
+    with suppress(KeyError):
+        del params['silent']
+        
+    silent = kwargs.get('silent', False)
 
-    notification = Notification.objects.create(**params)
+    # If it's a silent notification create the notification but don't save it
+    if silent:
+        notification = Notification(**params)
+    else:
+        notification = Notification.objects.create(**params)
 
     # send via custom adapters
     for adapter_path in getattr(settings, 'NOTIFICATION_ADAPTERS', []):

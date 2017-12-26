@@ -69,6 +69,7 @@ The fields in the `args` dictionary map to the fields in the `Notification` mode
   - **obj: The id of the object associated with the notification (Can be null).**
   - **short_description: The body of the notification.**
   - **url: The url of the object associated with the notification (Can be null).**
+  - **silent: If this Value is set, the notification won't be persisted to the database.**
 
 The values of the fields can easily be used to construct the notification message.
 
