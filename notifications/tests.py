@@ -3,9 +3,9 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from .signals import read
 from . import NotificationError
 from .models import Notification
+from .signals import read, notify
 
 
 class NotificationSignalTestCase(TestCase):
@@ -26,7 +26,7 @@ class NotificationSignalTestCase(TestCase):
 
     def test_user_cant_read_others_notifications(self):
         """A user should only be able to read THEIR notifications."""
-        # Create NOtification for User2
+        # Create Notification for User2
         notification = Notification.objects.create(
             source=self.user1, source_display_name='User 1',
             recipient=self.user2, action='Notified',
@@ -82,3 +82,18 @@ class NotificationSignalTestCase(TestCase):
                 'url': 'http://example.com', 'is_read': False
             }
         )
+
+    def test_silent_notification(self):
+        """Test Silent notifications."""
+        notify.send(
+            sender=self.__class__, source=self.user2,
+            source_display_name='User 2', recipient=self.user1,
+            action='Notified', category='Silent notification', obj=1,
+            url='http://example.com',
+            short_description='Short Description', is_read=False,
+            silent=True
+        )
+
+        notifications = Notification.objects.all()
+
+        self.assertEqual(tuple(notifications), tuple())
