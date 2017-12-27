@@ -2,7 +2,6 @@
 
 import importlib
 from json import dumps
-from contextlib import suppress
 
 import pika
 
@@ -34,8 +33,10 @@ def create_notification(**kwargs):
     params = kwargs.copy()
     del params['signal']
     del params['sender']
-    with suppress(KeyError):
+    try:
         del params['silent']
+    except KeyError:
+        pass
         
     silent = kwargs.get('silent', False)
 
