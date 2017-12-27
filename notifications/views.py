@@ -40,6 +40,7 @@ class GenerateNotification(View):
         return super().dispatch(request, *args, **kwargs)
 
     def add_access_control_headers(self, response):
+        """Add headers for CORS."""
         response["Access-Control-Allow-Origin"] = "*"
         response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
         response["Access-Control-Max-Age"] = "1000"
