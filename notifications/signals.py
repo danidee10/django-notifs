@@ -14,7 +14,7 @@ from .models import Notification
 
 notify = Signal(providing_args=(
     'source', 'source_display_name', 'recipient', 'action', 'category' 'obj',
-    'url', 'short_description', 'silent'
+    'url', 'short_description', 'extra_data', 'silent'
 ))
 read = Signal(providing_args=('notify_id', 'recipient'))
 
@@ -37,11 +37,9 @@ def create_notification(**kwargs):
         del params['silent']
     except KeyError:
         pass
-        
-    silent = kwargs.get('silent', False)
 
     # If it's a silent notification create the notification but don't save it
-    if silent:
+    if kwargs.get('silent', False):
         notification = Notification(**params)
     else:
         notification = Notification.objects.create(**params)

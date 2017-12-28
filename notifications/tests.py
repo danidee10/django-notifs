@@ -97,3 +97,54 @@ class NotificationSignalTestCase(TestCase):
         notifications = Notification.objects.all()
 
         self.assertEqual(tuple(notifications), tuple())
+
+
+class JSONFieldTestCase(TestCase):
+    """Test the Custom JSONField."""
+
+    User = get_user_model()
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create Users."""
+        cls.user1 = cls.User.objects.create_user(
+            username='user1@gmail.com', password='password'
+        )
+
+        cls.user2 = cls.User.objects.create(
+            username='user2@gmail.com', password='password'
+        )
+
+    def test_raise_exception(self):
+        """
+        Should raise an exception
+
+        When we try to save objects that can be serialized by the json module.
+        """
+        kwargs = {
+            'sender': self.__class__, 'source': self.user2,
+            'source_display_name': 'User 2', 'recipient': self.user1,
+            'action': 'Notified', 'category': 'General notification',
+            'obj': 1, 'short_description': 'Short Description',
+            'url': 'http://example.com', 'is_read': False,
+            'extra_data': {'hello': lambda x: print(x)}
+        }
+
+        self.assertRaises(TypeError, notify.send, **kwargs)
+
+    def test_json_decode(self):
+        """Should return a dictionary back."""
+        notify.send(
+            sender=self.__class__, source=self.user2,
+            source_display_name='User 2', recipient=self.user1,
+            action='Notified', category='Notification with extra data', obj=1,
+            url='http://example.com',
+            short_description='Short Description', is_read=False,
+            extra_data={'hello': 'world'}
+        )
+
+        notification = Notification.objects.last()
+
+        self.assertEqual(
+            notification.extra_data, {'hello': 'world'}
+        )
