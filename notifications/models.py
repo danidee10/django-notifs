@@ -3,6 +3,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+from .fields import JSONField
+
 
 class NotificationQuerySet(models.QuerySet):
     """Notifications QuerySet."""
@@ -61,6 +63,7 @@ class Notification(models.Model):
     obj = models.IntegerField(null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     short_description = models.CharField(max_length=100)
+    extra_data = JSONField(default='')
     is_read = models.BooleanField(default=False)
 
     create_date = models.DateTimeField(auto_now_add=True)
