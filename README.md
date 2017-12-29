@@ -5,7 +5,7 @@ django-notifs is a notifications app for Django. Basically it allows you to noti
 1. Your profile has been verified
 2. User xxxx sent you a message
 
-It also has built in support to deliver these notifications via Emails (if you want). It's also very easy to extend the delivery backends with a Custom Adapter
+It also has built in support to deliver these notifications via Emails (if you want). It's also very easy to extend the delivery backends with a Custom Adapter.
 
 ## Installation
 Get it from pip with
@@ -87,7 +87,7 @@ Internally, the JSON is stored as text in django's standard `TextField` so it do
 
 ### Reading notifications
 
-To read a notification simply send the read signal like this
+To read a notification simply send the read signal like this:
 
 ```python
 from notifications.signals import notify
@@ -122,7 +122,7 @@ This makes a user's notifications available in all templates as a template varia
 
 ## Sending Emails in the background
 
-That is beyond the scope of this project, though it can easily be achieved with a third party extension [django-celery-email](https://github.com/pmclanahan/django-celery-email) after the installation it's as easy as setting
+That is beyond the scope of this project, though it can easily be achieved with a third party extension [django-celery-email](https://github.com/pmclanahan/django-celery-email) after the installation it's as easy as setting:
 
 ```bash
 EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
@@ -138,7 +138,7 @@ To actually deliver notifications, `django-notifs` uses rabbitmq (No Redis suppo
 
 ### Running the websocket server
 
-To enable the Websocket functionality simply set 
+To enable the Websocket functionality simply set
 
 ```bash
 NOTIFICATIONS_WEBSOCKET = True
