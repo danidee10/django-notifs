@@ -45,7 +45,7 @@ def create_notification(**kwargs):
         notification = Notification.objects.create(**params)
 
     # send via custom adapters
-    for adapter_path in getattr(settings, 'NOTIFICATION_ADAPTERS', []):
+    for adapter_path in getattr(settings, 'NOTIFICATION_CHANNELS', []):
         adapter = import_attr(adapter_path)
         adapter(**kwargs).notify()
 

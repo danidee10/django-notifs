@@ -5,7 +5,7 @@ django-notifs is a notifications app for Django. Basically it allows you to noti
 1. Your profile has been verified
 2. User xxxx sent you a message
 
-It also has built in support to deliver these notifications via Emails (if you want). It's also very easy to extend the delivery backends with a Custom Adapter.
+It also has built in support to deliver these notifications via Emails (if you want). It's also very easy to extend the delivery backends with a Custom Delivery Channel.
 
 ## Installation
 Get it from pip with
@@ -119,15 +119,70 @@ django-notifs comes with a Context manager that you can use to display notificat
 
 This makes a user's notifications available in all templates as a template variable named "notifications"
 
+## Custom Delivery Channels
+
+django-notifs doesn't just allow you to send in app notifications. you can also send external notifications (Like Emails and SMS) by using custom delivery channels. A delivery channel is a python class that provides two methods:
+
+1. `construct_notify` to construct the message
+
+2. `notify` does the actual sending of the message
+
+There's a base meta class you can inherit. This is an example of an email delivery channel using `django.core.mail.send_mail`:
+
+```python
+
+from django.core.mail import send_mail
+from notifications.channel import BaseNotificationChannel
+
+class EmailNotificationChannel(BaseNotificationChannel):
+    """Allows notifications to be sent via email to users."""
+
+    def construct_message(self):
+        """Constructs a message from notification arguments."""
+        kwargs = self.notification_kwargs
+        category = kwargs.get('category', None)
+        short_description = kwargs.get('short_description', None)
+
+        message = '{} {} {}'.format(
+            kwargs['source_display_name'], kwargs['action'],
+            short_description
+        )
+
+        return message
+
+    def notify(self):
+        """Send the notification."""
+        message = self.construct_message()
+
+        subject = 'Notification'
+        from_email = 'your@email.com'
+        recipient_list = ['example@gmail.com']
+
+        send_mail(subject, message, from_email, recipient_list)
+
+```
+
+Finally don't forget to tell `django-notifs` about your new Delivery Channel by setting:
+
+
+```python
+
+NOTIFICATIONS_CHANNELS = ['path.to.EmailNotificationChannel']
+
+```
+
 
 ## Sending Emails in the background
 
 That is beyond the scope of this project, though it can easily be achieved with a third party extension [django-celery-email](https://github.com/pmclanahan/django-celery-email) after the installation it's as easy as setting:
 
 ```bash
+
 EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
+
 ```
 in your application's settings.
+
 
 ## Websockets
 
