@@ -14,7 +14,7 @@ class JSONField(models.TextField):
 
         return json.dumps(db_value)
 
-    def from_db_value(self, value, expression, connection):
+    def from_db_value(self, value, expression, connection, **kwargs):
         """Convert the JSON back to a dictionary."""
         try:
             return json.loads(value)
