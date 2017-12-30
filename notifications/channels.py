@@ -1,13 +1,13 @@
-"""Adapters to send notification with different mediums."""
+"""Base Implementation of a Delivery Backend."""
 
 import abc
 
 
-class BaseAdapter(metaclass=abc.ABCMeta):
-    """Base adapter for sending notifications."""
+class BaseNotificationChannel(metaclass=abc.ABCMeta):
+    """Base channel for sending notifications."""
 
     def __init__(self, **kwargs):
-        self.kwargs = kwargs
+        self.notifcation_kwargs = kwargs
 
     @abc.abstractmethod
     def construct_message(self):
