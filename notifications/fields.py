@@ -1,6 +1,5 @@
 """Custom model fields."""
 
-import ast
 import json
 from django.db import models
 
@@ -10,7 +9,7 @@ class JSONField(models.TextField):
 
     def get_prep_value(self, value):
         """Convert the dictionary to JSON, which is saved as text."""
-        db_value = super().get_prep_value(value)
+        db_value = super(JSONField, self).get_prep_value(value)
 
         return json.dumps(db_value)
 
