@@ -1,4 +1,4 @@
-Django==2.0
+Django==1.11.8
 pika==0.11.2
 pytz==2017.2
 uWSGI==2.0.15
