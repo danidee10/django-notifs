@@ -150,7 +150,7 @@ class JSONFieldTestCase(TestCase):
             'action': 'Notified', 'category': 'General notification',
             'obj': 1, 'short_description': 'Short Description',
             'url': 'http://example.com', 'is_read': False,
-            'extra_data': {'hello': lambda x: print(x)}
+            'extra_data': {'hello': lambda x: 'world'}
         }
 
         self.assertRaises(TypeError, notify.send, **kwargs)
