@@ -79,7 +79,30 @@ class NotificationSignalTestCase(TestCase):
                 'recipient': 'user1@gmail.com', 'action': 'Notified',
                 'category': 'General notification', 'obj': 1,
                 'short_description': 'Short Description',
+                'extra_data': '',
                 'url': 'http://example.com', 'is_read': False
+            }
+        )
+
+    def test_to_json_with_extra_data(self):
+        """Test to_json method with extra data."""
+        notification = Notification.objects.create(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='General notification', obj=1, url='http://example.com',
+            short_description='Short Description', is_read=False,
+            extra_data={'hello': 'world'}
+        )
+
+        self.assertEqual(
+            notification.to_json(),
+            {
+                'source': 'user2@gmail.com', 'source_display_name': 'User 2',
+                'recipient': 'user1@gmail.com', 'action': 'Notified',
+                'category': 'General notification', 'obj': 1,
+                'short_description': 'Short Description',
+                'url': 'http://example.com', 'extra_data': {'hello': 'world'},
+                'is_read': False,
             }
         )
 

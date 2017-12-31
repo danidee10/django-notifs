@@ -96,5 +96,5 @@ class Notification(models.Model):
             'recipient': self.recipient.username, 'category': self.category,
             'action': self.action, 'obj': self.obj,
             'short_description': self.short_description, 'url': self.url,
-            'is_read': self.is_read
+            'extra_data': self.extra_data, 'is_read': self.is_read
         }
