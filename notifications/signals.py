@@ -1,12 +1,10 @@
 """Defines and listens to notification signals."""
 
 import importlib
-from json import dumps
 
-import pika
-
-from django.conf import settings
 from django.dispatch import Signal, receiver
+
+import notifs.default_settings as settings
 
 from . import NotificationError
 from .models import Notification
@@ -38,19 +36,16 @@ def create_notification(**kwargs):
     except KeyError:
         pass
 
-    # If it's a silent notification create the notification but don't save it
-    if kwargs.get('silent', False):
-        notification = Notification(**params)
-    else:
-        notification = Notification.objects.create(**params)
+    # If it's a not a silent notification create the notification
+    if not kwargs.get('silent', False):
+        Notification.objects.create(**params)
 
     # send via custom adapters
-    for adapter_path in getattr(settings, 'NOTIFICATIONS_CHANNELS', []):
-        adapter = import_attr(adapter_path)
-        adapter(**kwargs).notify()
+    for channel_path in settings.NOTIFICATIONS_CHANNELS:
+        channel = import_attr(channel_path)(**params)
 
-    if getattr(settings, 'NOTIFICATIONS_WEBSOCKET', False):
-        send_to_queue(notification)
+        message = channel.construct_message()
+        channel.notify(message)
 
 
 @receiver(read)
@@ -69,35 +64,3 @@ def read_notification(**kwargs):
         raise NotificationError('You cannot read this notification')
 
     notification.read()
-
-
-def send_to_queue(notification):
-    """
-    Puts a new message on the queue.
-    
-    The queue is named after the username (for Uniqueness)
-    """
-    rabbit_mq_url = getattr(
-        settings, 'NOTIFICATIONS_RABBIT_MQ_URL', 'amqp://guest:guest@localhost:5672'
-    )
-    connection = pika.BlockingConnection(
-        pika.connection.URLParameters(rabbit_mq_url)
-    )
-    channel = connection.channel()
-
-    channel.queue_declare(queue=notification.source.username)
-
-    channel.confirm_delivery()
-
-    jsonified_messasge = dumps(notification.to_json())
-    published = channel.basic_publish(
-        exchange='', routing_key=notification.recipient.username,
-        body=jsonified_messasge
-    )
-
-    if published:
-        print("Sent '{}'".format(jsonified_messasge))
-    else:
-        print('Message was not delivered')
-
-    connection.close()

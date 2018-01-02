@@ -42,6 +42,7 @@ python manage.py migrate notifications
 ```
 
 ### Sending Notifications
+
 django-notifs uses Django signals to make it as decoupled from the rest of your application as possible. This also enables you to listen to it's signals and carry out other custom actions if you want to.
 
 To Create/Send a notification import the notify signal and send it with the following arguments (Hypothetical example).
@@ -150,10 +151,8 @@ class EmailNotificationChannel(BaseNotificationChannel):
 
         return message
 
-    def notify(self):
+    def notify(self, message):
         """Send the notification."""
-        message = self.construct_message()
-
         subject = 'Notification'
         from_email = 'your@email.com'
         recipient_list = ['example@gmail.com']
@@ -188,15 +187,12 @@ in your application's settings.
 
 This is the coolest part of this library, Unlike other django notification libraries that provide a JavaScript API that the client call poll at regular intervals, django-notifs supports websockets (thanks to `uWSGI`). This means you can easily alert your users when events occur in your application, You can use it to build a chat application etc
 
-To actually deliver notifications, `django-notifs` uses rabbitmq (No Redis support yet) as a message queue to store notifications which are then consumed and sent over the websocket to the client.
+To actually deliver notifications, `django-notifs` uses RabbitMQ as a message queue to store notifications which are then consumed and sent over the websocket to the client.
 
-
-### Running the websocket server
-
-To enable the Websocket functionality simply set
+To enable the Websocket functionality simply set:
 
 ```bash
-NOTIFICATIONS_WEBSOCKET = True
+NOTIFICATIONS_USE_WEBSOCKET = True
 ```
 
 and set the URL to your RabbitMQ Server with:
@@ -206,6 +202,10 @@ NOTIFICATIONS_RABBIT_MQ_URL = 'YOUR RABBIT MQ SERVER'
 ```
 
 This will tell django-notifs to publish messages to the rabbitmq queue.
+
+Under the hood, django-notifs adds a new channel to `NOTIFICATIONS_CHANNELS` which contains the logic for delivering the messages to RabbitMQ. If you need more advanced features that RabbitMQ offers like pub/sub [Pub/Sub](https://www.rabbitmq.com/tutorials/tutorial-one-python.html) or you want to use a different message queue like Redis, all you need to do is write your own delivery channel and add it to `NOTIFICATIONS_CHANNELS`.
+
+### Running the websocket server
 
 Due to the fact that Django itself doesn't support websockets, The Websocket server has to be started separately from your main application with uwsgi. e.g
 
@@ -222,4 +222,3 @@ At the backend, A Rabbitmq queue is created for each user based on the username,
 ```JavaScript
 var websocket = new WebSocket('ws://localhost:8080/danidee')
 ```
-
