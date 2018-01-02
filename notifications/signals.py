@@ -4,10 +4,9 @@ import importlib
 
 from django.dispatch import Signal, receiver
 
-import notifs.default_settings as settings
-
 from . import NotificationError
 from .models import Notification
+from . import default_settings as settings
 
 
 notify = Signal(providing_args=(

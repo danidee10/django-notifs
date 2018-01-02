@@ -5,9 +5,8 @@ from json import dumps
 
 import pika
 
-import notifs.default_settings as settings
-
 from .models import Notification
+from . import default_settings as settings
 
 
 class BaseNotificationChannel(metaclass=abc.ABCMeta):
