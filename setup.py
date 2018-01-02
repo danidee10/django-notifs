@@ -13,16 +13,11 @@ def package_files(directory):
 
 extra_files = package_files('notifications')
 
-setup(name='django-notifs',
-      version='2.5.2',
-      description='Re-usable notification app for Django',
-      url='https://github.com/danidee10/django-notifs',
-      author='Osaetin Daniel',
-      author_email='osaetindaniel@gmail.com',
-      license='GPL',
-      packages=['notifications'],
-      package_data={'': extra_files},
-      install_requires=[
-          'django',
-      ],
-      zip_safe=False)
+setup(
+    name='django-notifs', version='2.5.2',
+    description='Re-usable notification app for Django',
+    url='https://github.com/danidee10/django-notifs', author='Osaetin Daniel',
+    author_email='osaetindaniel@gmail.com', license='GPL',
+    packages=['notifications'], package_data={'': extra_files},
+    install_requires=['django'], zip_safe=False
+)

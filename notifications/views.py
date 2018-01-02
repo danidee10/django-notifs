@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.core.exceptions import ObjectDoesNotExist
 
-import notifs.default_settings as settings
+from . import default_settings as settings
 
 from .signals import notify
 from .models import Notification
