@@ -2,15 +2,14 @@
 
 from json import loads
 
-import pika
-
-from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from django.views.generic import ListView, View
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.core.exceptions import ObjectDoesNotExist
+
+import notifs.default_settings as settings
 
 from .signals import notify
 from .models import Notification
@@ -22,7 +21,7 @@ class NotificationsView(ListView):
     model = Notification
     context_object_name = 'notifications_list'
 
-    paginate_by = getattr(settings, 'NOTIFICATIONS_PAGINATE_BY', None)
+    paginate_by = settings.NOTIFICATIONS_PAGINATE_BY
 
     def get_queryset(self):
         """Filter notifications by currently logged in user."""
