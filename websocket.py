@@ -10,24 +10,22 @@ import pika
 import uwsgi
 
 import django
-from django.conf import settings
+
+import notifications.default_settings as settings
 
 
 # Setup Django and load apps
 django.setup()
 
-RABBIT_MQ_URL = getattr(
-    settings, 'NOTIFICATIONS_RABBIT_MQ_URL', 'amqp://guest:guest@localhost:5672'
-)
-
 
 def application(env, start_response):
     """Setup the Websocket Server and read messages off the queue."""
+    rabbit_mq_url = settings.NOTIFICATIONS_RABBIT_MQ_URL
     connection = pika.BlockingConnection(
-        pika.connection.URLParameters(RABBIT_MQ_URL)
+        pika.connection.URLParameters(rabbit_mq_url)
     )
     channel = connection.channel()
-   
+
     queue = env['PATH_INFO'].replace('/', '')
     
     channel.queue_declare(queue=queue)
@@ -37,24 +35,15 @@ def application(env, start_response):
         env.get('HTTP_ORIGIN', '')
     )
 
-    def keepalive():
-        """Keep the websocket connection alive (called each minute)."""
-        print('PING/PONG...')
-        try:
-            uwsgi.websocket_recv_nb()
-            connection.add_timeout(60, keepalive)
-        except OSError as error:
-            print('Killing the connection...')
-            sys.exit(0)
+    while True:
+        for method_frame, _, body in channel.consume(queue):
+            try:
+                uwsgi.websocket_send(body)
+            except OSError as error:
+                print(error)
+                sys.exit(0)
+            else:
+                # acknowledge the message
+                channel.basic_ack(method_frame.delivery_tag)
 
-    def callback(ch, method, properties, body):
-        """Callback called when a message has been received."""
-        try:
-            uwsgi.websocket_send(body)
-        except OSError as error:
-            print('Could not send message over the websocket', error)
-            sys.exit(0)
-
-    keepalive()
-    channel.basic_consume(callback, queue=queue, no_ack=True)
-    channel.start_consuming()
+        uwsgi.websocket_recv()
