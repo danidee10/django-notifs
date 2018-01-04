@@ -4,8 +4,6 @@ Implements a websocket based on uWSGI
 Consumes messages from a RabbitMQ Queue.
 """
 
-import sys
-
 import pika
 import uwsgi
 
@@ -41,7 +39,6 @@ def application(env, start_response):
                 uwsgi.websocket_send(body)
             except OSError as error:
                 print(error)
-                sys.exit(0)
             else:
                 # acknowledge the message
                 channel.basic_ack(method_frame.delivery_tag)
