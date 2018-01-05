@@ -207,10 +207,10 @@ Under the hood, django-notifs adds a new channel to `NOTIFICATIONS_CHANNELS` whi
 
 ### Running the websocket server
 
-Due to the fact that Django itself doesn't support websockets, The Websocket server has to be started separately from your main application with uwsgi. e.g
+Due to the fact that Django itself doesn't support websockets, The Websocket server has to be started separately from your main application with uwsgi. For example to start the `WebSocket` Server with `gevent` you can do this:
 
 ```bash
-uwsgi --http :8080 --http-websockets --wsgi-file websocket.py --threads 2 --workers 2 --processes 2 --thunder-lock --master
+uwsgi --http :8080 --gevent 100 --module websocket --gevent-monkey-patch --master --processes 4
 ```
 
 There is a sample implementation of a websocket server in `websocket.py` and there's a `websocket.html` file that you can use to test the websocket.
