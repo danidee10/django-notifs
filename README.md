@@ -213,7 +213,7 @@ Due to the fact that Django itself doesn't support websockets, The Websocket ser
 uwsgi --http :8080 --gevent 100 --module websocket --gevent-monkey-patch --master --processes 4
 ```
 
-There is a sample implementation of a websocket server in `websocket.py` and there's a `websocket.html` file that you can use to test the websocket.
+There is a sample echo websocket server in the `examples` directory
 
 ### How to listen to notifications
 
