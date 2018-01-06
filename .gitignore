@@ -1,5 +1,6 @@
 *.pyc
 *.coverage
 *.sqlite3
+*.vscode
 /dist
 *.egg-info
