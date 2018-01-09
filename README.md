@@ -203,7 +203,7 @@ NOTIFICATIONS_RABBIT_MQ_URL = 'YOUR RABBIT MQ SERVER'
 
 This will tell django-notifs to publish messages to the rabbitmq queue.
 
-Under the hood, django-notifs adds a new channel to `NOTIFICATIONS_CHANNELS` which contains the logic for delivering the messages to RabbitMQ. If you need more advanced features that RabbitMQ offers like pub/sub [Pub/Sub](https://www.rabbitmq.com/tutorials/tutorial-one-python.html) or you want to use a different message queue like Redis, all you need to do is write your own delivery channel and add it to `NOTIFICATIONS_CHANNELS`.
+Under the hood, django-notifs adds a new channel to `NOTIFICATIONS_CHANNELS` which contains the logic for delivering the messages to RabbitMQ. If you need more advanced features that RabbitMQ offers like [Pub/Sub](https://www.rabbitmq.com/tutorials/tutorial-one-python.html) or you want to use a different message queue like Redis, all you need to do is write your own delivery channel and add it to `NOTIFICATIONS_CHANNELS`.
 
 ### Running the websocket server
 
