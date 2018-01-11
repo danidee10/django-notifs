@@ -20,5 +20,5 @@ setup(
     url='https://github.com/danidee10/django-notifs', author='Osaetin Daniel',
     author_email='osaetindaniel@gmail.com', license='GPL',
     packages=['notifications'], package_data={'': EXTRA_FILES},
-    install_requires=['django'], zip_safe=False
+    install_requires=['django', 'pika'], zip_safe=False
 )
