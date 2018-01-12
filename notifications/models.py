@@ -56,7 +56,8 @@ class Notification(models.Model):
     source = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     source_display_name = models.CharField(max_length=150, null=True)
     recipient = models.ForeignKey(
-        User, related_name='notifications', on_delete=models.CASCADE
+        User, related_name='notifications', null=True, 
+        on_delete=models.CASCADE
     )
     action = models.CharField(max_length=50)
     category = models.CharField(max_length=50)
