@@ -222,3 +222,9 @@ At the backend, A Rabbitmq queue is created for each user based on the username,
 ```JavaScript
 var websocket = new WebSocket('ws://localhost:8080/danidee')
 ```
+
+### Examples?
+
+I've written a tutorial on how to build a [Realtime Chat application Vue, django-notifs, RabbitMQ and uWSGI](https://danidee10.github.io/2018/01/01/realtime-django-1.html).
+
+The Repository for the chat app (Chatire) is also available on [github](https://github.com/danidee10/chatire)
