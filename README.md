@@ -1,11 +1,20 @@
-# Notifications (InApp, Email, SMS, CustomBackend) for Django.
+## Notifications (InApp, Email, SMS, CustomBackend) for Django.
+
+![django-notifs](./django-notifs.png)
 
 django-notifs is a notifications app for Django. Basically it allows you to notify users about events that occur in your application E.g
 
 1. Your profile has been verified
 2. User xxxx sent you a message
 
-It also has built in support to deliver these notifications via Emails (if you want). It's also very easy to extend the delivery backends with a Custom Delivery Channel.
+It also allows you to deliver these notifications to any destination you want to with custom delivery channels.
+
+The Delivery channels are constantly updated, right now it has inbuilt delivery channels for:
+
+- Emails
+- RabbitMQ
+
+It's very easy to extend and write your own custom delivery channel(s). Checkout <a href="#delivery-channels">Writing custom delivery channels</a>
 
 ## Installation
 Get it from pip with
@@ -120,7 +129,7 @@ django-notifs comes with a Context manager that you can use to display notificat
 
 This makes a user's notifications available in all templates as a template variable named "notifications"
 
-## Custom Delivery Channels
+<h3 id="delivery-channels">Writing custom delivery channels</h3>
 
 django-notifs doesn't just allow you to send in app notifications. you can also send external notifications (Like Emails and SMS) by using custom delivery channels. A delivery channel is a python class that provides two methods:
 
@@ -228,3 +237,8 @@ var websocket = new WebSocket('ws://localhost:8080/danidee')
 I've written a tutorial on how to build a [Realtime Chat application Vue, django-notifs, RabbitMQ and uWSGI](https://danidee10.github.io/2018/01/01/realtime-django-1.html).
 
 The Repository for the chat app (Chatire) is also available on [github](https://github.com/danidee10/chatire)
+
+
+## TODO
+- Add a task queue to make notifications Non-blocking/Asynchronous
+- Document with Sphinx
