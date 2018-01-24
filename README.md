@@ -226,6 +226,18 @@ At the backend, A Rabbitmq queue is created for each user based on the username,
 var websocket = new WebSocket('ws://localhost:8080/danidee')
 ```
 
+### Writing tests
+
+django-notifs comes with an inbuilt console delivery channel that just prints out the notification arguments.
+
+```python
+NOTIFICATIONS_CHANNELS = {
+    'console': 'notifications.channels.ConsoleChannel'
+}
+```
+
+This can be helpful during development.
+
 ### Examples?
 
 I've written a tutorial on how to build a [Realtime Chat application Vue, django-notifs, RabbitMQ and uWSGI](https://danidee10.github.io/2018/01/01/realtime-django-1.html).
