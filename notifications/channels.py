@@ -3,13 +3,15 @@
 import abc
 from json import dumps
 
+import six
 import pika
 
 from .models import Notification
 from . import default_settings as settings
 
 
-class BaseNotificationChannel(metaclass=abc.ABCMeta):
+@six.add_metaclass(abc.ABCMeta)
+class BaseNotificationChannel():
     """Base channel for sending notifications."""
 
     def __init__(self, **kwargs):
