@@ -114,7 +114,7 @@ class NotificationSignalTestCase(TestCase):
             action='Notified', category='Silent notification', obj=1,
             url='http://example.com',
             short_description='Short Description', is_read=False,
-            silent=True
+            silent=True, channels=('websocket',)
         )
 
         notifications = Notification.objects.all()
@@ -150,7 +150,8 @@ class JSONFieldTestCase(TestCase):
             'action': 'Notified', 'category': 'General notification',
             'obj': 1, 'short_description': 'Short Description',
             'url': 'http://example.com', 'is_read': False,
-            'extra_data': {'hello': lambda x: 'world'}
+            'extra_data': {'hello': lambda x: 'world'},
+            'channels': ('websocket',)
         }
 
         self.assertRaises(TypeError, notify.send, **kwargs)
@@ -163,7 +164,7 @@ class JSONFieldTestCase(TestCase):
             action='Notified', category='Notification with extra data', obj=1,
             url='http://example.com',
             short_description='Short Description', is_read=False,
-            extra_data={'hello': 'world'}
+            extra_data={'hello': 'world'}, channels=('websocket',)
         )
 
         notification = Notification.objects.last()
