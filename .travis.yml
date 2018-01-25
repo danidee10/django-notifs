@@ -8,7 +8,8 @@ before_script:
   - ./cc-test-reporter before-build
 
 after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - coverage xml
+  - ./cc-test-reporter after-build -t coverage.py --exit-code $TRAVIS_TEST_RESULT
 
 language: python
 
