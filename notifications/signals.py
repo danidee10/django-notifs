@@ -11,14 +11,28 @@ from . import default_settings as settings
 
 notify = Signal(providing_args=(
     'source', 'source_display_name', 'recipient', 'action', 'category' 'obj',
-    'url', 'short_description', 'extra_data', 'silent'
+    'url', 'short_description', 'extra_data', 'silent', 'channels'
 ))
 read = Signal(providing_args=('notify_id', 'recipient'))
 
 
-def import_attr(path):
-    """helper to import classes/attributes from str paths."""
-    package, attr = path.rsplit('.', 1)
+def import_channel(channel_alias):
+    """
+    helper to import classes/attributes from str paths.
+    
+    raises an AttributeError if a channle can't be found by it's alias
+    """
+
+    try:
+        channel_path = settings.NOTIFICATIONS_CHANNELS[channel_alias]
+    except KeyError:
+        raise AttributeError(
+            '"%s" is not a valid delivery channel alias. '
+            'Check your applications settings for NOTIFICATIONS_CHANNELS'
+            % channel_alias
+        )
+
+    package, attr = channel_path.rsplit('.', 1)
 
     return getattr(importlib.import_module(package), attr)
 
@@ -30,6 +44,8 @@ def create_notification(**kwargs):
     params = kwargs.copy()
     del params['signal']
     del params['sender']
+    del params['channels']
+
     try:
         del params['silent']
     except KeyError:
@@ -40,8 +56,8 @@ def create_notification(**kwargs):
         Notification.objects.create(**params)
 
     # send via custom adapters
-    for channel_path in settings.NOTIFICATIONS_CHANNELS:
-        channel = import_attr(channel_path)(**params)
+    for channel_alias in kwargs['channels']:
+        channel = import_channel(channel_alias)(**params)
 
         message = channel.construct_message()
         channel.notify(message)
