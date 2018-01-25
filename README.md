@@ -64,10 +64,13 @@ args = {
     'source_display_name': self.request.user.get_full_name(),
     'recipient': recipent_user, 'category': 'Chat',
     'action': 'Sent', 'obj': message.id,
-    'short_description': 'You a new message', 'url': url
+    'short_description': 'You a new message', 'url': url,
+    'channels': ('email', 'websocket', 'slack')
 }
 notify.send(sender=self.__class__, **args)
 ```
+
+The example above would create a notification and deliver it via email, websocket and slack. *This assumes that you've implemented those channels and added them to the NOTIFICATIONS_CHANNELS dictionary*
 
 ### Notification Fields
 
@@ -83,6 +86,7 @@ The fields in the `args` dictionary map to the fields in the `Notification` mode
 - **url: The url of the object associated with the notification (Can be null).**
 - **silent: If this Value is set, the notification won't be persisted to the database.**
 - **extra_data: Arbitrary data as a dictionary.**
+- **channels: Delivery channels that should be used to deliver the message (Tuple/List)**
 
 The values of the fields can easily be used to construct the notification message.
 
@@ -175,21 +179,11 @@ Finally don't forget to tell `django-notifs` about your new Delivery Channel by 
 
 ```python
 
-NOTIFICATIONS_CHANNELS = ['path.to.EmailNotificationChannel']
+NOTIFICATIONS_CHANNELS = {
+    'email': 'path.to.EmailNotificationChannel'
+}
 
 ```
-
-
-## Sending Emails in the background
-
-That is beyond the scope of this project, though it can easily be achieved with a third party extension [django-celery-email](https://github.com/pmclanahan/django-celery-email) after the installation it's as easy as setting:
-
-```bash
-
-EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
-
-```
-in your application's settings.
 
 
 ## Websockets
@@ -231,6 +225,18 @@ At the backend, A Rabbitmq queue is created for each user based on the username,
 ```JavaScript
 var websocket = new WebSocket('ws://localhost:8080/danidee')
 ```
+
+### Writing tests
+
+django-notifs comes with an inbuilt console delivery channel that just prints out the notification arguments.
+
+```python
+NOTIFICATIONS_CHANNELS = {
+    'console': 'notifications.channels.ConsoleChannel'
+}
+```
+
+This can be helpful during development.
 
 ### Examples?
 

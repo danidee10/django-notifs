@@ -14,8 +14,7 @@ NOTIFICATIONS_RABBIT_MQ_URL = getattr(
     'amqp://guest:guest@localhost:5672'
 )
 
-NOTIFICATIONS_CHANNELS = getattr(settings, 'NOTIFICATIONS_CHANNELS', [])
+NOTIFICATIONS_CHANNELS = getattr(settings, 'NOTIFICATIONS_CHANNELS', {})
+
 if NOTIFICATIONS_USE_WEBSOCKET:
-    NOTIFICATIONS_CHANNELS.append(
-        'notifications.channels.BasicWebSocketChannel'
-    )
+    NOTIFICATIONS_CHANNELS['websocket'] = 'notifications.channels.BasicWebSocketChannel'

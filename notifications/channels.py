@@ -3,13 +3,15 @@
 import abc
 from json import dumps
 
+import six
 import pika
 
 from .models import Notification
 from . import default_settings as settings
 
 
-class BaseNotificationChannel(metaclass=abc.ABCMeta):
+@six.add_metaclass(abc.ABCMeta)
+class BaseNotificationChannel():
     """Base channel for sending notifications."""
 
     def __init__(self, **kwargs):
@@ -24,6 +26,17 @@ class BaseNotificationChannel(metaclass=abc.ABCMeta):
     def notify(self, message):
         """Sends the notification."""
         pass
+
+
+class ConsoleChannel(BaseNotificationChannel):
+    """Dummy channel that prints to the console."""
+
+    def construct_message(self):
+        """Stringify the notification kwargs."""
+        return str(self.notification_kwargs)
+
+    def notify(self, message):
+        print(message)
 
 
 class BasicWebSocketChannel(BaseNotificationChannel):

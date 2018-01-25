@@ -127,3 +127,6 @@ STATIC_URL = '/static/'
 NOTIFICATIONS_PAGINATE_BY = 15
 NOTIFICATIONS_USE_WEBSOCKET = False
 NOTIFICATIONS_RABBIT_MQ_URL = 'amqp://guest:guest@localhost:5672'
+NOTIFICATIONS_CHANNELS = {
+    'console': 'notifications.channels.ConsoleChannel'
+}
