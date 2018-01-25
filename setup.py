@@ -7,7 +7,7 @@ from setuptools import setup
 def package_files(directory):
     """Recursively add subfolders and files."""
     paths = []
-    for (path, directories, filenames) in os.walk(directory):
+    for (path, _, filenames) in os.walk(directory):
         for filename in filenames:
             paths.append(os.path.join('..', path, filename))
     return paths
@@ -15,7 +15,7 @@ def package_files(directory):
 EXTRA_FILES = package_files('notifications')
 
 setup(
-    name='django-notifs', version='2.5.5',
+    name='django-notifs', version='2.5.6',
     description='Re-usable notification app for Django',
     url='https://github.com/danidee10/django-notifs', author='Osaetin Daniel',
     author_email='osaetindaniel@gmail.com', license='GPL',
