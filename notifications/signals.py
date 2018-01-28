@@ -1,12 +1,10 @@
 """Defines and listens to notification signals."""
 
-import importlib
-
 from django.dispatch import Signal, receiver
 
 from . import NotificationError
 from .models import Notification
-from . import default_settings as settings
+from .tasks import send_notification
 
 
 notify = Signal(providing_args=(
@@ -16,27 +14,6 @@ notify = Signal(providing_args=(
 read = Signal(providing_args=('notify_id', 'recipient'))
 
 
-def import_channel(channel_alias):
-    """
-    helper to import classes/attributes from str paths.
-    
-    raises an AttributeError if a channle can't be found by it's alias
-    """
-
-    try:
-        channel_path = settings.NOTIFICATIONS_CHANNELS[channel_alias]
-    except KeyError:
-        raise AttributeError(
-            '"%s" is not a valid delivery channel alias. '
-            'Check your applications settings for NOTIFICATIONS_CHANNELS'
-            % channel_alias
-        )
-
-    package, attr = channel_path.rsplit('.', 1)
-
-    return getattr(importlib.import_module(package), attr)
-
-
 @receiver(notify)
 def create_notification(**kwargs):
     """Notify signal receiver."""
@@ -44,23 +21,20 @@ def create_notification(**kwargs):
     params = kwargs.copy()
     del params['signal']
     del params['sender']
-    del params['channels']
 
     try:
         del params['silent']
     except KeyError:
         pass
 
-    # If it's a not a silent notification create the notification
+    notification = Notification(**params)
+
+    # If it's a not a silent notification, save the notification
     if not kwargs.get('silent', False):
-        Notification.objects.create(**params)
+        notification.save()
 
-    # send via custom adapters
-    for channel_alias in kwargs['channels']:
-        channel = import_channel(channel_alias)(**params)
-
-        message = channel.construct_message()
-        channel.notify(message)
+    # Send the notification asynchronously with celery
+    send_notification.delay(notification.to_json())
 
 
 @receiver(read)

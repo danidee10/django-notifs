@@ -3,7 +3,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from .fields import JSONField
+from .fields import JSONField, ListField
 
 
 class NotificationQuerySet(models.QuerySet):
@@ -45,6 +45,7 @@ class Notification(models.Model):
 
     url: The url of the object associated with the notification
         (Can be null)
+    channels: Channel(s) that were/was used to deliver the message
     """
 
     User = get_user_model()
@@ -64,6 +65,7 @@ class Notification(models.Model):
     obj = models.IntegerField(null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     short_description = models.CharField(max_length=100)
+    channels = ListField(max_length=200)
     extra_data = JSONField(default='')
     is_read = models.BooleanField(default=False)
 
@@ -97,5 +99,6 @@ class Notification(models.Model):
             'recipient': self.recipient.username, 'category': self.category,
             'action': self.action, 'obj': self.obj,
             'short_description': self.short_description, 'url': self.url,
+            'channels': self.channels,
             'extra_data': self.extra_data, 'is_read': self.is_read
         }
