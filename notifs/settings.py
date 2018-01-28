@@ -130,3 +130,5 @@ NOTIFICATIONS_RABBIT_MQ_URL = 'amqp://guest:guest@localhost:5672'
 NOTIFICATIONS_CHANNELS = {
     'console': 'notifications.channels.ConsoleChannel'
 }
+
+CELERY_TASK_ALWAYS_EAGER = True
