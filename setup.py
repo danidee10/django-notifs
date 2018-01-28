@@ -15,10 +15,10 @@ def package_files(directory):
 EXTRA_FILES = package_files('notifications')
 
 setup(
-    name='django-notifs', version='2.5.6',
+    name='django-notifs', version='2.5.7',
     description='Re-usable notification app for Django',
     url='https://github.com/danidee10/django-notifs', author='Osaetin Daniel',
-    author_email='osaetindaniel@gmail.com', license='GPL',
+    author_email='osaetindaniel@gmail.com', license='MIT',
     packages=['notifications'], package_data={'': EXTRA_FILES},
-    install_requires=['django', 'pika'], zip_safe=False
+    install_requires=['django', 'pika', 'celery'], zip_safe=False
 )
