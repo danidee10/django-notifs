@@ -16,7 +16,10 @@ The Delivery channels are constantly updated, right now it has inbuilt delivery 
 
 It's very easy to extend and write your own custom delivery channel(s). Checkout <a href="#delivery-channels">Writing custom delivery channels</a>
 
+django-notifs uses <a href="#celery">Celery</a> to process notifications in the background so requests don't block and you can queue and retry failed notifications.
+
 ## Installation
+
 Get it from pip with
 
 ```bash
@@ -184,6 +187,14 @@ NOTIFICATIONS_CHANNELS = {
 }
 
 ```
+
+<h3 id="celery">Sending notifications asynchronously</h3>
+
+You don't need to do anything special here, `django-notifs` already installs celery as part of it's dependencies. You just need to setup celery like [you'd normally do](http://docs.celeryproject.org/en/latest/django/first-steps-with-django.html) make sure you have a broker installed (RabbitMQ or Redis) and run celery. Whenever a notification is created, it would be automatically sent to celery and processed.
+
+**Make sure you see the task registered under celery as  notifications.tasks.send_notification**
+
+If you have issues registering the task, you can import it manually or checkout the [celery settings in this repo](notifs/settings.py)
 
 
 ## Websockets
