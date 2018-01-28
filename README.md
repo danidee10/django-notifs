@@ -249,5 +249,4 @@ The Repository for the chat app (Chatire) is also available on [github](https://
 
 
 ## TODO
-- Add a task queue to make notifications Non-blocking/Asynchronous
 - Document with Sphinx
