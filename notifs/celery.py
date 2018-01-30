@@ -3,11 +3,7 @@
 from __future__ import absolute_import, unicode_literals
 import os
 
-import django
-
 from celery import Celery
-
-django.setup()  # This is key
 
 
 # set the default Django settings module for the 'celery' program.
