@@ -94,9 +94,9 @@ class Notification(models.Model):
     def to_json(self):
         """Return JSON representation that can easily be serialized."""
         return {
-            'source': self.source.username,
+            'source': self.source.id,
             'source_display_name': self.source_display_name,
-            'recipient': self.recipient.username, 'category': self.category,
+            'recipient': self.recipient.id, 'category': self.category,
             'action': self.action, 'obj': self.obj,
             'short_description': self.short_description, 'url': self.url,
             'channels': self.channels,

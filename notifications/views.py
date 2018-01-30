@@ -67,7 +67,7 @@ class GenerateNotification(View):
             'recipient': user, 'category': 'Quote', 'action': 'Sent',
             'obj': user.id,
             'short_description': 'You a message: {}'.format(message),
-            'url': 'http://example.com'
+            'url': 'http://example.com', 'channels': ('websocket',)
         }
         notify.send(sender=self.__class__, **args)
 
