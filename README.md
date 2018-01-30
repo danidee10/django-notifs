@@ -197,7 +197,9 @@ You don't need to do anything special here, `django-notifs` already installs cel
 
 **Make sure you see the task registered under celery as  notifications.tasks.send_notification**
 
-If you have issues registering the task, you can import it manually or checkout the [celery settings in this repo](notifs/settings.py)
+*If you have issues registering the task, you can import it manually or checkout the [celery settings in this repo](notifs/settings.py)*
+
+If you want to disable celery and send notifications synchronously you can always set `CELERY_TASK_ALWAYS_EAGER` to `True`.
 
 
 ## Websockets
