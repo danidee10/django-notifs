@@ -10,4 +10,4 @@ class NotificationsConfig(AppConfig):
 
     def ready(self):
         """Import signals."""
-        import notifications.signals
+        from . import signals
