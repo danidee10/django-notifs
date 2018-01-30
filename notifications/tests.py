@@ -75,8 +75,8 @@ class NotificationSignalTestCase(TestCase):
         self.assertEqual(
             notification.to_json(),
             {
-                'source': 'user2@gmail.com', 'source_display_name': 'User 2',
-                'recipient': 'user1@gmail.com', 'action': 'Notified',
+                'source': self.user2.id, 'source_display_name': 'User 2',
+                'recipient': self.user1.id, 'action': 'Notified',
                 'category': 'General notification', 'obj': 1,
                 'short_description': 'Short Description',
                 'extra_data': '', 'channels': '',
@@ -97,8 +97,8 @@ class NotificationSignalTestCase(TestCase):
         self.assertEqual(
             notification.to_json(),
             {
-                'source': 'user2@gmail.com', 'source_display_name': 'User 2',
-                'recipient': 'user1@gmail.com', 'action': 'Notified',
+                'source': self.user2.id, 'source_display_name': 'User 2',
+                'recipient': self.user1.id, 'action': 'Notified',
                 'category': 'General notification', 'obj': 1,
                 'short_description': 'Short Description', 'channels': '',
                 'url': 'http://example.com', 'extra_data': {'hello': 'world'},

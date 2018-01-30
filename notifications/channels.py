@@ -6,6 +6,8 @@ from json import dumps
 import six
 import pika
 
+from django.contrib.auth import get_user_model
+
 from .models import Notification
 from . import default_settings as settings
 
@@ -53,9 +55,8 @@ class BasicWebSocketChannel(BaseNotificationChannel):
 
     def construct_message(self):
         """Construct message from notification details."""
-        notification = Notification(**self.notification_kwargs)
         
-        return notification.to_json()
+        return self.notification_kwargs
 
     def notify(self, message):
         """
@@ -66,11 +67,16 @@ class BasicWebSocketChannel(BaseNotificationChannel):
         connection = self._connect()
         channel = connection.channel()
 
-        channel.queue_declare(queue=message['source'])
+        # Get user instance
+        User = get_user_model()
+        source = User.objects.get(id=message['source'])
+        recipient = User.objects.get(id=message['recipient'])
+
+        channel.queue_declare(queue=source.username)
 
         jsonified_messasge = dumps(message)
         channel.basic_publish(
-            exchange='', routing_key=message['recipient'],
+            exchange='', routing_key=recipient.username,
             body=jsonified_messasge
         )
 
