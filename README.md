@@ -143,9 +143,9 @@ This makes a user's notifications available in all templates as a template varia
 
 django-notifs doesn't just allow you to send in app notifications. you can also send external notifications (Like Emails and SMS) by using custom delivery channels. A delivery channel is a python class that provides two methods:
 
-1. `construct_notify` to construct the message
+1. `construct_message` to construct the message.
 
-2. `notify` does the actual sending of the message
+2. `notify` does the actual sending of the message.
 
 There's a base meta class you can inherit. This is an example of an email delivery channel using `django.core.mail.send_mail`:
 
