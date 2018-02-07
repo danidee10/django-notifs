@@ -20,5 +20,5 @@ setup(
     url='https://github.com/danidee10/django-notifs', author='Osaetin Daniel',
     author_email='osaetindaniel@gmail.com', license='MIT',
     packages=['notifications'], package_data={'': EXTRA_FILES},
-    install_requires=['django', 'pika', 'celery'], zip_safe=False
+    install_requires=['django', 'pika', 'celery', 'six'], zip_safe=False
 )
