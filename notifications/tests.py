@@ -8,8 +8,69 @@ from .models import Notification
 from .signals import read, notify
 
 
+class GeneralTestCase(TestCase):
+    """Tests for General functionality."""
+
+    User = get_user_model()
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create Users."""
+        cls.user1 = cls.User.objects.create_user(
+            username='user1@gmail.com', password='password'
+        )
+
+        cls.user2 = cls.User.objects.create(
+            username='user2@gmail.com', password='password'
+        )
+
+    def test_to_json(self):
+        """Test JSON Representation."""
+        # Create notification
+        notification = Notification.objects.create(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='General notification', obj=1, url='http://example.com',
+            short_description='Short Description', is_read=False,
+        )
+
+        self.assertEqual(
+            notification.to_json(),
+            {
+                'source': self.user2.id, 'source_display_name': 'User 2',
+                'recipient': self.user1.id, 'action': 'Notified',
+                'category': 'General notification', 'obj': 1,
+                'short_description': 'Short Description',
+                'extra_data': '', 'channels': '',
+                'url': 'http://example.com', 'is_read': False
+            }
+        )
+
+    def test_to_json_with_extra_data(self):
+        """Test to_json method with extra data."""
+        notification = Notification.objects.create(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='General notification', obj=1, url='http://example.com',
+            short_description='Short Description', is_read=False,
+            extra_data={'hello': 'world'}
+        )
+
+        self.assertEqual(
+            notification.to_json(),
+            {
+                'source': self.user2.id, 'source_display_name': 'User 2',
+                'recipient': self.user1.id, 'action': 'Notified',
+                'category': 'General notification', 'obj': 1,
+                'short_description': 'Short Description', 'channels': '',
+                'url': 'http://example.com', 'extra_data': {'hello': 'world'},
+                'is_read': False,
+            }
+        )
+
+
 class NotificationSignalTestCase(TestCase):
-    """Tests for the notifications app."""
+    """Tests for the notification signals."""
 
     User = get_user_model()
 
@@ -61,50 +122,6 @@ class NotificationSignalTestCase(TestCase):
 
         notification.refresh_from_db()
         self.assertEqual(notification.is_read, True)
-
-    def test_to_json(self):
-        """Test JSON Representation."""
-        # Create notification
-        notification = Notification.objects.create(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='General notification', obj=1, url='http://example.com',
-            short_description='Short Description', is_read=False,
-        )
-
-        self.assertEqual(
-            notification.to_json(),
-            {
-                'source': self.user2.id, 'source_display_name': 'User 2',
-                'recipient': self.user1.id, 'action': 'Notified',
-                'category': 'General notification', 'obj': 1,
-                'short_description': 'Short Description',
-                'extra_data': '', 'channels': '',
-                'url': 'http://example.com', 'is_read': False
-            }
-        )
-
-    def test_to_json_with_extra_data(self):
-        """Test to_json method with extra data."""
-        notification = Notification.objects.create(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='General notification', obj=1, url='http://example.com',
-            short_description='Short Description', is_read=False,
-            extra_data={'hello': 'world'}
-        )
-
-        self.assertEqual(
-            notification.to_json(),
-            {
-                'source': self.user2.id, 'source_display_name': 'User 2',
-                'recipient': self.user1.id, 'action': 'Notified',
-                'category': 'General notification', 'obj': 1,
-                'short_description': 'Short Description', 'channels': '',
-                'url': 'http://example.com', 'extra_data': {'hello': 'world'},
-                'is_read': False,
-            }
-        )
 
     def test_silent_notification(self):
         """Test Silent notifications."""
@@ -206,4 +223,3 @@ class TestListField(TestCase):
         self.assertEqual(
             notification.to_json()['channels'], ['console', 'console']
         )
-
