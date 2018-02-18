@@ -36,7 +36,7 @@ class GenerateNotification(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         """disable CSRF Verification."""
-        return super().dispatch(request, *args, **kwargs)
+        return super(GenerateNotification, self).dispatch(request, *args, **kwargs)
 
     def add_access_control_headers(self, response):
         """Add headers for CORS."""
