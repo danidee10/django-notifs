@@ -17,13 +17,13 @@ The Delivery channels are constantly updated, right now it has inbuilt delivery 
 - Emails
 - RabbitMQ
 
-It's very easy to extend and write your own custom delivery channel(s). Checkout <a href="#delivery-channels">Writing custom delivery channels</a>
+It's very easy to extend and write your own custom delivery channel(s). Checkout <a href="#delivery-channels">Writing custom delivery channels</a> to learn how to write your own delivery channel.
 
 django-notifs uses <a href="#celery">Celery</a> to process notifications in the background so requests don't block and you can queue and retry failed notifications.
 
 ## Installation
 
-Get it from pip with
+Get it from pip with:
 
 ```bash
 pip install django-notifs
@@ -76,7 +76,7 @@ args = {
 notify.send(sender=self.__class__, **args)
 ```
 
-The example above would create a notification and deliver it via email, websocket and slack. *This assumes that you've implemented those channels and added them to the NOTIFICATIONS_CHANNELS dictionary*
+The example above would create a notification and deliver it via email, websocket and slack. *This assumes that you've implemented those channels and added them to the NOTIFICATIONS_CHANNELS dictionary.*
 
 ### Notification Fields
 
@@ -234,7 +234,7 @@ Due to the fact that Django itself doesn't support websockets, The Websocket ser
 uwsgi --http :8080 --gevent 100 --module websocket --gevent-monkey-patch --master --processes 4
 ```
 
-There is a sample echo websocket server in the `examples` directory
+There is a sample echo websocket server in the `examples` directory.
 
 ### How to listen to notifications
 
