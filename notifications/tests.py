@@ -24,8 +24,12 @@ class GeneralTestCase(TestCase):
             username='user2@gmail.com', password='password'
         )
 
-    def test_to_json(self):
-        """Test JSON Representation."""
+    def test_to_json_without_extra_data(self):
+        """
+        If the extra_data argument is ommitted,
+
+        the default should be an empty dictionary
+        """
         # Create notification
         notification = Notification.objects.create(
             source=self.user2, source_display_name='User 2',
@@ -41,7 +45,7 @@ class GeneralTestCase(TestCase):
                 'recipient': self.user1.id, 'action': 'Notified',
                 'category': 'General notification', 'obj': 1,
                 'short_description': 'Short Description',
-                'extra_data': '', 'channels': '',
+                'extra_data': {}, 'channels': '',
                 'url': 'http://example.com', 'is_read': False
             }
         )
@@ -106,7 +110,7 @@ class NotificationSignalTestCase(TestCase):
 
     def test_user_can_read_notifications(self):
         """A user can read their notification"""
-        # Create NOtification for User1
+        # Create Notification for User1
         notification = Notification.objects.create(
             source=self.user2, source_display_name='User 2',
             recipient=self.user1, action='Notified',

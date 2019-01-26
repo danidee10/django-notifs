@@ -46,6 +46,9 @@ class Notification(models.Model):
     url: The url of the object associated with the notification
         (Can be null)
     channels: Channel(s) that were/was used to deliver the message
+
+    extra_data: Extra information that was passed in the notification
+        (Optional but default value is an empty dict {})
     """
 
     User = get_user_model()
@@ -66,7 +69,7 @@ class Notification(models.Model):
     url = models.URLField(null=True, blank=True)
     short_description = models.CharField(max_length=100)
     channels = ListField(max_length=200)
-    extra_data = JSONField(default='')
+    extra_data = JSONField(default={})
     is_read = models.BooleanField(default=False)
 
     create_date = models.DateTimeField(auto_now_add=True)
@@ -92,7 +95,8 @@ class Notification(models.Model):
         self.save()
 
     def to_json(self):
-        """Return JSON representation that can easily be serialized."""
+        """
+        Return JSON representation that can easily be serialized."""
         return {
             'source': getattr(self.source, 'id', ''),
             'source_display_name': self.source_display_name,
