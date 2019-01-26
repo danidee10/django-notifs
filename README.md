@@ -152,7 +152,7 @@ There's a base meta class you can inherit. This is an example of an email delive
 ```python
 
 from django.core.mail import send_mail
-from notifications.channel import BaseNotificationChannel
+from notifications.channels import BaseNotificationChannel
 
 class EmailNotificationChannel(BaseNotificationChannel):
     """Allows notifications to be sent via email to users."""
