@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='notification',
             name='extra_data',
-            field=notifications.fields.JSONField(default=''),
+            field=notifications.fields.JSONField(default={}),
         ),
     ]
