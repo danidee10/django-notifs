@@ -262,6 +262,11 @@ I've written a tutorial on how to build a [Realtime Chat application Vue, django
 
 The Repository for the chat app (Chatire) is also available on [github](https://github.com/danidee10/chatire)
 
+### Supported Python versions
 
-## TODO
+Python 3.5, 3.6 and 3.7.
+*It should still work with older versions of python but I can't guarantee it*
+
+### TODO
+
 - Document with Sphinx
