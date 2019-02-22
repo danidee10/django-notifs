@@ -1,6 +1,7 @@
 """Notification model."""
 
 from django.db import models
+from django.conf import settings
 from django.contrib.auth import get_user_model
 
 from .fields import JSONField, ListField
@@ -51,7 +52,7 @@ class Notification(models.Model):
         (Optional but default value is an empty dict {})
     """
 
-    User = get_user_model()
+    User = settings.AUTH_USER_MODEL
 
     class Meta:
         """Specify ordering for notifications."""
