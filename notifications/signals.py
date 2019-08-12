@@ -1,5 +1,7 @@
 """Defines and listens to notification signals."""
 
+import warnings
+
 from django.dispatch import Signal, receiver
 
 from . import NotificationError
@@ -17,6 +19,12 @@ read = Signal(providing_args=('notify_id', 'recipient'))
 @receiver(notify)
 def create_notification(**kwargs):
     """Notify signal receiver."""
+    warnings.warn(
+        'The \'notify\' Signal will be removed in 2.6.5 '
+        'Please use the helper functions in notifications.utils',
+        PendingDeprecationWarning
+    )
+
     # make fresh copy and retain kwargs
     params = kwargs.copy()
     del params['signal']
@@ -45,6 +53,12 @@ def read_notification(**kwargs):
     Raises NotificationError if the user doesn't have access
     to read the notification
     """
+    warnings.warn(
+        'The \'read\' Signal will be removed in 2.6.5 '
+        'Please use the helper functions in notifications.utils',
+        PendingDeprecationWarning
+    )
+
     notify_id = kwargs['notify_id']
     recipient = kwargs['recipient']
     notification = Notification.objects.get(id=notify_id)
