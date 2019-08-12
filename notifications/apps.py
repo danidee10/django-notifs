@@ -5,7 +5,7 @@ from django.apps import AppConfig
 
 class NotificationsConfig(AppConfig):
     """App Config."""
-    
+
     name = 'notifications'
 
     def ready(self):
