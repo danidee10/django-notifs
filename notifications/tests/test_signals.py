@@ -3,9 +3,9 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from . import NotificationError
-from .models import Notification
-from .signals import read, notify
+from .. import NotificationError
+from ..models import Notification
+from ..signals import read, notify
 
 
 class GeneralTestCase(TestCase):
