@@ -1,24 +1,39 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-import os
-from setuptools import setup
+from setuptools import find_packages, setup
 
 
-def package_files(directory):
-    """Recursively add subfolders and files."""
-    paths = []
-    for (path, _, filenames) in os.walk(directory):
-        for filename in filenames:
-            paths.append(os.path.join('..', path, filename))
-    return paths
+# Package meta-data.
+NAME = 'django-notifs'
+DESCRIPTION = 'Re-usable notification app for Django'
+URL = 'https://github.com/danidee10/django-notifs'
+EMAIL = 'osaetindaniel@gmail.com'
+AUTHOR = 'Osaetin Daniel'
+REQUIRES_PYTHON = '>=3.5.0'
+VERSION = '2.6.2'
 
-EXTRA_FILES = package_files('notifications')
+REQUIRED = ['django', 'pika', 'celery', 'six']
+EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
 
 setup(
-    name='django-notifs', version='2.6.2',
-    description='Re-usable notification app for Django',
-    url='https://github.com/danidee10/django-notifs', author='Osaetin Daniel',
-    author_email='osaetindaniel@gmail.com', license='MIT',
-    packages=['notifications'], package_data={'': EXTRA_FILES},
-    install_requires=['django', 'pika', 'celery', 'six'], zip_safe=False
+    name=NAME,
+    version=VERSION,
+    description=DESCRIPTION,
+    long_description=DESCRIPTION,
+    long_description_content_type='text/markdown',
+    author=AUTHOR,
+    author_email=EMAIL,
+    python_requires=REQUIRES_PYTHON,
+    url=URL,
+    packages=find_packages(exclude=EXCLUDE),
+    install_requires=REQUIRED,
+    license='MIT',
+    classifiers=[
+        # Trove classifiers
+        # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
+        'License :: OSI Approved :: All Rights Reserved',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: Implementation :: CPython',
+    ]
 )
