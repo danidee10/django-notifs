@@ -28,12 +28,5 @@ setup(
     url=URL,
     packages=find_packages(exclude=EXCLUDE),
     install_requires=REQUIRED,
-    license='MIT',
-    classifiers=[
-        # Trove classifiers
-        # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
-        'License :: OSI Approved :: All Rights Reserved',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: Implementation :: CPython',
-    ]
+    license='MIT'
 )
