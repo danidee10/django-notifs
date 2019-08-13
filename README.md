@@ -58,22 +58,22 @@ python manage.py migrate notifications
 
 ### Sending Notifications
 
-django-notifs uses Django signals to make it as decoupled from the rest of your application as possible. This also enables you to listen to it's signals and carry out other custom actions if you want to.
+Previously, django-notifs used [Django signals](https://docs.djangoproject.com/en/2.2/topics/signals/) to send and read notifications. If you use version <=2.6.2 Please read the [Using signals section](#signals).
 
-To Create/Send a notification import the notify signal and send it with the following arguments (Hypothetical example).
+To Create/Send a notification import the notify function and call it with the following arguments.
 
 ```python
-from notifications.signals import notify
+from notifications.utils import notify
 
-args = {
+kwargs = {
     'source': self.request.user,
     'source_display_name': self.request.user.get_full_name(),
     'recipient': recipent_user, 'category': 'Chat',
     'action': 'Sent', 'obj': message.id,
     'short_description': 'You a new message', 'url': url,
-    'channels': ('email', 'websocket', 'slack')
+    'channels': ('email', 'websocket', 'slack'), 'silent': True
 }
-notify.send(sender=self.__class__, **args)
+notify.send(**kwargs)
 ```
 
 The example above would create a notification and deliver it via email, websocket and slack. *This assumes that you've implemented those channels and added them to the NOTIFICATIONS_CHANNELS dictionary.*
@@ -107,19 +107,17 @@ Internally, the JSON is stored as text in django's standard `TextField` so it do
 
 ### Reading notifications
 
-To read a notification simply send the read signal like this:
+To read a notification use the read method like this:
 
 ```python
-from notifications.signals import notify
+from notifications.utils import read
 
 # id of the notification object, you can easily pass this through a URL
 notify_id = request.GET.get('notify_id')
 
 # Read notification
 if notify_id:
-    read.send(sender=self.__class__, notify_id=notify_id,
-              recipient=request.user
-    )
+    read(notify_id=notify_id, recipient=request.user)
 ```
 
 It's really important to pass the correct recipient to the read signal, Internally it's used to check if the user has the right to read the notification. If you pass in the wrong recipient or you omit it entirely, `django-notifs` would raise a
@@ -266,6 +264,46 @@ The Repository for the chat app (Chatire) is also available on [github](https://
 
 Python 3.5, 3.6 and 3.7.
 *It should still work with older versions of python but I can't guarantee it*
+
+
+<h3 id="signals">Using signals</h3>
+
+Previously, django-notifs used [Django signals](https://docs.djangoproject.com/en/2.2/topics/signals/) to send and read notifications. This has been deprecated in favour of pure Python functions.
+
+To Create/Send a notification import the notify signal and send it with the following arguments.
+
+```python
+from notifications.signals import notify
+
+kwargs = {
+    'source': self.request.user,
+    'source_display_name': self.request.user.get_full_name(),
+    'recipient': recipent_user, 'category': 'Chat',
+    'action': 'Sent', 'obj': message.id,
+    'short_description': 'You a new message', 'url': url,
+    'channels': ('email', 'websocket', 'slack'), 'silent': True
+}
+notify.send(sender=self.__class__, **kwargs)
+```
+
+To Read a notification use this:
+
+```python
+from notifications.signals import read
+
+# id of the notification object, you can easily pass this through a URL
+notify_id = request.GET.get('notify_id')
+
+# Read notification
+if notify_id:
+    read.send(
+        sender=self.__class__, notify_id=notify_id,
+        recipient=request.user
+    )
+```
+
+It's really important to pass the correct recipient to the read signal, Internally it's used to check if the user has the right to read the notification. If you pass in the wrong recipient or you omit it entirely, `django-notifs` would raise a
+`NotificationError`
 
 ### TODO
 

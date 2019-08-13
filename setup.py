@@ -11,7 +11,7 @@ URL = 'https://github.com/danidee10/django-notifs'
 EMAIL = 'osaetindaniel@gmail.com'
 AUTHOR = 'Osaetin Daniel'
 REQUIRES_PYTHON = '>=3.5.0'
-VERSION = '2.6.2'
+VERSION = '2.6.3'
 
 REQUIRED = ['django', 'pika', 'celery', 'six']
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
