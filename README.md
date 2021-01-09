@@ -1,7 +1,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/3f5dd1e1833c12c79db9/maintainability)](https://codeclimate.com/github/danidee10/django-notifs/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/3f5dd1e1833c12c79db9/test_coverage)](https://codeclimate.com/github/danidee10/django-notifs/test_coverage)
 
-## Notifications (InApp, Email, SMS, CustomBackend) for Django.
+## Modular Notifications (InApp, Email, SMS, CustomBackend etc) for Django.
 
 ![django-notifs](./django-notifs.png)
 
