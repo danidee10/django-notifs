@@ -3,7 +3,6 @@
 import abc
 from json import dumps
 
-import six
 import pika
 
 from django.contrib.auth import get_user_model
@@ -12,8 +11,7 @@ from .models import Notification
 from . import default_settings as settings
 
 
-@six.add_metaclass(abc.ABCMeta)
-class BaseNotificationChannel():
+class BaseNotificationChannel(metaclass=abc.ABCMeta):
     """Base channel for sending notifications."""
 
     def __init__(self, **kwargs):
