@@ -45,7 +45,7 @@ Include the urls in urls.py
 ```python
 urlpatterns = [
     ...
-    url('^notifications/', include('notifications.urls', namespace='notifications')),
+    path('notifications/', include('notifications.urls', namespace='notifications')),
     ...
 ]
 ```

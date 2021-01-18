@@ -6,14 +6,14 @@ from setuptools import find_packages, setup
 
 # Package meta-data.
 NAME = 'django-notifs'
-DESCRIPTION = 'Re-usable notification app for Django'
+DESCRIPTION = 'Modular notifications for Django'
 URL = 'https://github.com/danidee10/django-notifs'
 EMAIL = 'osaetindaniel@gmail.com'
 AUTHOR = 'Osaetin Daniel'
 REQUIRES_PYTHON = '>=3.5.0'
 VERSION = '2.6.3'
 
-REQUIRED = ['django', 'pika', 'celery', 'six']
+REQUIRED = ['django>=2.0', 'pika', 'celery<=4.1.0']
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
 
 setup(

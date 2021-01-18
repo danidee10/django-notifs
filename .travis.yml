@@ -1,3 +1,7 @@
+language: python
+sudo: required
+dist: xenial
+
 env:
   global:
     - CC_TEST_REPORTER_ID=323cb9fbdd4915f4bdb1734a71cb0d65c75dcdd5a2e724d51e422c4683367b54
@@ -7,22 +11,56 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 
-after_script:
-  - coverage xml
-  - ./cc-test-reporter after-build -t coverage.py --exit-code $TRAVIS_TEST_RESULT
+matrix:
+  fast_finish: true
+  include:
+    # Python 3.5
+    - python: 3.5
+      env: TOXENV=py35-django20,py35-django21,py35-django22
 
-language: python
-sudo: required
-dist: xenial
+    # Python 3.6
+    - python: 3.6
+      env: TOXENV=py36-django20,py36-django21,py36-django22,py36-django30,py36-django31
 
-python:
-  - "3.5"
-  - "3.6"
-  - "3.7"
+    # Python 3.7
+    - python: 3.7
+      env: TOXENV=py37-django20,py37-django21,py37-django22,py37-django30,py37-django31
+
+    # Python 3.8
+    - python: 3.8
+      env: TOXENV=py38-django22,py38-django30,py38-django31
+
+    # Python 3.9
+    - python: 3.9
+      env: TOXENV=py39-django22,py39-django30,py39-django31
+
+    # Django Master
+    - python: 3.6
+      env: TOXENV=py36-djangomaster
+    - python: 3.7
+      env: TOXENV=py37-djangomaster
+    - python: 3.8
+      env: TOXENV=py38-djangomaster
+
+  allow_failures:
+    - python: 3.6
+      env: TOXENV=py36-djangomaster
+    - python: 3.7
+      env: TOXENV=py37-djangomaster
+    - python: 3.8
+      env: TOXENV=py38-djangomaster
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+    - $TRAVIS_BUILD_DIR/.tox
 
 # Install Requirements
-install: "pip install -r requirements.txt"
+install: "pip install tox"
 
 # Run tests
 script:
-  - coverage run --source='.' manage.py test -v 2
+  - tox
+
+after_script:
+  - ./cc-test-reporter after-build -t coverage.py --exit-code $TRAVIS_TEST_RESULT

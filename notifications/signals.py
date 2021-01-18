@@ -9,11 +9,12 @@ from .models import Notification
 from .tasks import send_notification
 
 
-notify = Signal(providing_args=(
-    'source', 'source_display_name', 'recipient', 'action', 'category' 'obj',
-    'url', 'short_description', 'extra_data', 'silent', 'channels'
-))
-read = Signal(providing_args=('notify_id', 'recipient'))
+# Expected arguments; 'source', 'source_display_name', 'recipient', 'action', 'category' 'obj',
+#    'url', 'short_description', 'extra_data', 'silent', 'channels'
+notify = Signal()
+
+# Expected arguments: 'notify_id', 'recipient'
+read = Signal()
 
 
 @receiver(notify)
