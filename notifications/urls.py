@@ -1,6 +1,6 @@
 """Frontend urls."""
 
-from django.conf.urls import url
+from django.urls import path
 
 from . import views
 
@@ -8,7 +8,6 @@ from . import views
 app_name = 'notifications'
 
 urlpatterns = [
-    url(r'^$', views.NotificationsView.as_view(),
-        name='notifications_view'),
-    url(r'^generate-notification/$', views.GenerateNotification.as_view())
+    path('', views.NotificationsView.as_view(), name='notifications_view'),
+    path('generate-notification/', views.GenerateNotification.as_view())
 ]
