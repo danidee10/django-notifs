@@ -13,7 +13,7 @@ class JSONField(models.TextField):
 
         return json.dumps(db_value)
 
-    def from_db_value(self, value, expression, connection, *args, **kwargs):
+    def from_db_value(self, value, expression, connection):
         """Convert the JSON back to a dictionary."""
         try:
             return json.loads(value)
@@ -34,7 +34,7 @@ class ListField(models.CharField):
 
         return ','.join(value)
 
-    def from_db_value(self, value, expression, connection, *args, **kwargs):
+    def from_db_value(self, value, expression, connection):
         """Return the value from the database as a python list."""
 
         return value.split(',')

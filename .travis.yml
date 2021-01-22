@@ -41,6 +41,8 @@ matrix:
       env: TOXENV=py37-djangomaster
     - python: 3.8
       env: TOXENV=py38-djangomaster
+    - python: 3.9
+      env: TOXENV=py39-djangomaster
 
   allow_failures:
     - python: 3.6
@@ -49,6 +51,8 @@ matrix:
       env: TOXENV=py37-djangomaster
     - python: 3.8
       env: TOXENV=py38-djangomaster
+    - python: 3.9
+      env: TOXENV=py39-djangomaster
 
 cache:
   directories:
