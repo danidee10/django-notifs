@@ -68,3 +68,14 @@ script:
 
 after_script:
   - ./cc-test-reporter after-build -t coverage.py --exit-code $TRAVIS_TEST_RESULT
+
+deploy:
+  provider: pypi
+  user: danidee10
+  password:
+    secure: EHds6wNxHfbuiF+69tLiSGsOYGyYqt1brPt6SC+eGDYWIvZOtPepcX7XBBo/4e/uiFQJmR9mV1AinSPccZqzGOfdVsZ8A92D/58BmJ1dfBxyo9CSkwnoQlTKxeZpNUcwrpKObMVzMH+DpQEcnil78afo7MsILBuDZIXN+7XtNGp8fIsDCleGNXDgVq4PIXDRD0GHJR97l31IJ0JcwbKmOQAtuPRA6bt0na7NBelfakqIIZUiYfwI4jnxtJdIczVMEFeSYir0MOdUz7dk0f0aX7CGzrXbWmcIXHS9JaYiUfDFfrd3lcaZj63015bMQ6BF5k6Al8VnMTJGyzXLuo0VR0h5jrKOa5ygGy1tqz6dsfLYP/ZHTgc5vvSW5euWvo9yvEGLXNLa+XTvqDpm+AZm5kYfQlaTbyiw/lp2oehzSFjyEL/zN6wjS7HFBmIu34AyfvECpw/NIMvATnfu7AenCa/EDaJXLmTaUzRCIR5vgmLt0s2slayUspDiNln1B5gkXT24ac/DY/EyqS7EEGJfREqwx0fCjop948YSFfje3mKRGaMOCT3WPt1bhfo77hA1ZXV3m7AzJ33B4pq5mMB8vWavAzAUExeOXkOzzjgm9J5RflnIDNWb97m5ZqcZRTynfE+MD9PoDTXfSRKXZ5Vt3VKEQSnN5yWx+uO7rN70IyA=
+  skip_existing: true
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: danidee10/django-notifs
