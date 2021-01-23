@@ -1,0 +1,3 @@
+m2r2==0.2.7
+Sphinx==3.4.3
+sphinx-rtd-theme==0.5.1

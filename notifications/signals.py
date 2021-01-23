@@ -21,7 +21,7 @@ read = Signal()
 def create_notification(**kwargs):
     """Notify signal receiver."""
     warnings.warn(
-        'The \'notify\' Signal will be removed in 2.6.5 '
+        'The \'notify\' Signal will be removed in 2.6.6 '
         'Please use the helper functions in notifications.utils',
         PendingDeprecationWarning
     )
@@ -55,7 +55,7 @@ def read_notification(**kwargs):
     to read the notification
     """
     warnings.warn(
-        'The \'read\' Signal will be removed in 2.6.5 '
+        'The \'read\' Signal will be removed in 2.6.6 '
         'Please use the helper functions in notifications.utils',
         PendingDeprecationWarning
     )
