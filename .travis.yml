@@ -16,32 +16,41 @@ matrix:
   include:
     # Python 3.5
     - python: 3.5
+      if: branch != master
       env: TOXENV=py35-django20,py35-django21,py35-django22
 
     # Python 3.6
     - python: 3.6
+      if: branch != master
       env: TOXENV=py36-django20,py36-django21,py36-django22,py36-django30,py36-django31
 
     # Python 3.7
     - python: 3.7
+      if: branch != master
       env: TOXENV=py37-django20,py37-django21,py37-django22,py37-django30,py37-django31
 
     # Python 3.8
     - python: 3.8
+      if: branch != master
       env: TOXENV=py38-django22,py38-django30,py38-django31
 
     # Python 3.9
     - python: 3.9
+      if: branch != master
       env: TOXENV=py39-django22,py39-django30,py39-django31
 
     # Django Master
     - python: 3.6
+      if: branch != master
       env: TOXENV=py36-djangomaster
     - python: 3.7
+      if: branch != master
       env: TOXENV=py37-djangomaster
     - python: 3.8
+      if: branch != master
       env: TOXENV=py38-djangomaster
     - python: 3.9
+      if: branch != master
       env: TOXENV=py39-djangomaster
 
   allow_failures:
@@ -76,6 +85,7 @@ deploy:
     secure: EHds6wNxHfbuiF+69tLiSGsOYGyYqt1brPt6SC+eGDYWIvZOtPepcX7XBBo/4e/uiFQJmR9mV1AinSPccZqzGOfdVsZ8A92D/58BmJ1dfBxyo9CSkwnoQlTKxeZpNUcwrpKObMVzMH+DpQEcnil78afo7MsILBuDZIXN+7XtNGp8fIsDCleGNXDgVq4PIXDRD0GHJR97l31IJ0JcwbKmOQAtuPRA6bt0na7NBelfakqIIZUiYfwI4jnxtJdIczVMEFeSYir0MOdUz7dk0f0aX7CGzrXbWmcIXHS9JaYiUfDFfrd3lcaZj63015bMQ6BF5k6Al8VnMTJGyzXLuo0VR0h5jrKOa5ygGy1tqz6dsfLYP/ZHTgc5vvSW5euWvo9yvEGLXNLa+XTvqDpm+AZm5kYfQlaTbyiw/lp2oehzSFjyEL/zN6wjS7HFBmIu34AyfvECpw/NIMvATnfu7AenCa/EDaJXLmTaUzRCIR5vgmLt0s2slayUspDiNln1B5gkXT24ac/DY/EyqS7EEGJfREqwx0fCjop948YSFfje3mKRGaMOCT3WPt1bhfo77hA1ZXV3m7AzJ33B4pq5mMB8vWavAzAUExeOXkOzzjgm9J5RflnIDNWb97m5ZqcZRTynfE+MD9PoDTXfSRKXZ5Vt3VKEQSnN5yWx+uO7rN70IyA=
   skip_existing: true
   on:
+    branch: master
     tags: true
     distributions: sdist bdist_wheel
     repo: danidee10/django-notifs
