@@ -17,4 +17,5 @@ NOTIFICATIONS_RABBIT_MQ_URL = getattr(
 NOTIFICATIONS_CHANNELS = getattr(settings, 'NOTIFICATIONS_CHANNELS', {})
 
 if NOTIFICATIONS_USE_WEBSOCKET:
-    NOTIFICATIONS_CHANNELS['websocket'] = 'notifications.channels.BasicWebSocketChannel'
+    NOTIFICATIONS_CHANNELS['websocket'] = \
+        'notifications.channels.BasicWebSocketChannel'

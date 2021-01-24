@@ -163,7 +163,8 @@ class JSONFieldTestCase(TestCase):
         """
         Should raise an exception
 
-        When we try to save objects that can't be serialized by the json module.
+        When we try to save objects that can't be serialized by
+        the json module.
         """
         kwargs = {
             'sender': self.__class__, 'source': self.user2,
