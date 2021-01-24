@@ -7,7 +7,6 @@ import pika
 
 from django.contrib.auth import get_user_model
 
-from .models import Notification
 from . import default_settings as settings
 
 
@@ -53,13 +52,13 @@ class BasicWebSocketChannel(BaseNotificationChannel):
 
     def construct_message(self):
         """Construct message from notification details."""
-        
+
         return self.notification_kwargs
 
     def notify(self, message):
         """
         Puts a new message on the queue.
-        
+
         The queue is named based on the username (for Uniqueness)
         """
         connection = self._connect()

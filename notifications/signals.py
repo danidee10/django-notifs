@@ -9,8 +9,9 @@ from .models import Notification
 from .tasks import send_notification
 
 
-# Expected arguments; 'source', 'source_display_name', 'recipient', 'action', 'category' 'obj',
-#    'url', 'short_description', 'extra_data', 'silent', 'channels'
+# Expected arguments; 'source', 'source_display_name', 'recipient', 'action',
+# 'category' 'obj', 'url', 'short_description', 'extra_data', 'silent',
+# 'channels'
 notify = Signal()
 
 # Expected arguments: 'notify_id', 'recipient'

@@ -11,4 +11,4 @@ class NotificationsConfig(AppConfig):
 
     def ready(self):
         """Import signals."""
-        from . import signals
+        from . import signals  # noqa
