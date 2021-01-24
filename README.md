@@ -15,7 +15,7 @@ django-notifs is a modular notifications app for Django that basically allows yo
 
 It also allows you to deliver these notifications to any destination you want to with custom delivery channels.
 
-At the moment, django-notifs uses [Celery](https://docs.celeryproject.org/en/stable/) to asynchronously process the notifications. This ensures that requests are non-blocking and it also leads to a robust system that can retry failed notifications (In the case of external services)
+At the moment, django-notifs uses [Celery](https://docs.celeryproject.org/en/stable/) to asynchronously process the notifications. This ensures that requests are non-blocking and it also leads to a robust system that can retry failed notifications (In the case of external services).
 
 *This might change and become more flexible in the future with the introduction of pluggable delivery backends*
 
