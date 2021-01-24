@@ -38,6 +38,7 @@ matrix:
     - python: 3.9
       if: branch != master
       env: TOXENV=py39-django22,py39-django30,py39-django31
+      after_success: ./cc-test-reporter after-build -t coverage.py --exit-code $TRAVIS_TEST_RESULT
 
     # Django Master
     - python: 3.6
@@ -74,9 +75,6 @@ install: "pip install tox"
 # Run tests
 script:
   - tox
-
-after_script:
-  - ./cc-test-reporter after-build -t coverage.py --exit-code $TRAVIS_TEST_RESULT
 
 deploy:
   provider: pypi
