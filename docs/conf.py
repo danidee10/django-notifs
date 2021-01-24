@@ -56,4 +56,9 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+
+# Cusotm settings
 source_suffix = ['.rst', '.md']
+
+# Logo
+# html_logo = '_static/images/django-notifs.png'

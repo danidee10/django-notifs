@@ -1,11 +1,14 @@
 """Tests."""
 
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import RequestFactory, TestCase
+from django.contrib.auth.models import AnonymousUser
 
+from ..utils import notify, read
 from .. import NotificationError
 from ..models import Notification
-from ..utils import notify, read
+from ..tasks import send_notification
+from ..notifications import notifications
 
 
 class GeneralTestCase(TestCase):
@@ -73,7 +76,7 @@ class GeneralTestCase(TestCase):
         )
 
 
-class NotificationSignalTestCase(TestCase):
+class NotificationTestCase(TestCase):
     """Tests for the notification signals."""
 
     User = get_user_model()
@@ -88,6 +91,26 @@ class NotificationSignalTestCase(TestCase):
         cls.user2 = cls.User.objects.create(
             username='user2@gmail.com', password='password'
         )
+
+    def test_celery_task(self):
+        """
+        THIS IS PROBABLY THE MOST IMPORTANT TEST because:
+
+        It tests the actual Celery task i.e `send_notification`
+        Other tests that call `notify` simply test an emulation of a celery worker.
+
+        There's really nothing to assert here but `send_notification` should run without any
+        Exception
+        """
+        notification = Notification(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='Silent notification', obj=1, url='http://example.com',
+            short_description='Short Description', is_read=False,
+            channels=('console',)
+        )
+
+        self.assertIsNone(send_notification(notification.to_json()))
 
     def test_user_cant_read_others_notifications(self):
         """A user should only be able to read THEIR notifications."""
@@ -135,6 +158,97 @@ class NotificationSignalTestCase(TestCase):
 
         self.assertEqual(tuple(notifications), tuple())
 
+    def test_notify_invalid_channel(self):
+        """An invalid channel should raise an AttributeError."""
+        notification_kwargs = dict(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='Silent notification', obj=1, url='http://example.com',
+            short_description='Short Description', is_read=False,
+            channels=('invalid channel',)
+        )
+
+        self.assertRaises(AttributeError, notify, **notification_kwargs)
+
+    def test_send_notification_invalid_channel(self):
+        """
+        An invalid channel should raise an AttributeError.
+
+        This tests the actual Celery task
+        """
+        notification = Notification(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='Silent notification', obj=1, url='http://example.com',
+            short_description='Short Description', is_read=False,
+            channels=('invalid channel',)
+        )
+
+        self.assertRaises(
+            AttributeError, send_notification, notification.to_json()
+        )
+
+    def test_queryset_methods(self):
+        """Test the custom queryset methods."""
+        for count in range(3):
+            Notification.objects.create(
+                source=self.user2, source_display_name='User 2',
+                recipient=self.user1, action='Notified ' + str(count),
+                category='General notification', obj=1, url='http://example.com',
+                is_read=False
+            )
+
+        notification = Notification.objects.create(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='General notification', obj=1, url='http://example.com',
+            is_read=False
+        )
+        read(notify_id=notification.id, recipient=self.user1)
+
+        self.assertEqual(Notification.objects.all_unread().count(), 3)
+        self.assertEqual(Notification.objects.all_read().count(), 1)
+
+    def test_string_representation(self):
+        """Test the string representation of the Notification model."""
+        notification = Notification.objects.create(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='Admin notification', obj=1, url='http://example.com',
+            is_read=False
+        )
+        self.assertEqual(
+            str(notification),
+            'Admin notification: user2@gmail.com Notified  => user1@gmail.com'
+        )
+
+        notification = Notification.objects.create(
+            source=None, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            short_description='Admin was  notified',
+            category='Admin notification', obj=1, url='http://example.com',
+            is_read=False
+        )
+        self.assertEqual(str(notification), 'Admin was  notified')
+
+    def test_context_processor(self):
+        """Test the 'notifications context processor."""
+        Notification.objects.create(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='Admin notification', obj=1, url='http://example.com',
+            is_read=False
+        )
+
+        request = RequestFactory()
+        request.user = AnonymousUser()
+        self.assertEqual(notifications(request), {})
+
+        # 'authenticate' the request
+        request.user = self.user1
+        notifications_count = notifications(request)['notifications'].count()
+        self.assertEqual(notifications_count, 1)
+
 
 class JSONFieldTestCase(TestCase):
     """Test the Custom JSONField."""
@@ -156,7 +270,7 @@ class JSONFieldTestCase(TestCase):
         """
         Should raise an exception
 
-        When we try to save objects that can be serialized by the json module.
+        When we try to save objects that can't be serialized by the json module.
         """
         kwargs = {
             'sender': self.__class__, 'source': self.user2,
@@ -183,9 +297,7 @@ class JSONFieldTestCase(TestCase):
 
         notification = Notification.objects.last()
 
-        self.assertEqual(
-            notification.extra_data, {'hello': 'world'}
-        )
+        self.assertEqual(notification.extra_data, {'hello': 'world'})
 
 
 class TestListField(TestCase):
