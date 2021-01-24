@@ -97,10 +97,11 @@ class NotificationTestCase(TestCase):
         THIS IS PROBABLY THE MOST IMPORTANT TEST because:
 
         It tests the actual Celery task i.e `send_notification`
-        Other tests that call `notify` simply test an emulation of a celery worker.
+        Other tests that call `notify` simply test an emulation
+        of a celery worker.
 
-        There's really nothing to assert here but `send_notification` should run without any
-        Exception
+        There's really nothing to assert here but `send_notification`
+        should run without any Exception
         """
         notification = Notification(
             source=self.user2, source_display_name='User 2',
@@ -194,8 +195,8 @@ class NotificationTestCase(TestCase):
             Notification.objects.create(
                 source=self.user2, source_display_name='User 2',
                 recipient=self.user1, action='Notified ' + str(count),
-                category='General notification', obj=1, url='http://example.com',
-                is_read=False
+                category='General notification', obj=1,
+                url='http://example.com', is_read=False
             )
 
         notification = Notification.objects.create(
@@ -270,7 +271,8 @@ class JSONFieldTestCase(TestCase):
         """
         Should raise an exception
 
-        When we try to save objects that can't be serialized by the json module.
+        When we try to save objects that can't be serialized by
+        the json module.
         """
         kwargs = {
             'sender': self.__class__, 'source': self.user2,
