@@ -6,7 +6,7 @@
 
 <h3>Modular Notifications (InApp, Email, SMS, CustomBackend etc) for Django</h3>
 
-![django-notifs](./docs/_static/images/django-notifs.png)
+![django-notifs](./docs/django-notifs.png)
 
 django-notifs is a modular notifications app for Django that basically allows you to notify users about events that occur in your application E.g
 
