@@ -4,7 +4,7 @@
 [![Pypi](https://img.shields.io/pypi/v/django-notifs.svg)](https://pypi.python.org/pypi/django-notifs)
 [![Style guide](https://img.shields.io/badge/code%20style-pep8-green.svg)](https://www.python.org/dev/peps/pep-0008/)
 
-<h4>Modular Notifications (InApp, Email, SMS, CustomBackend etc) for Django</h4>
+<h3>Modular Notifications (InApp, Email, SMS, CustomBackend etc) for Django</h3>
 
 ![django-notifs](./django-notifs.png)
 
@@ -24,3 +24,7 @@ At the moment, django-notifs uses [Celery](https://docs.celeryproject.org/en/sta
 A tutorial on how to build a [Realtime Chat application with Vue, django-notifs, RabbitMQ and uWSGI](https://danidee10.github.io/2018/01/01/realtime-django-1.html)
 
 The Repository for the chat app (Chatire) is also available on [github](https://github.com/danidee10/chatire)
+
+
+#### Documentation
+https://django-notifs.readthedocs.io

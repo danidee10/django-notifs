@@ -8,11 +8,12 @@ from celery import shared_task
 from . import default_settings as settings
 
 
-def _import_channel(channel_alias):
+def __validate_channel_alias(channel_alias):
     """
-    helper to import channels aliases from string paths.
+    Validates a channel alias against settings.NOTIFICATION_CHANNELS.
 
-    raises an AttributeError if a channel can't be found by it's alias
+    returns the channel's path (i.e the path to the Channel's class)
+    raises an AttributeError for invalid aliases
     """
     try:
         channel_path = settings.NOTIFICATIONS_CHANNELS[channel_alias]
@@ -22,6 +23,12 @@ def _import_channel(channel_alias):
             'Check your applications settings for NOTIFICATIONS_CHANNELS'
             % channel_alias
         )
+
+    return channel_path
+
+
+def __import_channel(channel_path):
+    """helper to import channel classes from string paths."""
     package, attr = channel_path.rsplit('.', 1)
 
     return getattr(importlib.import_module(package), attr)
@@ -31,7 +38,10 @@ def _import_channel(channel_alias):
 def send_notification(notification):
     """Send notification via a channel to celery."""
     for channel_alias in notification['channels']:
-        channel = _import_channel(channel_alias)(**notification)
+        # Validate channel alias
+        channel_path = __validate_channel_alias(channel_alias)
+
+        channel = __import_channel(channel_path)(**notification)
 
         message = channel.construct_message()
         channel.notify(message)
