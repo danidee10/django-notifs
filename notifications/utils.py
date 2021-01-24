@@ -2,12 +2,16 @@
 
 from . import NotificationError
 from .models import Notification
-from .tasks import send_notification
+from .tasks import send_notification, __validate_channel_alias
 
 
 def notify(silent=False, **kwargs):
     """Helper method to send a notification."""
     notification = Notification(**kwargs)
+
+    # Validate channels
+    for channel_alias in notification.channels:
+        __validate_channel_alias(channel_alias)
 
     # If it's a not a silent notification, save the notification
     if not silent:

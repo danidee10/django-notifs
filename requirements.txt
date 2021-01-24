@@ -1,5 +1,5 @@
 celery==4.1.0
 coverage==4.3.4
-pika==0.11.2
+pika==0.12.0
 pytz==2017.2
 uWSGI==2.0.19.1

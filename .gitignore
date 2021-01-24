@@ -6,3 +6,8 @@
 *.egg-info
 /.tox
 /docs/_build
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
