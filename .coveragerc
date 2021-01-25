@@ -1,5 +1,5 @@
 [run]
-source = .
+source = notifications
 omit = .tox/*,./venv/*,*tests*,*apps.py,*manage.py,*__init__.py,*migrations*,*asgi*,*wsgi*,*admin.py,*urls.py,setup.py
 
 [report]
