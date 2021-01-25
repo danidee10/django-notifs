@@ -157,7 +157,7 @@ class NotificationTestCase(TestCase):
 
         notifications = Notification.objects.all()
 
-        self.assertEqual(tuple(notifications), tuple())
+        self.assertEqual(notifications.count(), 0)
 
     def test_notify_invalid_channel(self):
         """An invalid channel should raise an AttributeError."""
