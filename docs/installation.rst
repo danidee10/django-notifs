@@ -14,14 +14,6 @@ Include it in ``settings.INSTALLED_APPS``::
         ...
     )
 
-Include the urls in urls.py::
-
-    urlpatterns = [
-        ...
-        path('notifications/', include('notifications.urls', namespace='notifications')),
-        ...
-    ]
-
 Finally don't forget to run the migrations with::
 
     python manage.py migrate notifications
