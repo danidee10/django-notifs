@@ -140,7 +140,7 @@ class NotificationSignalTestCase(TestCase):
 
         notifications = Notification.objects.all()
 
-        self.assertEqual(tuple(notifications), tuple())
+        self.assertEqual(notifications.count(), 0)
 
 
 class JSONFieldTestCase(TestCase):
