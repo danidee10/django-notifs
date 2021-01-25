@@ -8,7 +8,6 @@ from ..utils import notify, read
 from .. import NotificationError
 from ..models import Notification
 from ..tasks import send_notification
-from ..notifications import notifications
 
 
 class GeneralTestCase(TestCase):
@@ -231,24 +230,6 @@ class NotificationTestCase(TestCase):
             is_read=False
         )
         self.assertEqual(str(notification), 'Admin was  notified')
-
-    def test_context_processor(self):
-        """Test the 'notifications context processor."""
-        Notification.objects.create(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='Admin notification', obj=1, url='http://example.com',
-            is_read=False
-        )
-
-        request = RequestFactory()
-        request.user = AnonymousUser()
-        self.assertEqual(notifications(request), {})
-
-        # 'authenticate' the request
-        request.user = self.user1
-        notifications_count = notifications(request)['notifications'].count()
-        self.assertEqual(notifications_count, 1)
 
 
 class JSONFieldTestCase(TestCase):
