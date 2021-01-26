@@ -27,7 +27,7 @@ def application(env, start_response):
     channel = connection.channel()
 
     queue = env['PATH_INFO'].replace('/', '')
-    
+
     channel.queue_declare(queue=queue)
 
     uwsgi.websocket_handshake(
@@ -43,7 +43,7 @@ def application(env, start_response):
             connection.add_timeout(30, keepalive)
         except OSError as error:
             print(error)
-            sys.exit(1) # Kill process and force uWSGI to Respawn
+            sys.exit(1)  # Kill process and force uWSGI to Respawn
 
     keepalive()
 
@@ -53,7 +53,7 @@ def application(env, start_response):
                 uwsgi.websocket_send(body)
             except OSError as error:
                 print(error)
-                sys.exit(1) # Kill process and force uWSGI to Respawn
+                sys.exit(1)  # Kill process and force uWSGI to Respawn
             else:
                 # acknowledge the message
                 channel.basic_ack(method_frame.delivery_tag)

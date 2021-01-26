@@ -223,7 +223,7 @@ class NotificationTestCase(TestCase):
         )
 
         notification = Notification.objects.create(
-            source=None, source_display_name='User 2',
+            source_display_name='User 2',
             recipient=self.user1, action='Notified',
             short_description='Admin was  notified',
             category='Admin notification', obj=1, url='http://example.com',
