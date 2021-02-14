@@ -1,8 +1,7 @@
 """Tests."""
 
+from django.test import TestCase
 from django.contrib.auth import get_user_model
-from django.test import RequestFactory, TestCase
-from django.contrib.auth.models import AnonymousUser
 
 from ..utils import notify, read
 from .. import NotificationError

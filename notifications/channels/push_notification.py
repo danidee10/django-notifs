@@ -1,12 +1,7 @@
 """Adpaters to send notifications through various meduiums."""
 
-import textwrap
-
 from django.conf import settings
-from django.utils.safestring import mark_safe
-from django.contrib.auth import get_user_model
 
-from templated_mail.mail import BaseEmailMessage
 from notifications.channels import BaseNotificationChannel
 
 import requests
@@ -18,7 +13,7 @@ class PushNotificationChannel(BaseNotificationChannel):
     def notify(self, message):
         """Send the notification."""
         kwargs = self.notification_kwargs
-        message = self.construct_message()
+        # message = self.construct_message()
 
         # Send push notification(s)
         subject = '{} {} {}'.format(
@@ -35,7 +30,7 @@ class PushNotificationChannel(BaseNotificationChannel):
                         'title': subject,
                         # 'body': message,
                         'click_action': kwargs.get('url', ''),
-                        'icon': 'https://assets.ogamechanic.com/static/frontend/images/logo.png'
+                        'icon': 'https://example.com/icon.png'
                     },
                     'to': token
                 },

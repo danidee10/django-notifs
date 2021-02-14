@@ -9,6 +9,11 @@ env:
 matrix:
   fast_finish: true
   include:
+    # Lint (Python 3.9)
+    - python: 3.9
+      if: branch != master
+      env: TOXENV=lint
+
     # Python 3.6
     - python: 3.6
       if: branch != master
@@ -69,7 +74,7 @@ cache:
     - $TRAVIS_BUILD_DIR/.tox
 
 # Install Requirements
-install: "pip install tox"
+install: "pip install tox==3.21.4"
 
 # Run tests
 script:
