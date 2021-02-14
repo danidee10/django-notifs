@@ -13,7 +13,9 @@ AUTHOR = 'Osaetin Daniel'
 REQUIRES_PYTHON = '>=3.5.0'
 VERSION = '2.6.5'
 
-REQUIRED = ['django>=2.0', 'pika>=0.12.0', 'celery>=4.1.0']
+REQUIRED = [
+    'celery>=4.1.0', 'django>=2.0', 'pika>=0.12.0', 'requests==2.25.1'
+]
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
 
 setup(
