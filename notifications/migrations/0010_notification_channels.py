@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='notification',
             name='channels',
-            field=notifications.fields.ListField(default=('console',), max_length=200),
+            field=notifications.fields.ListField(default=('console',), max_length=200),  # noqa
             preserve_default=False,
         ),
     ]
