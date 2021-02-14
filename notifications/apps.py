@@ -1,4 +1,4 @@
-"""Register all Signals."""
+"Notifications app config"
 
 from django.apps import AppConfig
 
@@ -8,7 +8,3 @@ class NotificationsConfig(AppConfig):
 
     name = 'notifications'
     default_auto_field = 'django.db.models.AutoField'
-
-    def ready(self):
-        """Import signals."""
-        from . import signals  # noqa

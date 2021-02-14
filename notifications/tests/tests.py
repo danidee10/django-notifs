@@ -75,7 +75,7 @@ class GeneralTestCase(TestCase):
 
 
 class NotificationTestCase(TestCase):
-    """Tests for the notification signals."""
+    """Tests for the notifications"""
 
     User = get_user_model()
 
