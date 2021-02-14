@@ -2,7 +2,7 @@
 
 from django.conf import settings
 
-from notifications.channels import BaseNotificationChannel
+from .base import BaseNotificationChannel
 
 import requests
 
@@ -20,6 +20,7 @@ class PushNotificationChannel(BaseNotificationChannel):
             kwargs['source_display_name'], kwargs['action'],
             kwargs.get('short_description', '')
         )
+        icon = kwargs.get('icon')
         token = kwargs.get('extra_data', {}).get('token', '')
 
         if token:
@@ -30,7 +31,7 @@ class PushNotificationChannel(BaseNotificationChannel):
                         'title': subject,
                         # 'body': message,
                         'click_action': kwargs.get('url', ''),
-                        'icon': 'https://example.com/icon.png'
+                        'icon': icon
                     },
                     'to': token
                 },
