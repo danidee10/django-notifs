@@ -1,41 +1,13 @@
 """Base Implementation of a Delivery Backend."""
 
-import abc
 from json import dumps
 
 import pika
 
 from django.contrib.auth import get_user_model
 
-from . import default_settings as settings
-
-
-class BaseNotificationChannel(metaclass=abc.ABCMeta):
-    """Base channel for sending notifications."""
-
-    def __init__(self, **kwargs):
-        self.notification_kwargs = kwargs
-
-    @abc.abstractmethod
-    def construct_message(self):
-        """Constructs a message from notification details."""
-        pass
-
-    @abc.abstractmethod
-    def notify(self, message):
-        """Sends the notification."""
-        pass
-
-
-class ConsoleChannel(BaseNotificationChannel):
-    """Dummy channel that prints to the console."""
-
-    def construct_message(self):
-        """Stringify the notification kwargs."""
-        return str(self.notification_kwargs)
-
-    def notify(self, message):
-        print(message)
+from .base import BaseNotificationChannel
+from notifications import default_settings as settings
 
 
 class BasicWebSocketChannel(BaseNotificationChannel):
