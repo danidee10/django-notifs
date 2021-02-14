@@ -14,4 +14,3 @@ Contents
    usage
    configuration
    advanced-usage
-   signals
