@@ -4,8 +4,13 @@ from __future__ import absolute_import, unicode_literals
 import importlib
 
 from celery import shared_task
+from celery.utils.log import get_task_logger
+
 
 from . import default_settings as settings
+
+
+logger = get_task_logger(__name__)
 
 
 def __validate_channel_alias(channel_alias):
@@ -41,7 +46,13 @@ def send_notification(notification):
         # Validate channel alias
         channel_path = __validate_channel_alias(channel_alias)
 
-        channel = __import_channel(channel_path)(**notification)
+        channel = __import_channel(channel_path)(
+            **notification, alias=channel_alias
+        )
 
         message = channel.construct_message()
         channel.notify(message)
+        logger.info(
+            'Sent notification with the %s channel. kwargs: %s\n' %
+            (channel_alias, notification)
+        )
