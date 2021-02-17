@@ -16,7 +16,7 @@ NOTIFICATIONS_RABBIT_MQ_URL = getattr(
 
 NOTIFICATIONS_DELIVERY_BACKEND = getattr(
     settings, 'NOTIFICATIONS_DELIVERY_BACKEND',
-    'notifications.backends.Celery'
+    'notifications.backends.Synchronous'
 )
 NOTIFICATIONS_CHANNELS = getattr(settings, 'NOTIFICATIONS_CHANNELS', {})
 
