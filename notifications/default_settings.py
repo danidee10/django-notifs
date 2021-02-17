@@ -14,6 +14,10 @@ NOTIFICATIONS_RABBIT_MQ_URL = getattr(
     'amqp://guest:guest@localhost:5672'
 )
 
+NOTIFICATIONS_DELIVERY_BACKEND = getattr(
+    settings, 'NOTIFICATIONS_DELIVERY_BACKEND',
+    'notifications.backends.Celery'
+)
 NOTIFICATIONS_CHANNELS = getattr(settings, 'NOTIFICATIONS_CHANNELS', {})
 
 if NOTIFICATIONS_USE_WEBSOCKET:
