@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from ..utils import notify, read
 from .. import NotificationError
 from ..models import Notification
-from ..tasks import send_notification
+from ..backends.celery import send_notification
 
 
 class GeneralTestCase(TestCase):
