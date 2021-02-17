@@ -1,4 +1,6 @@
-"""Tests."""
+"""General Tests."""
+
+import logging
 
 from django.test import TestCase
 from django.contrib.auth import get_user_model
@@ -6,7 +8,7 @@ from django.contrib.auth import get_user_model
 from ..utils import notify, read
 from .. import NotificationError
 from ..models import Notification
-from ..backends.celery import send_notification
+from ..backends.utils import _send_notification
 
 
 class GeneralTestCase(TestCase):
@@ -73,6 +75,25 @@ class GeneralTestCase(TestCase):
             }
         )
 
+    def test_send_notification(self):
+        """
+       This is the default method that's used by all backends
+
+        There's really nothing to assert here but `_send_notification`
+        should run without any Exception.
+        (This might change in the future)
+        """
+        notification = Notification(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='Silent notification', obj=1, url='http://example.com',
+            short_description='Short Description', is_read=False,
+            channels=('console',)
+        )
+
+        logger = logging.getLogger(__name__)
+        self.assertIsNone(_send_notification(notification.to_json(), logger))
+
 
 class NotificationTestCase(TestCase):
     """Tests for the notifications"""
@@ -89,27 +110,6 @@ class NotificationTestCase(TestCase):
         cls.user2 = cls.User.objects.create(
             username='user2@gmail.com', password='password'
         )
-
-    def test_celery_task(self):
-        """
-        THIS IS PROBABLY THE MOST IMPORTANT TEST because:
-
-        It tests the actual Celery task i.e `send_notification`
-        Other tests that call `notify` simply test an emulation
-        of a celery worker.
-
-        There's really nothing to assert here but `send_notification`
-        should run without any Exception
-        """
-        notification = Notification(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='Silent notification', obj=1, url='http://example.com',
-            short_description='Short Description', is_read=False,
-            channels=('console',)
-        )
-
-        self.assertIsNone(send_notification(notification.to_json()))
 
     def test_user_cant_read_others_notifications(self):
         """A user should only be able to read THEIR notifications."""
@@ -170,11 +170,7 @@ class NotificationTestCase(TestCase):
         self.assertRaises(AttributeError, notify, **notification_kwargs)
 
     def test_send_notification_invalid_channel(self):
-        """
-        An invalid channel should raise an AttributeError.
-
-        This tests the actual Celery task
-        """
+        """An invalid channel should raise an AttributeError."""
         notification = Notification(
             source=self.user2, source_display_name='User 2',
             recipient=self.user1, action='Notified',
@@ -183,8 +179,9 @@ class NotificationTestCase(TestCase):
             channels=('invalid channel',)
         )
 
+        logger = logging.getLogger(__name__)
         self.assertRaises(
-            AttributeError, send_notification, notification.to_json()
+            AttributeError, _send_notification, notification.to_json(), logger
         )
 
     def test_queryset_methods(self):

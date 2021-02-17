@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     'notifications',
+    'django_rq'
 ]
 
 MIDDLEWARE = [
@@ -131,4 +132,12 @@ NOTIFICATIONS_CHANNELS = {
     'console': 'notifications.channels.ConsoleChannel'
 }
 
-CELERY_TASK_ALWAYS_EAGER = True
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'PASSWORD': '',
+        'DEFAULT_TIMEOUT': 360,
+    }
+}
