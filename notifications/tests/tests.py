@@ -71,7 +71,7 @@ class GeneralTestCase(TestCase):
                 'category': 'General notification', 'obj': 1,
                 'short_description': 'Short Description', 'channels': '',
                 'url': 'http://example.com', 'extra_data': {'hello': 'world'},
-                'is_read': False,
+                'is_read': False
             }
         )
 

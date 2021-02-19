@@ -2,6 +2,8 @@
 
 import logging
 
+from .. import default_settings as settings
+
 import django_rq
 
 from .base import BaseBackend
@@ -15,6 +17,5 @@ logger = logging.getLogger('django_notifs.backends.rq')
 class RQBackend(BaseBackend):
 
     def run(self):
-        django_rq.enqueue(
-            _send_notification, self.notification.to_json(), logger
-        )
+        queue = django_rq.get_queue(settings.NOTIFICATIONS_QUEUE_NAME)
+        queue.enqueue(_send_notification, self.notification.to_json(), logger)
