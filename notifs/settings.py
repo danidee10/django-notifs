@@ -133,7 +133,7 @@ NOTIFICATIONS_CHANNELS = {
 }
 
 RQ_QUEUES = {
-    'default': {
+    'django_notifs': {
         'HOST': 'localhost',
         'PORT': 6379,
         'DB': 0,
