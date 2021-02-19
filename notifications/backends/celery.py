@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, unicode_literals
 
+from .. import default_settings as settings
+
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
@@ -21,4 +23,7 @@ def send_notification(notification):
 class CeleryBackend(BaseBackend):
 
     def run(self):
-        send_notification.delay(self.notification.to_json())
+        send_notification.apply_async(
+            args=[self.notification.to_json()],
+            queue=settings.NOTIFICATIONS_QUEUE_NAME
+        )

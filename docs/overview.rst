@@ -15,4 +15,4 @@ Supported Functionality
     - In-app notifications
     - Silent notifications (i.e Notifications that aren't saved in the database)
     - Custom delivery (notification) channels e.g Telegram, Slack, SMS etc
-    - Asynchronous notifications
+    - Asynchronous notifications (with support for multiple backends e.g Celery, RQ etc)

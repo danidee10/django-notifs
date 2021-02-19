@@ -6,7 +6,7 @@
 
 <h3>Modular Notifications (InApp, Email, SMS, CustomBackend etc) for Django</h3>
 
-![django-notifs](./docs/django-notifs.png)
+![django-notifs](./django-notifs.png)
 
 django-notifs is a modular notifications app for Django that basically allows you to notify users about events that occur in your application E.g
 
@@ -15,9 +15,7 @@ django-notifs is a modular notifications app for Django that basically allows yo
 
 It also allows you to deliver these notifications to any destination you want to with custom delivery channels.
 
-At the moment, django-notifs uses [Celery](https://docs.celeryproject.org/en/stable/) to asynchronously process the notifications. This ensures that requests are non-blocking and it also leads to a robust system that can retry failed notifications (In the case of external services).
-
-*This might change and become more flexible in the future with the introduction of pluggable delivery backends*
+It also supports asynchronous notification with several pluggable delivery backends (e.g Celery, RQ etc)
 
 #### Examples?
 
