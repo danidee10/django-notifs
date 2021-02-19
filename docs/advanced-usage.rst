@@ -1,6 +1,8 @@
 Advanced usage
 **************
 
+.. _Pub/Sub: https://www.rabbitmq.com/tutorials/tutorial-one-python.html
+
 WebSockets
 ---------------------
 
@@ -24,7 +26,8 @@ and set the URL to your RabbitMQ Server with:
 
 This will tell django-notifs to publish messages to the rabbitmq queue.
 
-Under the hood, django-notifs adds a new channel to ``settings.NOTIFICATIONS_CHANNELS`` which contains the logic for delivering the messages to RabbitMQ. If you need more advanced features that RabbitMQ offers like [Pub/Sub](https://www.rabbitmq.com/tutorials/tutorial-one-python.html) or you want to use a different message queue like Redis, all you need to do is write your own delivery channel and add it to `NOTIFICATIONS_CHANNELS`.
+Under the hood, django-notifs adds a new channel to ``settings.NOTIFICATIONS_CHANNELS`` which contains the logic for delivering the messages to RabbitMQ.
+If you need more advanced features that RabbitMQ offers like `Pub/Sub`_ or you want to use a different message queue like Redis, all you need to do is write your own delivery channel and add it to `settings.NOTIFICATIONS_CHANNELS`.
 
 **Running the websocket server**
 
@@ -54,7 +57,3 @@ django-notifs comes with an inbuilt console delivery channel that just prints ou
 
 
 This can be helpful during development.
-
-**Synchronous Notifications**
-
-During development, you might need to send notifications synchronously. You can achieve this by setting ``settings.CELERY_TASK_ALWAYS_EAGER`` to ``True``.

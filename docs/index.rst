@@ -13,4 +13,5 @@ Contents
    installation
    usage
    configuration
+   backends
    advanced-usage

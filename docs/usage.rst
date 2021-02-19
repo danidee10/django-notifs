@@ -109,17 +109,13 @@ Finally don't forget to tell `django-notifs` about your new Delivery Channel by 
 Sending notifications asynchronously
 ------------------------------------
 
-You don't need to do anything special here because `django-notifs` already installs celery as part of it's dependencies. You just need to setup celery like `you'd normally do`_.
+``django-notifs`` is designed to support different backends for delivering notifications.
+By default it uses the ``Synchronous`` backend which delivers notifications synchronously.
 
-Make sure you have a broker installed (RabbitMQ or Redis) and run celery. Whenever a notification is created, it's automatically sent to celery and processed.
-
-**Make sure you see the task registered under celery as  notifications.tasks.send_notification**
-
-.. image:: _static/images/django-notifs-celery.png
-
-If you have issues registering the task, you can import it manually or checkout the `Celery settings in the repo`_.
-
-If you want to disable celery and send notifications synchronously you can always set ``settings.CELERY_TASK_ALWAYS_EAGER`` to ``True``.
+.. note::
+   The Synchronous backend is not suitable for production because it blocks the request.
+   It's more suitable for testing and debugging.
+   To deliver notification asynchronously, please see the :doc:`backends section <./backends>`.
 
 
 Reading notifications
@@ -137,22 +133,8 @@ To read a notification use the read method::
         read(notify_id=notify_id, recipient=request.user)
 
 .. note::
-    It's really important to pass the correct recipient to the read signal.
+    It's really important to pass the correct recipient to the ``read`` function.
 
     Internally,it's used to check if the user has the right to read the notification.
     If you pass in the wrong recipient or you omit it entirely, ``django-notifs`` will raise a
     ``NotificationError``
-
-
-Templates
----------
-
-django-notifs comes with a Context manager that you can use to display notifications in your templates. Include it with::
-
-    'context_processors': [
-        ...
-        'notifications.notifications.notifications',
-        ...
-    ]
-
-This makes a user's notifications available in all templates as a template variable named ``"notifications"``
