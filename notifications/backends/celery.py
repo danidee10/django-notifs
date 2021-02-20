@@ -15,15 +15,16 @@ logger = get_task_logger(__name__)
 
 
 @shared_task
-def send_notification(notification):
+def send_notification(notification, channel_alias):
     """Send notification via a channel to celery."""
-    _send_notification(notification, logger)
+    _send_notification(notification, channel_alias, logger)
 
 
 class CeleryBackend(BaseBackend):
 
     def run(self):
-        send_notification.apply_async(
-            args=[self.notification.to_json()],
-            queue=settings.NOTIFICATIONS_QUEUE_NAME
-        )
+        for channel_alias in self.notification['channels']:
+            send_notification.apply_async(
+                args=[self.notification, channel_alias],
+                queue=settings.NOTIFICATIONS_QUEUE_NAME
+            )
