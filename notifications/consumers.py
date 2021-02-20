@@ -14,4 +14,6 @@ logger = logging.getLogger('django_notifs.backends.channels')
 class DjangoNotifsConsumer(SyncConsumer):
 
     def notify(self, message):
-        _send_notification(message['notification'], logger)
+        _send_notification(
+            message['notification'], message['channel_alias'], logger
+        )
