@@ -92,7 +92,9 @@ class GeneralTestCase(TestCase):
         )
 
         logger = logging.getLogger(__name__)
-        self.assertIsNone(_send_notification(notification.to_json(), logger))
+        self.assertIsNone(
+            _send_notification(notification.to_json(), 'console', logger)
+        )
 
 
 class NotificationTestCase(TestCase):
@@ -181,7 +183,8 @@ class NotificationTestCase(TestCase):
 
         logger = logging.getLogger(__name__)
         self.assertRaises(
-            AttributeError, _send_notification, notification.to_json(), logger
+            AttributeError, _send_notification, notification,
+            'invalid channel', logger
         )
 
     def test_queryset_methods(self):

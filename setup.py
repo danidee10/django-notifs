@@ -16,7 +16,7 @@ VERSION = '2.6.5'
 REQUIRED = [
     'django>=2.0', 'pika>=0.12.0', 'requests==2.25.1',
 ]
-TEST_REQUIRES = ['coverage>=4.3.4']
+TEST_REQUIRES = ['coverage>=5.4']
 EXTRAS_REQUIRE = {
     'celery': ['celery>=4.1.0'],
     'rq': ['django-rq>=2.4.0'],

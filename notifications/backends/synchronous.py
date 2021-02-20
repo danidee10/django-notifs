@@ -13,4 +13,5 @@ logger = logging.getLogger('django_notifs.backends.synchronous')
 class SynchronousBackend(BaseBackend):
 
     def run(self):
-        _send_notification(self.notification.to_json(), logger)
+        for channel_alias in self.notification['channels']:
+            _send_notification(self.notification, channel_alias, logger)

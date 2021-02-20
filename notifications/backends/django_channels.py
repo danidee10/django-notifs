@@ -16,7 +16,12 @@ class ChannelsBackend(BaseBackend):
         channel_layer = channels.layers.get_channel_layer(
             settings.NOTIFICATIONS_QUEUE_NAME
         )
-        async_to_sync(channel_layer.send)(
-            settings.NOTIFICATIONS_QUEUE_NAME,
-            {'notification': self.notification.to_json(), 'type': 'notify'}
-        )
+
+        for channel_alias in self.notification['channels']:
+            async_to_sync(channel_layer.send)(
+                settings.NOTIFICATIONS_QUEUE_NAME,
+                {
+                    'notification': self.notification,
+                    'channel_alias': channel_alias, 'type': 'notify'
+                }
+            )
