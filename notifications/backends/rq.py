@@ -17,5 +17,8 @@ logger = logging.getLogger('django_notifs.backends.rq')
 class RQBackend(BaseBackend):
 
     def run(self):
-        queue = django_rq.get_queue(settings.NOTIFICATIONS_QUEUE_NAME)
-        queue.enqueue(_send_notification, self.notification.to_json(), logger)
+        for channel_alias in self.notification['channels']:
+            queue = django_rq.get_queue(settings.NOTIFICATIONS_QUEUE_NAME)
+            queue.enqueue(
+                _send_notification, self.notification, channel_alias, logger
+            )
