@@ -1,6 +1,6 @@
 language: python
 sudo: required
-dist: xenial
+dist: focal
 
 env:
   global:
@@ -63,8 +63,11 @@ cache:
     - $HOME/.cache/pip
     - $TRAVIS_BUILD_DIR/.tox
 
+# Upgrade pip
+before_install: pip install -U pip
+
 # Install Requirements
-install: "pip install tox==3.21.4"
+install: pip install tox==3.21.4
 
 # Run tests
 script:

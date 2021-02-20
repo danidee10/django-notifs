@@ -34,7 +34,7 @@ By default it uses the ``Synchronous`` backend which delivers notifications sync
 
 **NOTIFICATIONS_QUEUE_NAME (default='django_notifs')**
 
-**This setting is only valid for the Celery and RQ backend**
+**This setting is only valid for the Celery, Channels and RQ backend**
 
 This is the queue name for backends that have a "queue" functionality
 
