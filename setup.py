@@ -19,7 +19,8 @@ REQUIRED = [
 TEST_REQUIRES = ['coverage>=4.3.4']
 EXTRAS_REQUIRE = {
     'celery': ['celery>=4.1.0'],
-    'rq': ['django-rq==2.4.0']
+    'rq': ['django-rq>=2.4.0'],
+    'channels': ['channels>=3.0.3', 'channels-redis>=3.2.0']
 }
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
 
