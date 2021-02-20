@@ -1,6 +1,6 @@
 language: python
 sudo: required
-dist: xenial
+dist: focal
 
 env:
   global:
@@ -17,9 +17,7 @@ matrix:
     # Python 3.6
     - python: 3.6
       if: branch != master
-      env:
-        - TOXENV=py36-django22,py36-django30,py36-django31
-        - CRYPTOGRAPHY_DONT_BUILD_RUST=1
+      env: TOXENV=py36-django22,py36-django30,py36-django31
 
     # Python 3.7
     - python: 3.7
@@ -65,6 +63,7 @@ cache:
     - $HOME/.cache/pip
     - $TRAVIS_BUILD_DIR/.tox
 
+# Upgrade pip
 before_install: pip install -U pip
 
 # Install Requirements
