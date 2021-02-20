@@ -9,6 +9,7 @@ Backends
 The primary function of **a delivery backend** is to execute the code of the delivery channels.
 *Unlike delivery channels, you can only use one delivery backend at the same time.*
 
+
 Celery
 ------
 
@@ -29,6 +30,47 @@ Whenever a notification is created, it's automatically sent to celery and proces
 .. image:: _static/images/django-notifs-celery.png
 
 If you have issues registering the task, you can import it manually or checkout the `Celery settings in the repo`_.
+
+
+Channels
+--------
+
+Install the channels dependency with::
+
+    pip install django-notifs[channels]
+
+*This also installs channels_redis as an extra dependency*
+
+Declare the notifications consumer in ``asgi.py``::
+
+    from notifications import consumers
+
+    application = ProtocolTypeRouter({
+        ...,
+        'channel': ChannelNameRouter({
+            'django_notifs': consumers.DjangoNotifsConsumer.as_asgi(),
+        })
+    })
+
+*This example assumes that you're running Django 3x Which has native support for asgi. Check the channels documentation for Django 2.2*
+
+Next add the `django_notifs` channel layer to ``settings.CHANNEL_LAYERS``::
+
+    CHANNEL_LAYERS = {
+        ...,
+        'django_notifs': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [('127.0.0.1', 6379)],
+            },
+        },
+    }
+
+Finally, run the worker with::
+
+    python manage.py runworker django_notifs
+
+.. image:: _static/images/channels.png
 
 
 RQ
