@@ -10,9 +10,9 @@ class BaseNotificationChannel(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def construct_message(self):
         """Constructs a message from notification details."""
-        pass
+        raise NotImplementedError
 
     @abc.abstractmethod
     def notify(self, message):
         """Sends the notification."""
-        pass
+        raise NotImplementedError
