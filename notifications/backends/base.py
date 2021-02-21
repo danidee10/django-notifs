@@ -10,4 +10,4 @@ class BaseBackend(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def run(self):
-        raise NotImplementedError
+        pass
