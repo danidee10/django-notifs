@@ -99,7 +99,7 @@ Configure the ``django_notifs`` in ``settings.py``::
 
 Finally start the rq worker with::
 
-    python manage.py rqworker django_notifs
+    python manage.py rqworker django_notifs --with-scheduler
 
 .. image:: _static/images/rq-worker.png
 
