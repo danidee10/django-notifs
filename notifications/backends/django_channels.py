@@ -5,9 +5,8 @@ from __future__ import absolute_import, unicode_literals
 import channels.layers
 from asgiref.sync import async_to_sync
 
-from .. import default_settings as settings
-
 from .base import BaseBackend
+from .. import default_settings as settings
 
 
 class ChannelsBackend(BaseBackend):
