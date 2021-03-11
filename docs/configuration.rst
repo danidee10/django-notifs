@@ -77,20 +77,21 @@ The maximum number of retries for a notification.
 
 
 
-``NOTIFICATIONS_USE_WEBSOCKET``
--------------------------------
+``NOTIFICATIONS_WEBSOCKET_EVENT_NAME``
+--------------------------------------
 
-``Default=False``
+``Default='notifs_websocket_message'``
 
-.. warning::
-   This websocket settings have been deperecated and will be removed in a future version
-
-Enable the WebSocket channel. Interally, this adds a new channel ``{'websocket': 'notifications.channels.BasicWebSocketChannel'}`` to ``settings.NOTIFICATIONS_CHANNELS``
+The ``type`` value of the messages that are going to received by the django notifs websocket consumer.
+In most cases, you don't need to change this setting.
 
 
-``NOTIFICATIONS_RABBIT_MQ_URL``
--------------------------------
 
-``Default='amqp://guest:guest@localhost:5672'``
+``NOTIFICATIONS_WEBSOCKET_URL_PARAM``
+--------------------------------------
 
-The RabbitMQ URI for the WebSocket channel
+``Default = 'room_name'``
+
+The WebSocket URL param name. This setting **MUST** be used in the ``notify`` method's ``extra_data`` dictionary.
+It's also used to construct the WebSocket URL.
+See the :ref:`Advanced usage <Notification channels>` section for more information.

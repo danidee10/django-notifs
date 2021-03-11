@@ -1,7 +1,6 @@
 Backends
 ********
 
-.. _you'd normally do: http://docs.celeryproject.org/en/latest/django/first-steps-with-django.html
 .. _Celery settings in the repo: https://github.com/danidee10/django-notifs/blob/master/notifs/settings.py
 .. _django-rq: https://github.com/rq/django-rq
 .. _django-rq documentation: https://github.com/rq/django-rq

@@ -3,15 +3,6 @@
 from django.conf import settings
 
 
-NOTIFICATIONS_USE_WEBSOCKET = getattr(
-    settings, 'NOTIFICATIONS_USE_WEBSOCKET', False
-)
-
-NOTIFICATIONS_RABBIT_MQ_URL = getattr(
-    settings, 'NOTIFICATIONS_RABBIT_MQ_URL',
-    'amqp://guest:guest@localhost:5672'
-)
-
 NOTIFICATIONS_DELIVERY_BACKEND = getattr(
     settings, 'NOTIFICATIONS_DELIVERY_BACKEND',
     'notifications.backends.Synchronous'
@@ -31,6 +22,9 @@ NOTIFICATIONS_MAX_RETRIES = getattr(settings, 'NOTIFICATIONS_MAX_RETRIES', 5)
 
 NOTIFICATIONS_CHANNELS = getattr(settings, 'NOTIFICATIONS_CHANNELS', {})
 
-if NOTIFICATIONS_USE_WEBSOCKET:
-    NOTIFICATIONS_CHANNELS['websocket'] = \
-        'notifications.channels.BasicWebSocketChannel'
+NOTIFICATIONS_WEBSOCKET_EVENT_NAME = getattr(
+    settings, 'NOTIFICATIONS_WEBSOCKET_EVENT_NAME', 'notifs_websocket_message'
+)
+NOTIFICATIONS_WEBSOCKET_URL_PARAM = getattr(
+    settings, 'NOTIFICATIONS_WEBSOCKET_URL_PARAM', 'room_name'
+)

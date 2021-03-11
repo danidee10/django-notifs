@@ -32,7 +32,8 @@ release = '2.6.4'
 # ones.
 extensions = [
     'm2r2',
-    'sphinx_rtd_theme'
+    'sphinx_rtd_theme',
+    'sphinx.ext.autosectionlabel'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
