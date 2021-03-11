@@ -1,3 +1,4 @@
 from .console import ConsoleChannel  # noqa
-from .uwsgi_websocket import BasicWebSocketChannel  # noqa
+from .base import BaseNotificationChannel  # noqa
+from .channels_websocket import WebSocketChannel  # noqa
 from .push_notification import PushNotificationChannel  # noqa

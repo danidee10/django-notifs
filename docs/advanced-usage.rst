@@ -1,48 +1,125 @@
 Advanced usage
 **************
 
-.. _Pub/Sub: https://www.rabbitmq.com/tutorials/tutorial-one-python.html
+.. _documentation: https://channels.readthedocs.io/en/stable/index.html
+.. _channels deployment documentation: https://channels.readthedocs.io/en/stable/deploying.html
 
 WebSockets
 ---------------------
 
-.. warning::
-   This functionality has been deperecated and will probably be replaced by
-   *django-channels* or *django-socketio*
+Unlike other django notification libraries that provide an API for accessing notifications,
+django-notifs supports websockets out of the box (thanks to `django-channels`). This makes it easy to send realtime notifications
+to your users in reaction to a new server side event.
 
-This is the coolest part of this library, Unlike other django notification libraries that provide a JavaScript API that the client call poll at regular intervals,
-django-notifs supports websockets (thanks to `uWSGI`). This means you can send realtime notifications and possibly use it to build a chat application
-or something that requires instant notifications etc
+If you're unfamiliar with django-channels. It's advised to go through the `documentation`_ so you can understand the basics.
 
-To actually deliver notifications, `django-notifs` uses `RabbitMQ` as a message queue to store notifications which are then consumed and sent over the websocket to the client.
 
-To enable the Websocket functionality simply set:
+Setting up the WebSocket server
+-------------------------------
 
-``NOTIFICATIONS_USE_WEBSOCKET = True``
+*This section assumes that you've already installed django-channels*
 
-and set the URL to your RabbitMQ Server with:
+Setup the consumer routing in your ``asgi.py`` file::
 
-``NOTIFICATIONS_RABBIT_MQ_URL = 'YOUR RABBIT MQ SERVER'``
+    import os
 
-This will tell django-notifs to publish messages to the rabbitmq queue.
+    import django
+    from django.core.asgi import get_asgi_application
+    from channels.routing import ProtocolTypeRouter, URLRouter
 
-Under the hood, django-notifs adds a new channel to ``settings.NOTIFICATIONS_CHANNELS`` which contains the logic for delivering the messages to RabbitMQ.
-If you need more advanced features that RabbitMQ offers like `Pub/Sub`_ or you want to use a different message queue like Redis, all you need to do is write your own delivery channel and add it to `settings.NOTIFICATIONS_CHANNELS`.
+    from notifications import routing as notifications_routing
 
-**Running the websocket server**
 
-Due to the fact that Django itself doesn't support websockets, The Websocket server has to be started separately from your main application with uwsgi. For example to start the `WebSocket` Server with `gevent` you can do this:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yourapp.settings')
 
-``uwsgi --http :8080 --gevent 100 --module websocket --gevent-monkey-patch --master --processes 4``
+    application = ProtocolTypeRouter({
+        'http': get_asgi_application(),
+        'websocket': URLRouter(notifications_routing.websocket_urlpatterns)
+    })
 
-There is a sample echo websocket server in the ``examples`` directory.
 
-**How to listen to notifications**
+Notification channels
+---------------------
+A simple WebSocket channel is provided:
 
-At the backend, A Rabbitmq queue is created for each user based on the username, so when you're connecting to the websocket server you have to pass the username in the websocket url.
-For example, you can listen to messages for the username ``danidee`` connect to this url (Assuming the websocket server is running on `localhost` and port `8080`)
+- notifications.channels.WebSocketChannel
 
-``var websocket = new WebSocket('ws://localhost:8080/danidee')``
+This channel simply delivers notifications to the ``settings.NOTIFICATIONS_WEBSOCKET_EVENT_NAME`` group.
+
+Add the channel to ``settings.NOTIFICATION_CHANNELS``::
+
+    NOTIFICATION_CHANNELS = {
+        'websocket': 'notifications.channels.WebSocketChannel'
+    }
+
+Sample usage::
+
+    from notifications import default_settings as notifs_settings
+    ...
+
+    notif_args = {
+        'source': user,
+        'source_display_name': user.get_full_name(),
+        'category': 'MESSAGE', 'action': 'Sent',
+        'obj': obj.id,
+        'short_description': 'You a new message', 'silent': True,
+        'extra_data': {
+            notifs_settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM: chat_session.uri,
+            'message': chat_session_message.to_json()
+        }
+    }
+    notify(**notif_args, channels=['websocket'])
+
+``notifs_settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM`` is a required key. You can also override it in ``settings.py``
+and reference it through ``django.conf.settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM``
+
+
+Running the WebSocket server
+----------------------------
+
+``ASGI`` is capable of handling regular HTTP and WebSocket traffic so you don't really need to run a dedicated
+WebSocket server but it's still an option.
+
+see the `channels deployment documentation`_ for more information on the best way to deploy your
+application.
+
+
+How to listen to notifications
+------------------------------
+
+You listen to notifications by connecting to the WebSocket URL.
+
+The default URL is ``http://localhost:8000/<settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM>``
+
+To connect to a WebSocket room (via JavaScript) for a user ``danidee`` you'll need to connect to::
+
+    var websocket = new WebSocket('ws://localhost:8000/danidee')
+
+You can always change the default route by Importing the ``notifications.consumers.DjangoNotifsWebsocketConsumer``
+consumer and declaring another route. If you decide to do that, make sure you use the
+``NOTIFICATIONS_WEBSOCKET_URL_PARAM`` setting because the Consumer class relies on it
+
+an example to prefix the URL with ``/chat`` would be::
+
+    from django.urls import path
+
+    from . import default_settings as settings
+    from .consumers import DjangoNotifsWebsocketConsumer
+
+    websocket_urlpatterns = [
+        path(
+            f'chat/<{settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM}>',
+            DjangoNotifsWebsocketConsumer.as_asgi()
+        )
+    ]
+
+
+Authentication?
+---------------
+
+This is out of the scope of django-notifs for now. This might change in the future as django-channels becomes more mature.
+Hence, The WebSocket endpoint is unprotected and you'll probably want to roll out your own custom authentication backend
+if you don't make use of the standard Authentication backend.
 
 
 Testing and Debugging
@@ -56,4 +133,4 @@ django-notifs comes with an inbuilt console delivery channel that just prints ou
     }
 
 
-This can be helpful during development.
+This can be helpful during development where you don't want notifications to be delivered.
