@@ -15,6 +15,7 @@ VERSION = '2.6.5'
 
 REQUIRED = [
     'django>=2.0', 'pika>=0.12.0', 'requests==2.25.1',
+    'django-jsonfield-backport>=1.0.3'
 ]
 TEST_REQUIRES = ['coverage>=5.4']
 EXTRAS_REQUIRE = {
