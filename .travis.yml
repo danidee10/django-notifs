@@ -82,6 +82,5 @@ deploy:
   skip_existing: true
   on:
     tags: true
-    condition: $TRAVIS_BRANCH = master
     distributions: sdist bdist_wheel
     repo: danidee10/django-notifs
