@@ -1,6 +1,5 @@
 """Custom model fields."""
 
-import json
 from django.db import models
 
 from django_jsonfield_backport.models import JSONField  # noqa
