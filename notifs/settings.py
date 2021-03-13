@@ -42,7 +42,8 @@ INSTALLED_APPS = [
 
     'notifications',
     'django_rq',
-    'channels'
+    'channels',
+    'django_jsonfield_backport'
 ]
 
 MIDDLEWARE = [

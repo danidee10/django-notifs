@@ -23,7 +23,7 @@ class GeneralTestCase(TestCase):
             username='user1@gmail.com', password='password'
         )
 
-        cls.user2 = cls.User.objects.create(
+        cls.user2 = cls.User.objects.create_user(
             username='user2@gmail.com', password='password'
         )
 
@@ -109,7 +109,7 @@ class NotificationTestCase(TestCase):
             username='user1@gmail.com', password='password'
         )
 
-        cls.user2 = cls.User.objects.create(
+        cls.user2 = cls.User.objects.create_user(
             username='user2@gmail.com', password='password'
         )
 
@@ -243,7 +243,7 @@ class JSONFieldTestCase(TestCase):
             username='user1@gmail.com', password='password'
         )
 
-        cls.user2 = cls.User.objects.create(
+        cls.user2 = cls.User.objects.create_user(
             username='user2@gmail.com', password='password'
         )
 
@@ -294,7 +294,7 @@ class TestListField(TestCase):
             username='user1@gmail.com', password='password'
         )
 
-        cls.user2 = cls.User.objects.create(
+        cls.user2 = cls.User.objects.create_user(
             username='user2@gmail.com', password='password'
         )
 
