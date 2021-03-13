@@ -27,54 +27,6 @@ class GeneralTestCase(TestCase):
             username='user2@gmail.com', password='password'
         )
 
-    def test_to_json_without_extra_data(self):
-        """
-        If the extra_data argument is ommitted,
-
-        the default should be an empty dictionary
-        """
-        # Create notification
-        notification = Notification.objects.create(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='General notification', obj=1, url='http://example.com',
-            short_description='Short Description', is_read=False,
-        )
-
-        self.assertEqual(
-            notification.to_json(),
-            {
-                'source': self.user2.id, 'source_display_name': 'User 2',
-                'recipient': self.user1.id, 'action': 'Notified',
-                'category': 'General notification', 'obj': 1,
-                'short_description': 'Short Description',
-                'extra_data': {}, 'channels': '',
-                'url': 'http://example.com', 'is_read': False
-            }
-        )
-
-    def test_to_json_with_extra_data(self):
-        """Test to_json method with extra data."""
-        notification = Notification.objects.create(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='General notification', obj=1, url='http://example.com',
-            short_description='Short Description', is_read=False,
-            extra_data={'hello': 'world'}
-        )
-
-        self.assertEqual(
-            notification.to_json(),
-            {
-                'source': self.user2.id, 'source_display_name': 'User 2',
-                'recipient': self.user1.id, 'action': 'Notified',
-                'category': 'General notification', 'obj': 1,
-                'short_description': 'Short Description', 'channels': '',
-                'url': 'http://example.com', 'extra_data': {'hello': 'world'},
-                'is_read': False
-            }
-        )
-
     def test_send_notification(self):
         """
        This is the default method that's used by all backends
@@ -229,57 +181,6 @@ class NotificationTestCase(TestCase):
             is_read=False
         )
         self.assertEqual(str(notification), 'Admin was  notified')
-
-
-class JSONFieldTestCase(TestCase):
-    """Test the Custom JSONField."""
-
-    User = get_user_model()
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create Users."""
-        cls.user1 = cls.User.objects.create_user(
-            username='user1@gmail.com', password='password'
-        )
-
-        cls.user2 = cls.User.objects.create_user(
-            username='user2@gmail.com', password='password'
-        )
-
-    def test_raise_exception(self):
-        """
-        Should raise an exception
-
-        When we try to save objects that can't be serialized by
-        the json module.
-        """
-        kwargs = {
-            'sender': self.__class__, 'source': self.user2,
-            'source_display_name': 'User 2', 'recipient': self.user1,
-            'action': 'Notified', 'category': 'General notification',
-            'obj': 1, 'short_description': 'Short Description',
-            'url': 'http://example.com', 'is_read': False,
-            'extra_data': {'hello': lambda x: 'world'},
-            'channels': ('console',)
-        }
-
-        self.assertRaises(TypeError, notify, **kwargs)
-
-    def test_json_decode(self):
-        """Should return a dictionary back."""
-        notify(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='Notification with extra data', obj=1,
-            url='http://example.com', short_description='Short Description',
-            is_read=False, extra_data={'hello': 'world'},
-            channels=('console',)
-        )
-
-        notification = Notification.objects.last()
-
-        self.assertEqual(notification.extra_data, {'hello': 'world'})
 
 
 class TestListField(TestCase):
