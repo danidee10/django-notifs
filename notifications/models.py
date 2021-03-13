@@ -69,7 +69,7 @@ class Notification(models.Model):
     url = models.URLField(null=True, blank=True)
     short_description = models.CharField(max_length=100)
     channels = ListField(max_length=200)
-    extra_data = JSONField(default={})
+    extra_data = JSONField(default=dict)
     is_read = models.BooleanField(default=False)
 
     create_date = models.DateTimeField(auto_now_add=True)
