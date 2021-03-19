@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from os import path
 from setuptools import find_packages, setup
 
 
@@ -10,7 +11,7 @@ DESCRIPTION = 'Modular notifications for Django'
 URL = 'https://github.com/danidee10/django-notifs'
 EMAIL = 'osaetindaniel@gmail.com'
 AUTHOR = 'Osaetin Daniel'
-REQUIRES_PYTHON = '>=3.5.0'
+REQUIRES_PYTHON = '>=3.6.0'
 VERSION = '3.0.0'
 
 REQUIRED = [
@@ -24,11 +25,15 @@ EXTRAS_REQUIRE = {
 }
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
 
+current_directory = path.abspath(path.dirname(__file__))
+with open(path.join(current_directory, 'README.md'), encoding='utf-8') as f:
+    LONG_DESCRIPTION = f.read()
+
 setup(
     name=NAME,
     version=VERSION,
     description=DESCRIPTION,
-    long_description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     author=AUTHOR,
     author_email=EMAIL,
