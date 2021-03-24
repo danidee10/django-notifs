@@ -15,7 +15,7 @@ REQUIRES_PYTHON = '>=3.6.0'
 VERSION = '3.0.2'
 
 REQUIRED = [
-    'django>=2.0', 'requests==2.25.1', 'django-jsonfield-backport==1.0.3'
+    'django>=2.0', 'requests>=2.25.1', 'django-jsonfield-backport>=1.0.3'
 ]
 TEST_REQUIRES = ['coverage>=5.4']
 EXTRAS_REQUIRE = {
