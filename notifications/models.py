@@ -3,7 +3,7 @@
 from django.db import models
 from django.conf import settings
 
-from .fields import JSONField, ListField
+from .fields import JSONField
 
 
 class NotificationQuerySet(models.QuerySet):
@@ -68,7 +68,7 @@ class Notification(models.Model):
     obj = models.IntegerField(null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     short_description = models.CharField(max_length=100)
-    channels = ListField(max_length=200)
+    channels = JSONField(default=list)
     extra_data = JSONField(default=dict)
     is_read = models.BooleanField(default=False)
 
