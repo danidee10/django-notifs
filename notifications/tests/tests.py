@@ -181,37 +181,3 @@ class NotificationTestCase(TestCase):
             is_read=False
         )
         self.assertEqual(str(notification), 'Admin was  notified')
-
-
-class TestListField(TestCase):
-    """Tests for the list field."""
-
-    User = get_user_model()
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create Users."""
-        cls.user1 = cls.User.objects.create_user(
-            username='user1@gmail.com', password='password'
-        )
-
-        cls.user2 = cls.User.objects.create_user(
-            username='user2@gmail.com', password='password'
-        )
-
-    def test_should_return_list(self):
-        """Should return a list of channels back."""
-        notify(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='Notification with extra data', obj=1,
-            url='http://example.com', short_description='Short Description',
-            is_read=False, extra_data={'hello': 'world'},
-            channels=('console', 'console')
-        )
-
-        notification = Notification.objects.last()
-
-        self.assertEqual(
-            notification.to_json()['channels'], ['console', 'console']
-        )
