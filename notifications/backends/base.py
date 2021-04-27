@@ -9,5 +9,5 @@ class BaseBackend(metaclass=abc.ABCMeta):
         self.notification = notification.to_json()
 
     @abc.abstractmethod
-    def run(self):
+    def run(self, countdown):
         pass

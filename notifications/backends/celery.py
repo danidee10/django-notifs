@@ -29,9 +29,10 @@ def send_notification(notification, channel_alias):
 
 
 class CeleryBackend(BaseBackend):
-    def run(self):
+    def run(self, countdown):
         for channel_alias in self.notification["channels"]:
             send_notification.apply_async(
                 args=[self.notification, channel_alias],
                 queue=settings.NOTIFICATIONS_QUEUE_NAME,
+                countdown=countdown
             )

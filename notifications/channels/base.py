@@ -6,6 +6,7 @@ class BaseNotificationChannel(metaclass=abc.ABCMeta):
 
     def __init__(self, **kwargs):
         self.notification_kwargs = kwargs
+        self.notification_id = kwargs['notification_id']
 
     @abc.abstractmethod
     def construct_message(self):
