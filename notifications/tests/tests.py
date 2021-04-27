@@ -1,5 +1,6 @@
 """General Tests."""
 
+import time
 import logging
 
 from django.test import TestCase
@@ -11,8 +12,8 @@ from ..models import Notification
 from ..backends.utils import _send_notification
 
 
-class GeneralTestCase(TestCase):
-    """Tests for General functionality."""
+class NotificationTestCase(TestCase):
+    """Tests for the notifications"""
 
     User = get_user_model()
 
@@ -46,23 +47,6 @@ class GeneralTestCase(TestCase):
         logger = logging.getLogger(__name__)
         self.assertIsNone(
             _send_notification(notification.to_json(), 'console', logger)
-        )
-
-
-class NotificationTestCase(TestCase):
-    """Tests for the notifications"""
-
-    User = get_user_model()
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create Users."""
-        cls.user1 = cls.User.objects.create_user(
-            username='user1@gmail.com', password='password'
-        )
-
-        cls.user2 = cls.User.objects.create_user(
-            username='user2@gmail.com', password='password'
         )
 
     def test_user_cant_read_others_notifications(self):
@@ -181,3 +165,21 @@ class NotificationTestCase(TestCase):
             is_read=False
         )
         self.assertEqual(str(notification), 'Admin was  notified')
+
+    def test_notify_countdown(self):
+        """
+        The notification should only be sent after
+
+        the specified countdown.
+        """
+        start_time = time.time()
+        notify(
+            source=self.user2, source_display_name='User 2',
+            recipient=self.user1, action='Notified',
+            category='Silent notification', obj=1, url='http://example.com',
+            short_description='Short Description', is_read=False,
+            channels=('console',), countdown=3
+        )
+        total_time = time.time() - start_time
+
+        self.assertGreater(total_time, 3)

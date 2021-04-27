@@ -98,6 +98,7 @@ class Notification(models.Model):
         """
         Return JSON representation that can easily be serialized."""
         return {
+            'notification_id': self.id,
             'source': getattr(self.source, 'id', ''),
             'source_display_name': self.source_display_name,
             'recipient': getattr(self.recipient, 'id', ''),
