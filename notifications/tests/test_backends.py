@@ -40,17 +40,17 @@ class BackendTests(TestCase):
     def test_celery_backend(self):
         delivery_backend = Celery(self.notification)
 
-        self.assertIsNone(delivery_backend.run())
+        self.assertIsNone(delivery_backend.run(countdown=0))
 
     def test_channels_backend(self):
         delivery_backend = Channels(self.notification)
 
-        self.assertIsNone(delivery_backend.run())
+        self.assertIsNone(delivery_backend.run(countdown=0))
 
     def test_rq_backend(self):
         delivery_backend = RQ(self.notification)
 
-        self.assertIsNone(delivery_backend.run())
+        self.assertIsNone(delivery_backend.run(countdown=0))
 
     def test_celery_task(self):
         """This ensures that the Celery task runs without errors."""
@@ -58,11 +58,12 @@ class BackendTests(TestCase):
             send_notification(self.notification.to_json(), 'console')
         )
 
-    def test_channels_consumer(self):
+    async def test_channels_consumer(self):
         """This ensures that the Channels consumer runs without errors."""
         consumer = DjangoNotifsConsumer()
         message = {
             'notification': self.notification.to_json(),
-            'channel_alias': 'console'
+            'channel_alias': 'console', 'countdown': 0
         }
-        self.assertIsNone(consumer.notify(message))
+        result = await consumer.notify(message)
+        self.assertIsNone(result)

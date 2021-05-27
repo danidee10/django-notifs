@@ -118,6 +118,49 @@ By default it uses the ``Synchronous`` backend which delivers notifications sync
    To deliver notification asynchronously, please see the :doc:`backends section <./backends>`.
 
 
+Delayed/Tentative notifications
+-------------------------------
+You can delay a notification by passing the ``countdown`` (in seconds) parameter to the ``notify`` function
+
+example::
+
+    # delay notification for one minute
+    notify(**kwargs, countdown=60)
+
+A tentative notification is a conditional notification that should only be sent if a criteria is met.
+
+An example is sending a notification if a user hasn't read a chat message in 30 minutes (as a reminder).
+
+You can acheive this by combining the ``countdown`` functionality with some simple logic in your notification
+channel class::
+
+    # delay notification for 30 minutes
+    notify(**kwargs, countdown=1800)
+
+Delayed notification channel class::
+
+    from notifications.models import Notification
+    from notifications.channels import BaseNotificationChannel
+
+
+    class DelayedNotificationChannel(BaseNotificationChannel):
+
+        def notify(self, message):
+            """Cancel the delivery if the notification has been read"""
+            # notification_id is only available if the notification isn't silent
+            if self.notification_id:
+                notification = Notification.objects.get(id=self.notification_id)
+
+                if notification.read is True:
+                    return
+
+            # send the notification
+            print(message)
+
+In this example, we abort the notification if the notification has been read but you're free
+to use any condition/custom logic
+
+
 Reading notifications
 ---------------------
 
