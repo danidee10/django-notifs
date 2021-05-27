@@ -1,9 +1,11 @@
 """Channels consumers."""
 
 import json
+import asyncio
 import logging
 
-from channels.consumer import SyncConsumer
+from channels.consumer import AsyncConsumer
+from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 from . import default_settings as settings
@@ -14,10 +16,17 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('django_notifs.backends.channels')
 
 
-class DjangoNotifsConsumer(SyncConsumer):
+class DjangoNotifsConsumer(AsyncConsumer):
+    """
+    This class inherits from AsyncConsumer
 
-    def notify(self, message):
-        _send_notification(
+    so we can delay (`sleep`) multiple messages
+    """
+
+    async def notify(self, message):
+        await asyncio.sleep(message['countdown'])
+
+        await database_sync_to_async(_send_notification)(
             message['notification'], message['channel_alias'], logger
         )
 

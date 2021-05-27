@@ -12,3 +12,4 @@ exclude_lines =
     if self.debug:
     raise AssertionError
     raise NotImplementedError
+    class ListField

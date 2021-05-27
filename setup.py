@@ -17,7 +17,7 @@ VERSION = '3.0.5'
 REQUIRED = [
     'django>=2.0', 'requests>=2.25.1', 'django-jsonfield-backport>=1.0.3'
 ]
-TEST_REQUIRES = ['coverage>=5.4']
+TEST_REQUIRES = ['coverage>=5.4', 'channels>=3.0.3']
 EXTRAS_REQUIRE = {
     'celery': ['celery>=4.1.0'],
     'rq': ['django-rq>=2.4.0'],
