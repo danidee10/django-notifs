@@ -30,18 +30,23 @@ class NotificationTestCase(TestCase):
 
     def test_send_notification(self):
         """
-       This is the default method that's used by all backends
+        This is the default method that's used by all backends
 
-        There's really nothing to assert here but `_send_notification`
-        should run without any Exception.
-        (This might change in the future)
+         There's really nothing to assert here but `_send_notification`
+         should run without any Exception.
+         (This might change in the future)
         """
         notification = Notification(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='Silent notification', obj=self.user2, url='http://example.com',
-            short_description='Short Description', is_read=False,
-            channels=('console',)
+            source=self.user2,
+            source_display_name='User 2',
+            recipient=self.user1,
+            action='Notified',
+            category='Silent notification',
+            obj=self.user2,
+            url='http://example.com',
+            short_description='Short Description',
+            is_read=False,
+            channels=('console',),
         )
 
         logger = logging.getLogger(__name__)
@@ -53,26 +58,36 @@ class NotificationTestCase(TestCase):
         """A user should only be able to read THEIR notifications."""
         # Create Notification for User2
         notification = Notification.objects.create(
-            source=self.user1, source_display_name='User 1',
-            recipient=self.user2, action='Notified',
-            category='General notification', obj=self.user2, url='http://example.com',
-            is_read=False
+            source=self.user1,
+            source_display_name='User 1',
+            recipient=self.user2,
+            action='Notified',
+            category='General notification',
+            obj=self.user2,
+            url='http://example.com',
+            is_read=False,
         )
 
         # Try and Read the notification as User1
         self.assertRaises(
             NotificationError,
-            read, notify_id=notification.id, recipient=self.user1
+            read,
+            notify_id=notification.id,
+            recipient=self.user1,
         )
 
     def test_user_can_read_notifications(self):
         """A user can read their notification"""
         # Create Notification for User1
         notification = Notification.objects.create(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='General notification', obj=self.user2, url='http://example.com',
-            is_read=False
+            source=self.user2,
+            source_display_name='User 2',
+            recipient=self.user1,
+            action='Notified',
+            category='General notification',
+            obj=self.user2,
+            url='http://example.com',
+            is_read=False,
         )
 
         # Try and Read the notification as user1
@@ -84,11 +99,17 @@ class NotificationTestCase(TestCase):
     def test_silent_notification(self):
         """Test Silent notifications."""
         notify(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='Silent notification', obj=self.user2, url='http://example.com',
-            short_description='Short Description', is_read=False, silent=True,
-            channels=('console',)
+            source=self.user2,
+            source_display_name='User 2',
+            recipient=self.user1,
+            action='Notified',
+            category='Silent notification',
+            obj=self.user2,
+            url='http://example.com',
+            short_description='Short Description',
+            is_read=False,
+            silent=True,
+            channels=('console',),
         )
 
         notifications = Notification.objects.all()
@@ -98,11 +119,16 @@ class NotificationTestCase(TestCase):
     def test_notify_invalid_channel(self):
         """An invalid channel should raise an AttributeError."""
         notification_kwargs = dict(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='Silent notification', obj=self.user2, url='http://example.com',
-            short_description='Short Description', is_read=False,
-            channels=('invalid channel',)
+            source=self.user2,
+            source_display_name='User 2',
+            recipient=self.user1,
+            action='Notified',
+            category='Silent notification',
+            obj=self.user2,
+            url='http://example.com',
+            short_description='Short Description',
+            is_read=False,
+            channels=('invalid channel',),
         )
 
         self.assertRaises(AttributeError, notify, **notification_kwargs)
@@ -110,34 +136,50 @@ class NotificationTestCase(TestCase):
     def test_send_notification_invalid_channel(self):
         """An invalid channel should raise an AttributeError."""
         notification = Notification(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='Silent notification', obj=self.user2, url='http://example.com',
-            short_description='Short Description', is_read=False,
-            channels=('invalid channel',)
+            source=self.user2,
+            source_display_name='User 2',
+            recipient=self.user1,
+            action='Notified',
+            category='Silent notification',
+            obj=self.user2,
+            url='http://example.com',
+            short_description='Short Description',
+            is_read=False,
+            channels=('invalid channel',),
         )
 
         logger = logging.getLogger(__name__)
         self.assertRaises(
-            AttributeError, _send_notification, notification,
-            'invalid channel', logger
+            AttributeError,
+            _send_notification,
+            notification,
+            'invalid channel',
+            logger,
         )
 
     def test_queryset_methods(self):
         """Test the custom queryset methods."""
         for count in range(3):
             Notification.objects.create(
-                source=self.user2, source_display_name='User 2',
-                recipient=self.user1, action='Notified ' + str(count),
-                category='General notification', obj=self.user2,
-                url='http://example.com', is_read=False
+                source=self.user2,
+                source_display_name='User 2',
+                recipient=self.user1,
+                action='Notified ' + str(count),
+                category='General notification',
+                obj=self.user2,
+                url='http://example.com',
+                is_read=False,
             )
 
         notification = Notification.objects.create(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='General notification', obj=self.user2, url='http://example.com',
-            is_read=False
+            source=self.user2,
+            source_display_name='User 2',
+            recipient=self.user1,
+            action='Notified',
+            category='General notification',
+            obj=self.user2,
+            url='http://example.com',
+            is_read=False,
         )
         read(notify_id=notification.id, recipient=self.user1)
 
@@ -147,22 +189,29 @@ class NotificationTestCase(TestCase):
     def test_string_representation(self):
         """Test the string representation of the Notification model."""
         notification = Notification.objects.create(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='Admin notification', obj=self.user2, url='http://example.com',
-            is_read=False
+            source=self.user2,
+            source_display_name='User 2',
+            recipient=self.user1,
+            action='Notified',
+            category='Admin notification',
+            obj=self.user2,
+            url='http://example.com',
+            is_read=False,
         )
         self.assertEqual(
             str(notification),
-            'Admin notification: user2@gmail.com Notified  => user1@gmail.com'
+            'Admin notification: user2@gmail.com Notified  => user1@gmail.com',
         )
 
         notification = Notification.objects.create(
             source_display_name='User 2',
-            recipient=self.user1, action='Notified',
+            recipient=self.user1,
+            action='Notified',
             short_description='Admin was  notified',
-            category='Admin notification', obj=self.user2, url='http://example.com',
-            is_read=False
+            category='Admin notification',
+            obj=self.user2,
+            url='http://example.com',
+            is_read=False,
         )
         self.assertEqual(str(notification), 'Admin was  notified')
 
@@ -174,11 +223,17 @@ class NotificationTestCase(TestCase):
         """
         start_time = time.time()
         notify(
-            source=self.user2, source_display_name='User 2',
-            recipient=self.user1, action='Notified',
-            category='Silent notification', obj=self.user2, url='http://example.com',
-            short_description='Short Description', is_read=False,
-            channels=('console',), countdown=3
+            source=self.user2,
+            source_display_name='User 2',
+            recipient=self.user1,
+            action='Notified',
+            category='Silent notification',
+            obj=self.user2,
+            url='http://example.com',
+            short_description='Short Description',
+            is_read=False,
+            channels=('console',),
+            countdown=3,
         )
         total_time = time.time() - start_time
 

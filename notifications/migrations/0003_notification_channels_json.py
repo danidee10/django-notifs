@@ -35,8 +35,7 @@ class Migration(migrations.Migration):
             name='channels_json',
             field=django_jsonfield_backport.models.JSONField(default=list),
         ),
-
         migrations.RunPython(
             convert_strings_to_lists, reverse_convert_strings_to_lists
-        )
+        ),
     ]

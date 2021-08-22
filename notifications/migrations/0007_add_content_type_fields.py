@@ -15,7 +15,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='notification',
             name='content_type',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='contenttypes.ContentType'),
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to='contenttypes.ContentType',
+            ),
         ),
         migrations.AlterField(
             model_name='notification',

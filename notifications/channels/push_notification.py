@@ -17,8 +17,9 @@ class PushNotificationChannel(BaseNotificationChannel):
 
         # Send push notification(s)
         subject = '{} {} {}'.format(
-            kwargs['source_display_name'], kwargs['action'],
-            kwargs.get('short_description', '')
+            kwargs['source_display_name'],
+            kwargs['action'],
+            kwargs.get('short_description', ''),
         )
         icon = kwargs.get('icon')
         token = kwargs.get('extra_data', {}).get('token', '')
@@ -31,9 +32,9 @@ class PushNotificationChannel(BaseNotificationChannel):
                         'title': subject,
                         # 'body': message,
                         'click_action': kwargs.get('url', ''),
-                        'icon': icon
+                        'icon': icon,
                     },
-                    'to': token
+                    'to': token,
                 },
-                headers={'Authorization': 'key=' + settings.FCM_KEY}
+                headers={'Authorization': 'key=' + settings.FCM_KEY},
             )

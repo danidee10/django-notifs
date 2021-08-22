@@ -57,19 +57,21 @@ class Notification(models.Model):
 
     class Meta:
         """Specify ordering for notifications."""
+
         ordering = ('-id',)
 
     source = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     source_display_name = models.CharField(max_length=150, null=True)
     recipient = models.ForeignKey(
-        User, related_name='notifications', null=True,
-        on_delete=models.CASCADE
+        User, related_name='notifications', null=True, on_delete=models.CASCADE
     )
     action = models.CharField(max_length=50)
     category = models.CharField(max_length=50)
 
     object_id = models.PositiveIntegerField(null=True, blank=True)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, null=True, blank=True
+    )
     obj = GenericForeignKey('content_type', 'object_id')
 
     url = models.URLField(null=True, blank=True)
@@ -87,8 +89,11 @@ class Notification(models.Model):
     def __str__(self):
         if self.source:
             res = '{}: {} {} {} => {}'.format(
-                self.category, self.source, self.action,
-                self.short_description, self.recipient
+                self.category,
+                self.source,
+                self.action,
+                self.short_description,
+                self.recipient,
             )
         else:
             res = self.short_description
@@ -108,8 +113,12 @@ class Notification(models.Model):
             'source': getattr(self.source, 'id', ''),
             'source_display_name': self.source_display_name,
             'recipient': getattr(self.recipient, 'id', ''),
-            'category': self.category, 'action': self.action, 'obj': self.obj,
-            'short_description': self.short_description, 'url': self.url,
-            'channels': self.channels, 'extra_data': self.extra_data,
-            'is_read': self.is_read
+            'category': self.category,
+            'action': self.action,
+            'obj': self.obj,
+            'short_description': self.short_description,
+            'url': self.url,
+            'channels': self.channels,
+            'extra_data': self.extra_data,
+            'is_read': self.is_read,
         }

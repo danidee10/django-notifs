@@ -17,7 +17,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='notification',
             name='source',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),  # noqa
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),  # noqa
         ),
         migrations.AlterField(
             model_name='notification',
