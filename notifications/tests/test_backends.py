@@ -33,7 +33,7 @@ class BackendTests(TestCase):
         cls.notification = Notification(
             source=cls.user2, source_display_name='User 2',
             recipient=cls.user1, action='Notified',
-            category='General notification', obj=1, url='http://example.com',
+            category='General notification', obj=cls.user2, url='http://example.com',
             short_description='Short Description', is_read=False,
         )
 

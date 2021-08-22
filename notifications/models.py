@@ -2,6 +2,8 @@
 
 from django.db import models
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 from .fields import JSONField
 
@@ -65,7 +67,11 @@ class Notification(models.Model):
     )
     action = models.CharField(max_length=50)
     category = models.CharField(max_length=50)
-    obj = models.IntegerField(null=True, blank=True)
+
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    obj = GenericForeignKey('content_type', 'object_id')
+
     url = models.URLField(null=True, blank=True)
     short_description = models.CharField(max_length=100)
     channels = JSONField(default=list)

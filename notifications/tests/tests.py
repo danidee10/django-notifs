@@ -39,7 +39,7 @@ class NotificationTestCase(TestCase):
         notification = Notification(
             source=self.user2, source_display_name='User 2',
             recipient=self.user1, action='Notified',
-            category='Silent notification', obj=1, url='http://example.com',
+            category='Silent notification', obj=self.user2, url='http://example.com',
             short_description='Short Description', is_read=False,
             channels=('console',)
         )
@@ -55,7 +55,7 @@ class NotificationTestCase(TestCase):
         notification = Notification.objects.create(
             source=self.user1, source_display_name='User 1',
             recipient=self.user2, action='Notified',
-            category='General notification', obj=1, url='http://example.com',
+            category='General notification', obj=self.user2, url='http://example.com',
             is_read=False
         )
 
@@ -71,7 +71,7 @@ class NotificationTestCase(TestCase):
         notification = Notification.objects.create(
             source=self.user2, source_display_name='User 2',
             recipient=self.user1, action='Notified',
-            category='General notification', obj=1, url='http://example.com',
+            category='General notification', obj=self.user2, url='http://example.com',
             is_read=False
         )
 
@@ -86,7 +86,7 @@ class NotificationTestCase(TestCase):
         notify(
             source=self.user2, source_display_name='User 2',
             recipient=self.user1, action='Notified',
-            category='Silent notification', obj=1, url='http://example.com',
+            category='Silent notification', obj=self.user2, url='http://example.com',
             short_description='Short Description', is_read=False, silent=True,
             channels=('console',)
         )
@@ -100,7 +100,7 @@ class NotificationTestCase(TestCase):
         notification_kwargs = dict(
             source=self.user2, source_display_name='User 2',
             recipient=self.user1, action='Notified',
-            category='Silent notification', obj=1, url='http://example.com',
+            category='Silent notification', obj=self.user2, url='http://example.com',
             short_description='Short Description', is_read=False,
             channels=('invalid channel',)
         )
@@ -112,7 +112,7 @@ class NotificationTestCase(TestCase):
         notification = Notification(
             source=self.user2, source_display_name='User 2',
             recipient=self.user1, action='Notified',
-            category='Silent notification', obj=1, url='http://example.com',
+            category='Silent notification', obj=self.user2, url='http://example.com',
             short_description='Short Description', is_read=False,
             channels=('invalid channel',)
         )
@@ -129,14 +129,14 @@ class NotificationTestCase(TestCase):
             Notification.objects.create(
                 source=self.user2, source_display_name='User 2',
                 recipient=self.user1, action='Notified ' + str(count),
-                category='General notification', obj=1,
+                category='General notification', obj=self.user2,
                 url='http://example.com', is_read=False
             )
 
         notification = Notification.objects.create(
             source=self.user2, source_display_name='User 2',
             recipient=self.user1, action='Notified',
-            category='General notification', obj=1, url='http://example.com',
+            category='General notification', obj=self.user2, url='http://example.com',
             is_read=False
         )
         read(notify_id=notification.id, recipient=self.user1)
@@ -149,7 +149,7 @@ class NotificationTestCase(TestCase):
         notification = Notification.objects.create(
             source=self.user2, source_display_name='User 2',
             recipient=self.user1, action='Notified',
-            category='Admin notification', obj=1, url='http://example.com',
+            category='Admin notification', obj=self.user2, url='http://example.com',
             is_read=False
         )
         self.assertEqual(
@@ -161,7 +161,7 @@ class NotificationTestCase(TestCase):
             source_display_name='User 2',
             recipient=self.user1, action='Notified',
             short_description='Admin was  notified',
-            category='Admin notification', obj=1, url='http://example.com',
+            category='Admin notification', obj=self.user2, url='http://example.com',
             is_read=False
         )
         self.assertEqual(str(notification), 'Admin was  notified')
@@ -176,7 +176,7 @@ class NotificationTestCase(TestCase):
         notify(
             source=self.user2, source_display_name='User 2',
             recipient=self.user1, action='Notified',
-            category='Silent notification', obj=1, url='http://example.com',
+            category='Silent notification', obj=self.user2, url='http://example.com',
             short_description='Short Description', is_read=False,
             channels=('console',), countdown=3
         )
