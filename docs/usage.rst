@@ -138,7 +138,6 @@ channel class::
 
 Delayed notification channel class::
 
-    from notifications.models import Notification
     from notifications.channels import BaseNotificationChannel
 
 
@@ -148,7 +147,7 @@ Delayed notification channel class::
             """Cancel the delivery if the notification has been read"""
             # notification_id is only available if the notification isn't silent
             if self.notification_id:
-                notification = Notification.objects.get(id=self.notification_id)
+                notification = self.NotificationModel.objects.get(id=self.notification_id)
 
                 if notification.read is True:
                     return

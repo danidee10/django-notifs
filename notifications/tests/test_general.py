@@ -3,13 +3,16 @@
 import time
 import logging
 
-from django.test import TestCase
 from django.contrib.auth import get_user_model
+from django.test import TestCase, override_settings
 
-from ..utils import notify, read
+from ..utils import notify, read, get_notification_model
 from .. import NotificationError
-from ..models import Notification
+from ..models import BaseNotificationModel
 from ..backends.utils import _send_notification
+
+
+Notification = get_notification_model()
 
 
 class NotificationTestCase(TestCase):
@@ -238,3 +241,51 @@ class NotificationTestCase(TestCase):
         total_time = time.time() - start_time
 
         self.assertGreater(total_time, 3)
+
+
+class CustomNotificationModel(Notification):
+
+    class Meta:
+        abstract = True
+        db_table = 'notifications_notification'
+
+    def to_json(self):
+        return 'custom notification model'
+
+
+@override_settings(NOTIFICATIONS_MODEL='notifications.tests.test_general.CustomNotificationModel')
+class CustomNotificationTestCase(TestCase):
+    """Tests for the custom Notification model functionality"""
+
+    User = get_user_model()
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create Users."""
+        cls.user1 = cls.User.objects.create_user(
+            username='user1@gmail.com', password='password'
+        )
+
+        cls.user2 = cls.User.objects.create_user(
+            username='user2@gmail.com', password='password'
+        )
+
+    def test_import_custom_notification_model(self):
+        """The NOTIFICATIONS_MODEL setting should be applied."""
+        Notification = get_notification_model()
+        notification = Notification(
+            source=self.user2,
+            source_display_name='User 2',
+            recipient=self.user1,
+            action='Notified',
+            category='Silent notification',
+            obj=self.user2,
+            url='http://example.com',
+            short_description='Short Description',
+            is_read=False,
+            channels=('console',),
+        )
+
+        self.assertEqual(
+           notification.to_json(), 'custom notification model'
+        )

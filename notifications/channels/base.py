@@ -1,5 +1,7 @@
 import abc
 
+from notifications.utils import get_notification_model
+
 
 class BaseNotificationChannel(metaclass=abc.ABCMeta):
     """Base channel for sending notifications."""
@@ -7,6 +9,8 @@ class BaseNotificationChannel(metaclass=abc.ABCMeta):
     def __init__(self, **kwargs):
         self.notification_kwargs = kwargs
         self.notification_id = kwargs['notification_id']
+
+        self.NotificationModel = get_notification_model()
 
     @abc.abstractmethod
     def construct_message(self):

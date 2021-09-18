@@ -22,7 +22,7 @@ class NotificationQuerySet(models.QuerySet):
         return self.filter(is_read=True)
 
 
-class Notification(models.Model):
+class BaseNotificationModel(models.Model):
     """
     Model for notifications.
 
@@ -57,7 +57,7 @@ class Notification(models.Model):
 
     class Meta:
         """Specify ordering for notifications."""
-
+        abstract = True
         ordering = ('-id',)
 
     source = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
@@ -122,3 +122,7 @@ class Notification(models.Model):
             'extra_data': self.extra_data,
             'is_read': self.is_read,
         }
+
+
+class Notification(BaseNotificationModel):
+    pass

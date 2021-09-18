@@ -2,7 +2,10 @@
 
 from django.contrib import admin
 
-from .models import Notification
+from .utils import get_notification_model
+
+
+Notification = get_notification_model()
 
 
 admin.site.register(Notification)

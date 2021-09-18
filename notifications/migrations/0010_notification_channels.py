@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='channels',
             field=notifications.fields.ListField(
                 default=('console',), max_length=200
-            ),  # noqa
+            ),
             preserve_default=False,
         ),
     ]

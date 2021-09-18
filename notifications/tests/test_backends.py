@@ -3,10 +3,13 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from ..models import Notification
+from ..utils import get_notification_model
 from ..tasks import send_notification
 from ..backends import Celery, Channels, RQ
 from ..consumers import DjangoNotifsConsumer
+
+
+Notification = get_notification_model()
 
 
 class BackendTests(TestCase):
