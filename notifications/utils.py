@@ -3,12 +3,12 @@
 import importlib
 
 from . import NotificationError
-from .models import Notification
-from . import default_settings as settings
+from django.conf import settings
 
 
 def notify(silent=False, countdown=0, **kwargs):
     """Helper method to send a notification."""
+    Notification = get_notification_model()
     notification = Notification(**kwargs)
 
     # Validate channels
@@ -19,7 +19,7 @@ def notify(silent=False, countdown=0, **kwargs):
     if not silent:
         notification.save()
 
-    # Send the notification asynchronously with celery
+    # Send the notification asynchronously
     notification_delivery_backend = _import_class_string(
         settings.NOTIFICATIONS_DELIVERY_BACKEND
     )
@@ -33,6 +33,7 @@ def read(notify_id, recipient):
     Raises NotificationError if the user doesn't have access
     to read the notification
     """
+    Notification = get_notification_model()
     notification = Notification.objects.get(id=notify_id)
 
     if recipient != notification.recipient:
@@ -65,3 +66,10 @@ def _import_class_string(path):
     package, attr = path.rsplit('.', 1)
 
     return getattr(importlib.import_module(package), attr)
+
+
+def get_notification_model():
+    notification_model_path = getattr(
+        settings, 'NOTIFICATIONS_MODEL', 'notifications.models.Notification'
+    )
+    return _import_class_string(notification_model_path)

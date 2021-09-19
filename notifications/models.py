@@ -22,7 +22,7 @@ class NotificationQuerySet(models.QuerySet):
         return self.filter(is_read=True)
 
 
-class Notification(models.Model):
+class BaseNotificationModel(models.Model):
     """
     Model for notifications.
 
@@ -56,9 +56,8 @@ class Notification(models.Model):
     User = settings.AUTH_USER_MODEL
 
     class Meta:
-        """Specify ordering for notifications."""
-
         ordering = ('-id',)
+        abstract = True
 
     source = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     source_display_name = models.CharField(max_length=150, null=True)
@@ -122,3 +121,7 @@ class Notification(models.Model):
             'extra_data': self.extra_data,
             'is_read': self.is_read,
         }
+
+
+class Notification(BaseNotificationModel):
+    pass

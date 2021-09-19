@@ -2,6 +2,14 @@ Configuration
 *************
 
 
+``NOTIFICATIONS_MODEL``
+--------------------------
+
+``Default='notifications.models.Notification'``
+
+This setting is used override the default database Model for saving notifications. Most users wouldn't need to override this
+but it can be useful if you're trying to integrate django-notifs into an existing project that already has it's own Notificaiton model
+
 
 ``NOTIFICATIONS_CHANNELS``
 --------------------------

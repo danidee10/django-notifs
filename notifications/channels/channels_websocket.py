@@ -21,8 +21,7 @@ class WebSocketChannel(BaseNotificationChannel):
             notif_kwargs['extra_data'][self.destination_name]
         except KeyError:
             raise KeyError(
-                f'`extra_kwargs` must contain the `{self.destination_name}`'
-                'key'
+                f'`extra_kwargs` must contain the `{self.destination_name}`' 'key'
             )
 
     def construct_message(self):
@@ -35,9 +34,7 @@ class WebSocketChannel(BaseNotificationChannel):
 
     def notify(self, message):
         channel_layer = get_channel_layer()
-        destination = self.notification_kwargs['extra_data'][
-            self.destination_name
-        ]
+        destination = self.notification_kwargs['extra_data'][self.destination_name]
 
         async_to_sync(channel_layer.group_send)(
             destination,

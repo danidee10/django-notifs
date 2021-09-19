@@ -9,9 +9,7 @@ def _send_notification(notification, channel_alias, logger):
     # Validate channel alias
     channel_path = _validate_channel_alias(channel_alias)
 
-    channel = _import_class_string(channel_path)(
-        **notification, alias=channel_alias
-    )
+    channel = _import_class_string(channel_path)(**notification, alias=channel_alias)
 
     message = channel.construct_message()
     channel.notify(message)
