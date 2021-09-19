@@ -2,8 +2,10 @@
 
 import importlib
 
+from django.conf import settings as django_settings
+
 from . import NotificationError
-from django.conf import settings
+from . import default_settings as settings
 
 
 def notify(silent=False, countdown=0, **kwargs):
@@ -70,6 +72,6 @@ def _import_class_string(path):
 
 def get_notification_model():
     notification_model_path = getattr(
-        settings, 'NOTIFICATIONS_MODEL', 'notifications.models.Notification'
+        django_settings, 'NOTIFICATIONS_MODEL', 'notifications.models.Notification'
     )
     return _import_class_string(notification_model_path)
