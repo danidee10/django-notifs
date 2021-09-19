@@ -18,3 +18,14 @@ Include it in ``settings.INSTALLED_APPS``::
 Finally don't forget to run the migrations with::
 
     python manage.py migrate notifications
+
+
+You can also register the current Notification model in django admin::
+
+    """admin.py file."""
+    from django.contrib import admin
+    from .utils import get_notification_model
+
+
+    Notification = get_notification_model()
+    admin.site.register(Notification)
