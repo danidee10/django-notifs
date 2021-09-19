@@ -3,6 +3,7 @@
 import time
 import logging
 
+from django.db import models
 from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 
@@ -53,9 +54,7 @@ class NotificationTestCase(TestCase):
         )
 
         logger = logging.getLogger(__name__)
-        self.assertIsNone(
-            _send_notification(notification.to_json(), 'console', logger)
-        )
+        self.assertIsNone(_send_notification(notification.to_json(), 'console', logger))
 
     def test_user_cant_read_others_notifications(self):
         """A user should only be able to read THEIR notifications."""
@@ -243,17 +242,25 @@ class NotificationTestCase(TestCase):
         self.assertGreater(total_time, 3)
 
 
-class CustomNotificationModel(Notification):
-
+class CustomNotificationModel(BaseNotificationModel):
     class Meta:
-        abstract = True
         db_table = 'notifications_notification'
+        managed = False
+
+    recipient = models.ForeignKey(
+        get_user_model(),
+        related_name='custom_notifs_notifications',
+        null=True,
+        on_delete=models.CASCADE,
+    )
 
     def to_json(self):
         return 'custom notification model'
 
 
-@override_settings(NOTIFICATIONS_MODEL='notifications.tests.test_general.CustomNotificationModel')
+@override_settings(
+    NOTIFICATIONS_MODEL='notifications.tests.test_general.CustomNotificationModel'
+)
 class CustomNotificationTestCase(TestCase):
     """Tests for the custom Notification model functionality"""
 
@@ -286,6 +293,4 @@ class CustomNotificationTestCase(TestCase):
             channels=('console',),
         )
 
-        self.assertEqual(
-           notification.to_json(), 'custom notification model'
-        )
+        self.assertEqual(notification.to_json(), 'custom notification model')

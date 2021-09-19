@@ -70,8 +70,6 @@ def _import_class_string(path):
 
 def get_notification_model():
     notification_model_path = getattr(
-        settings,
-        'NOTIFICATIONS_MODEL',
-        'notifications.models.Notification'
+        settings, 'NOTIFICATIONS_MODEL', 'notifications.models.Notification'
     )
     return _import_class_string(notification_model_path)

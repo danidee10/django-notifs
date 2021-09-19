@@ -62,9 +62,7 @@ class BackendTests(TestCase):
 
     def test_celery_task(self):
         """This ensures that the Celery task runs without errors."""
-        self.assertIsNone(
-            send_notification(self.notification.to_json(), 'console')
-        )
+        self.assertIsNone(send_notification(self.notification.to_json(), 'console'))
 
     async def test_channels_consumer(self):
         """This ensures that the Channels consumer runs without errors."""

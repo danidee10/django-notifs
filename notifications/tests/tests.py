@@ -50,9 +50,7 @@ class NotificationTestCase(TestCase):
         )
 
         logger = logging.getLogger(__name__)
-        self.assertIsNone(
-            _send_notification(notification.to_json(), 'console', logger)
-        )
+        self.assertIsNone(_send_notification(notification.to_json(), 'console', logger))
 
     def test_user_cant_read_others_notifications(self):
         """A user should only be able to read THEIR notifications."""
