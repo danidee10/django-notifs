@@ -1,9 +1,9 @@
 """Notification model."""
 
-from django.db import models
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
 
 from .fields import JSONField
 
@@ -62,7 +62,7 @@ class BaseNotificationModel(models.Model):
     source = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     source_display_name = models.CharField(max_length=150, null=True)
     recipient = models.ForeignKey(
-        User, related_name='notifications', null=True, on_delete=models.CASCADE
+        User, related_name='notifs_notifications', null=True, on_delete=models.CASCADE
     )
     action = models.CharField(max_length=50)
     category = models.CharField(max_length=50)
