@@ -43,6 +43,6 @@ class WebSocketChannel(BaseNotificationChannel):
             destination,
             {
                 'type': settings.NOTIFICATIONS_WEBSOCKET_EVENT_NAME,
-                'message': message
-            }
+                'message': message,
+            },
         )

@@ -12,7 +12,6 @@ logger = logging.getLogger('django_notifs.backends.synchronous')
 
 
 class SynchronousBackend(BaseBackend):
-
     def run(self, countdown):
         for channel_alias in self.notification['channels']:
             time.sleep(countdown)

@@ -18,7 +18,8 @@ To Create/Send a notification import the notify function and call it with the fo
         'recipient': recipent_user, 'category': 'Chat',
         'action': 'Sent', 'obj': message.id,
         'short_description': 'You a new message', 'url': url,
-        'channels': ('email', 'websocket', 'slack'), 'silent': True
+        'channels': ('email', 'websocket', 'slack'), 'silent': True,
+        'content_object': self.request.user
     }
     notify(**kwargs)
 
@@ -32,14 +33,14 @@ Notification Fields
 
 The fields in the `args` dictionary map to the fields in the `Notification` model
 
-- **source: A ForeignKey to Django's User model (Can be null if it's not a User to User Notification).**
+- **source: A ForeignKey to Django's User model (optional if it's not a User to User Notification).**
 - **source_display_name: A User Friendly name for the source of the notification.**
 - **recipient: The Recipient of the notification. It's a ForeignKey to Django's User model.**
 - **category: Arbitrary category that can be used to group messages.**
 - **action: Verbal action for the notification E.g Sent, Cancelled, Bought e.t.c**
-- **obj: The id of the object associated with the notification (Can be null).**
+- **obj: An arbitrary object associated with the notification using the `contenttypes` app (optional).**
 - **short_description: The body of the notification.**
-- **url: The url of the object associated with the notification (Can be null).**
+- **url: The url of the object associated with the notification (optional).**
 - **silent: If this Value is set, the notification won't be persisted to the database.**
 - **extra_data: Arbitrary data as a dictionary.**
 - **channels: Delivery channels that should be used to deliver the message (Tuple/List)**
@@ -55,8 +56,6 @@ Simply pass in a dictionary as the extra_data argument.
 
 .. note::
     The dictionary is serialized using python's json module so make sure the dictionary contains objects that can be serialized by the json module
-
-    Internally, the JSON is stored as plain text with django's standard ``TextField``.
 
 
 Writing custom delivery channels

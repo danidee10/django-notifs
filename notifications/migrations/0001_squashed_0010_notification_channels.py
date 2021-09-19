@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         ('notifications', '0007_auto_20171006_0126'),
         ('notifications', '0008_notification_extra_data'),
         ('notifications', '0009_auto_20180112_0915'),
-        ('notifications', '0010_notification_channels')
+        ('notifications', '0010_notification_channels'),
     ]
 
     initial = True
@@ -31,8 +31,19 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Notification',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),  # noqa
-                ('source_display_name', models.CharField(max_length=150, null=True)),  # noqa
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),  # noqa
+                (
+                    'source_display_name',
+                    models.CharField(max_length=150, null=True),
+                ),  # noqa
                 ('action', models.CharField(max_length=50)),
                 ('category', models.CharField(max_length=50)),
                 ('obj', models.IntegerField(blank=True, null=True)),
@@ -41,10 +52,30 @@ class Migration(migrations.Migration):
                 ('create_date', models.DateTimeField(auto_now_add=True)),
                 ('update_date', models.DateTimeField(auto_now=True)),
                 ('short_description', models.CharField(max_length=100)),
-                ('recipient', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='notifications', to=settings.AUTH_USER_MODEL)),  # noqa
-                ('source', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),  # noqa
+                (
+                    'recipient',
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='notifications',
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),  # noqa
+                (
+                    'source',
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),  # noqa
                 ('extra_data', notifications.fields.JSONField(default={})),
-                ('channels', notifications.fields.ListField(default=('console',), max_length=200)),  # noqa
+                (
+                    'channels',
+                    notifications.fields.ListField(
+                        default=('console',), max_length=200
+                    ),
+                ),  # noqa
             ],
             options={
                 'ordering': ('-id',),

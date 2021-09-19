@@ -8,6 +8,6 @@ from .consumers import DjangoNotifsWebsocketConsumer
 websocket_urlpatterns = [
     path(
         f'<{settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM}>',
-        DjangoNotifsWebsocketConsumer.as_asgi()
+        DjangoNotifsWebsocketConsumer.as_asgi(),
     )
 ]

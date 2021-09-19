@@ -21,7 +21,7 @@ if settings.NOTIFICATIONS_RETRY:
 @shared_task(
     autoretry_for=autoretry_for,
     retry_backoff=settings.NOTIFICATIONS_RETRY_INTERVAL,
-    max_retries=settings.NOTIFICATIONS_MAX_RETRIES
+    max_retries=settings.NOTIFICATIONS_MAX_RETRIES,
 )
 def send_notification(notification, channel_alias):
     """Send notification via a channel to celery."""
@@ -34,5 +34,5 @@ class CeleryBackend(BaseBackend):
             send_notification.apply_async(
                 args=[self.notification, channel_alias],
                 queue=settings.NOTIFICATIONS_QUEUE_NAME,
-                countdown=countdown
+                countdown=countdown,
             )

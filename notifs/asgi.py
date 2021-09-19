@@ -9,9 +9,13 @@ from notifications import consumers
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'notifs.settings')
 
-application = ProtocolTypeRouter({
-    'http': get_asgi_application(),
-    'channel': ChannelNameRouter({
-        'django_notifs': consumers.DjangoNotifsConsumer.as_asgi(),
-    })
-})
+application = ProtocolTypeRouter(
+    {
+        'http': get_asgi_application(),
+        'channel': ChannelNameRouter(
+            {
+                'django_notifs': consumers.DjangoNotifsConsumer.as_asgi(),
+            }
+        ),
+    }
+)

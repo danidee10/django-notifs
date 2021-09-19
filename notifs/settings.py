@@ -39,11 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.humanize',
-
     'notifications',
     'django_rq',
     'channels',
-    'django_jsonfield_backport'
+    'django_jsonfield_backport',
 ]
 
 MIDDLEWARE = [
@@ -83,7 +82,7 @@ WSGI_APPLICATION = 'notifs.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -105,9 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-)
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
@@ -130,9 +127,7 @@ STATIC_URL = '/static/'
 # Notifications
 NOTIFICATIONS_USE_WEBSOCKET = False
 NOTIFICATIONS_RABBIT_MQ_URL = 'amqp://guest:guest@localhost:5672'
-NOTIFICATIONS_CHANNELS = {
-    'console': 'notifications.channels.ConsoleChannel'
-}
+NOTIFICATIONS_CHANNELS = {'console': 'notifications.channels.ConsoleChannel'}
 NOTIFICATIONS_DELIVERY_BACKEND = 'notifications.backends.Synchronous'
 NOTIFICATIONS_RETRY = False
 
