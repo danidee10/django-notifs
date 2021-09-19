@@ -10,7 +10,6 @@ from .. import default_settings as settings
 
 
 class ChannelsBackend(BaseBackend):
-
     def run(self, countdown):
         channel_layer = channels.layers.get_channel_layer(
             settings.NOTIFICATIONS_QUEUE_NAME
@@ -22,6 +21,7 @@ class ChannelsBackend(BaseBackend):
                 {
                     'notification': self.notification,
                     'countdown': countdown,
-                    'channel_alias': channel_alias, 'type': 'notify'
-                }
+                    'channel_alias': channel_alias,
+                    'type': 'notify',
+                },
             )

@@ -16,6 +16,6 @@ def _send_notification(notification, channel_alias, logger):
     message = channel.construct_message()
     channel.notify(message)
     logger.info(
-        'Sent notification with the %s channel. kwargs: %s\n' %
-        (channel_alias, notification)
+        'Sent notification with the %s channel. kwargs: %s\n'
+        % (channel_alias, notification)
     )

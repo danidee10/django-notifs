@@ -39,8 +39,7 @@ class DjangoNotifsWebsocketConsumer(AsyncWebsocketConsumer):
 
         # Join room group
         await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
+            self.room_group_name, self.channel_name
         )
 
         await self.accept()
@@ -48,8 +47,7 @@ class DjangoNotifsWebsocketConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         """Leave the group."""
         await self.channel_layer.group_discard(
-            self.room_group_name,
-            self.channel_name
+            self.room_group_name, self.channel_name
         )
 
     async def receive(self, text_data):
@@ -66,8 +64,8 @@ class DjangoNotifsWebsocketConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             {
                 'type': settings.NOTIFICATIONS_WEBSOCKET_EVENT_NAME,
-                'message': message
-            }
+                'message': message,
+            },
         )
 
 
@@ -81,5 +79,6 @@ async def __websocket_message(self, event):
 
 setattr(
     DjangoNotifsWebsocketConsumer,
-    settings.NOTIFICATIONS_WEBSOCKET_EVENT_NAME, __websocket_message
+    settings.NOTIFICATIONS_WEBSOCKET_EVENT_NAME,
+    __websocket_message,
 )

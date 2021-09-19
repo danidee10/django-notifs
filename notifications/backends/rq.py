@@ -18,16 +18,19 @@ retry = None
 if settings.NOTIFICATIONS_RETRY:
     retry = Retry(
         max=settings.NOTIFICATIONS_MAX_RETRIES,
-        interval=settings.NOTIFICATIONS_RETRY_INTERVAL
+        interval=settings.NOTIFICATIONS_RETRY_INTERVAL,
     )
 
 
 class RQBackend(BaseBackend):
-
     def run(self, countdown):
         for channel_alias in self.notification['channels']:
             queue = django_rq.get_queue(settings.NOTIFICATIONS_QUEUE_NAME)
             queue.enqueue_in(
-                timedelta(seconds=countdown), _send_notification,
-                self.notification, channel_alias, logger, retry=retry
+                timedelta(seconds=countdown),
+                _send_notification,
+                self.notification,
+                channel_alias,
+                logger,
+                retry=retry,
             )
