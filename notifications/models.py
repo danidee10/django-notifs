@@ -56,9 +56,8 @@ class BaseNotificationModel(models.Model):
     User = settings.AUTH_USER_MODEL
 
     class Meta:
-        """Specify ordering for notifications."""
-        abstract = True
         ordering = ('-id',)
+        abstract = True
 
     source = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     source_display_name = models.CharField(max_length=150, null=True)
