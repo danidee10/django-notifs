@@ -37,9 +37,4 @@ class AwsSqsLambdaConsumer:
         logger = AwsSqsLambdaBackend.logger
         for record in event['Records']:
             message = json.loads(record['body'])
-            logger.info(f'Message body: {record["body"]}')
-            logger.info(
-                f'Message attribute: {record["messageAttributes"]["AttributeName"]["stringValue"]}'
-            )
-
             AwsSqsLambdaBackend.consume(**message)
