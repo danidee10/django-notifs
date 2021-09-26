@@ -1,23 +1,48 @@
 import abc
 
-from notifications.utils import get_notification_model
+from notifications.utils import _import_class_string
+from notifications import default_settings as settings
+
+from notifications.providers import BaseNotificationProvider
 
 
 class BaseNotificationChannel(metaclass=abc.ABCMeta):
-    """Base channel for sending notifications."""
+    def __init__(self, notification, context=dict()):
+        self.notification = notification
+        self.context = context
 
-    def __init__(self, **kwargs):
-        self.notification_kwargs = kwargs
-        self.notification_id = kwargs['notification_id']
-
-        self.NotificationModel = get_notification_model()
-
-    @abc.abstractmethod
-    def construct_message(self):
-        """Constructs a message from notification details."""
-        raise NotImplementedError
+    @abc.abstractproperty
+    def providers(self):
+        return []
 
     @abc.abstractmethod
-    def notify(self, message):
-        """Sends the notification."""
+    def build_payload(self, payload):
+        """Constructs a paylod from the notification object."""
         raise NotImplementedError
+
+    @property
+    def provider_paths(self):
+        provider_paths = dict()
+        registered_providers = BaseNotificationProvider.providers
+        for name in self.providers:
+            try:
+                class_path = registered_providers[name]
+            except KeyError:
+                raise KeyError(
+                    '%s is not a valid notification provider. '
+                    '\n Registered providers: %s' % (name, registered_providers)
+                )
+
+            provider_paths[name] = class_path
+
+        return provider_paths
+
+    def get_context(self, provider):
+        return self.context
+
+    def get_delivery_backend(self):
+        return _import_class_string(settings.NOTIFICATIONS_DELIVERY_BACKEND)
+
+    def notify(self, countdown=0):
+        delivery_backend = self.get_delivery_backend()
+        delivery_backend(self).run(countdown)

@@ -9,7 +9,7 @@ from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 from . import default_settings as settings
-from notifications.backends.utils import _send_notification
+from notifications.backends.django_channels import ChannelsBackend
 
 
 logging.basicConfig(level=logging.INFO)
@@ -26,8 +26,11 @@ class DjangoNotifsConsumer(AsyncConsumer):
     async def notify(self, message):
         await asyncio.sleep(message['countdown'])
 
-        await database_sync_to_async(_send_notification)(
-            message['notification'], message['channel_alias'], logger
+        await database_sync_to_async(ChannelsBackend.send_notification)(
+            message['provider'],
+            message['provider_class'],
+            message['payload'],
+            message['context'],
         )
 
 

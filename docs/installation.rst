@@ -11,7 +11,7 @@ Include it in ``settings.INSTALLED_APPS``::
         'django.contrib.auth',
         ...
         'notifications',
-        'django_jsonfield_backport'  # backport of JSONField for Django < 3.0
+        'django_jsonfield_backport'  # if you're running django < 3.1
         ...
     )
 

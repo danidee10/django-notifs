@@ -8,24 +8,10 @@ from . import NotificationError
 from . import default_settings as settings
 
 
-def notify(silent=False, countdown=0, **kwargs):
-    """Helper method to send a notification."""
-    Notification = get_notification_model()
-    notification = Notification(**kwargs)
-
-    # Validate channels
-    for channel_alias in notification.channels:
-        _validate_channel_alias(channel_alias)
-
-    # If it's a not a silent notification, save the notification
-    if not silent:
-        notification.save()
-
-    # Send the notification asynchronously
-    notification_delivery_backend = _import_class_string(
-        settings.NOTIFICATIONS_DELIVERY_BACKEND
-    )
-    notification_delivery_backend(notification).run(countdown=countdown)
+def notify(*notifications, countdown=0):
+    """Helper method to send multiple notifications."""
+    for notification in notifications:
+        notification.notify(countdown)
 
 
 def read(notify_id, recipient):
