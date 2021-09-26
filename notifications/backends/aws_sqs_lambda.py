@@ -2,7 +2,6 @@
 
 import logging
 import json
-import os
 
 import boto3
 
@@ -13,13 +12,13 @@ from notifications import default_settings as settings
 class AwsSqsLambdaBackend(BaseBackend):
     logger = logging.getLogger('django_notifs.backends.aws_sqs_lambda')
 
-    def produce(self, provider, provider_class, payload, context, countdown):
+    def produce(self, provider, provider_path, payload, context, countdown):
         QUEUE_URL = settings.NOTIFICATIONS_SQS_QUEUE_URL
         SQS = boto3.client('sqs')
 
         message = {
             'provider': provider,
-            'provider_class': provider_class,
+            'provider_path': provider_path,
             'payload': payload,
             'context': context
         }
@@ -34,7 +33,6 @@ class AwsSqsLambdaConsumer:
 
     @classmethod
     def consume(cls, event, context):
-        logger = AwsSqsLambdaBackend.logger
         for record in event['Records']:
             message = json.loads(record['body'])
             AwsSqsLambdaBackend.consume(**message)
