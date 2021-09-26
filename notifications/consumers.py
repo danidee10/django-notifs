@@ -26,7 +26,7 @@ class DjangoNotifsConsumer(AsyncConsumer):
     async def notify(self, message):
         await asyncio.sleep(message['countdown'])
 
-        await database_sync_to_async(ChannelsBackend.send_notification)(
+        await database_sync_to_async(ChannelsBackend.consume)(
             message['provider'],
             message['provider_class'],
             message['payload'],

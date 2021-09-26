@@ -10,7 +10,7 @@ from .base import BaseBackend
 
 
 class ChannelsBackend(BaseBackend):
-    def deliver(self, provider, provider_class, payload, context, countdown):
+    def produce(self, provider, provider_class, payload, context, countdown):
         channel_layer = channels.layers.get_channel_layer(
             settings.NOTIFICATIONS_QUEUE_NAME
         )

@@ -22,11 +22,11 @@ if settings.NOTIFICATIONS_RETRY:
 
 
 class RQBackend(BaseBackend):
-    def deliver(self, provider, provider_class, payload, context, countdown):
+    def produce(self, provider, provider_class, payload, context, countdown):
         queue = django_rq.get_queue(settings.NOTIFICATIONS_QUEUE_NAME)
         queue.enqueue_in(
             timedelta(seconds=countdown),
-            self.send_notification,
+            self.consume,
             provider,
             provider_class,
             payload,

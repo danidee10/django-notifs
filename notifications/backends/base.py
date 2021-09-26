@@ -21,7 +21,7 @@ class BaseBackend(metaclass=abc.ABCMeta):
         return _import_class_string(provider_path)(context)
 
     @classmethod
-    def send_notification(cls, provider, provider_path, payload, context):
+    def consume(cls, provider, provider_path, payload, context):
         notification_channel = cls.get_notification_provider(provider_path, context)
         notification_channel.send(payload)
         cls.logger.info(
@@ -29,7 +29,7 @@ class BaseBackend(metaclass=abc.ABCMeta):
         )
 
     @abc.abstractclassmethod
-    def deliver(self):
+    def produce(self):
         raise NotImplementedError
 
     def run(self, countdown):
@@ -40,4 +40,4 @@ class BaseBackend(metaclass=abc.ABCMeta):
             payload = self.notification_channel.build_payload(provider)
             context = self.notification_channel.get_context(provider)
 
-            self.deliver(provider, provider_class, payload, context, countdown)
+            self.produce(provider, provider_class, payload, context, countdown)

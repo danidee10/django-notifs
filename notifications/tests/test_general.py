@@ -32,11 +32,11 @@ class NotificationTestCase(TestCase):
             username='user2@gmail.com', password='password'
         )
 
-    def test_send_notification(self):
+    def test_consume(self):
         """
         This is the default method that's used by all backends
 
-         There's really nothing to assert here but `_send_notification`
+         There's really nothing to assert here but `consume`
          should run without any Exception.
          (This might change in the future)
         """
@@ -54,7 +54,7 @@ class NotificationTestCase(TestCase):
         )
 
         self.assertIsNone(
-            BaseBackend.send_notification(
+            BaseBackend.consume(
                 'console', 'notifications.providers.ConsoleNotificationProvider',
                 notification.to_json(), dict(),
             )
@@ -156,7 +156,7 @@ class NotificationTestCase(TestCase):
 
         self.assertRaises(
             AttributeError,
-            BaseBackend.send_notification,
+            BaseBackend.consume,
             'console', 'notifications.providers.InvalidNotificationProvider',
             notification.to_json(), dict(),
         )

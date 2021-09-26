@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 from ..channels import ConsoleNotificationChannel
 from ..utils import get_notification_model
-from ..tasks import send_notification
+from ..tasks import consume
 from ..backends import Celery, Channels, RQ
 from ..consumers import DjangoNotifsConsumer
 
@@ -65,7 +65,7 @@ class BackendTests(TestCase):
     def test_celery_task(self):
         """This ensures that the Celery task runs without errors."""
         self.assertIsNone(
-            send_notification(
+            consume(
                 'console', 'notifications.providers.ConsoleNotificationProvider',
                 self.notification.to_json(), dict()
             )
