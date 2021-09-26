@@ -1,5 +1,7 @@
 import abc
 
+from django.utils.functional import classproperty
+
 from notifications.utils import _import_class_string
 from notifications import default_settings as settings
 
@@ -12,6 +14,10 @@ class BaseNotificationChannel(metaclass=abc.ABCMeta):
         self.context = context
 
     @abc.abstractproperty
+    def name(self):
+        raise NotImplementedError
+
+    @abc.abstractproperty
     def providers(self):
         return []
 
@@ -19,6 +25,13 @@ class BaseNotificationChannel(metaclass=abc.ABCMeta):
     def build_payload(self, payload):
         """Constructs a paylod from the notification object."""
         raise NotImplementedError
+
+    @classproperty
+    def registered_channels(cls):
+        return {
+            klass.name: f'{klass.__module__}.{klass.__name__}'
+            for klass in cls.__subclasses__()
+        }
 
     @property
     def provider_paths(self):
