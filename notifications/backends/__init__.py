@@ -15,4 +15,9 @@ try:
 except ImportError:
     pass
 
+try:
+    from .aws_sqs_lambda import AwsSqsLambdaBackend as AwsSqsLambda
+except ImportError:
+    pass
+
 from .synchronous import SynchronousBackend as Synchronous  # noqa
