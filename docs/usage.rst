@@ -12,26 +12,56 @@ To Create/Send a notification import the notify function and call it with the fo
 
     from notifications.utils import notify
 
-    kwargs = {
-        'source': self.request.user,
-        'source_display_name': self.request.user.get_full_name(),
-        'recipient': recipent_user, 'category': 'Chat',
-        'action': 'Sent', 'obj': message.id,
-        'short_description': 'You a new message', 'url': url,
-        'channels': ('email', 'websocket', 'slack'), 'silent': True,
-        'content_object': self.request.user
-    }
-    notify(**kwargs)
+    notify(
+        notification,
+        silent=True,  # Don't persist to the database
+        countdown=0  # delay (in seconds) before sending the notification
+        channels=('email', 'websocket', 'slack'),
+    )
 
 This example creates a *silent* notification and delivers it via ``email``, ``websocket`` and ``slack``.
 
-This assumes that you've implemented those channels and added them to the ``settings.NOTIFICATIONS_CHANNELS`` dictionary.
+This assumes that you've implemented these channels
+
+A `NotificationChannel` is a class thats builds a payload from a Notification object and sends it to one or more providers.
+Below is an example of a console channel that returns the provider name and delivers it to the inbuilt Console provider::
+
+    from notifications.channels import BaseNotificationChannel
+
+    class ConsoleNotificationChannel(BaseNotificationChannel):
+        name = 'console'
+        providers = ['console']
+
+        def build_payload(self, provider):
+            return provider
 
 
-Notification Fields
+To create a new ``NotificationChannel`` all you have to do is inherit from the BaseNotificationChannel class, provide the ``name`` and ``providers``
+attributes and implement the ``build_payload`` method.
+
+
+Then you can instantiate the Notification channel directly::
+
+    console_notification = ConsoleNotificationChannel(
+        notification: Notification, context={'arbitrary_data': 'data'}
+    )
+    console_notification.notify()  # Send immediately
+    console_notification.notify(countdown=60)  # Send after 1 minute
+
+
+This gives you more flexibility over the ``notify`` utility function because you can create several notifications and decide on how each
+individual notification should be sent
+
+
+.. note::
+    Notification channels are automatically registered by django-notifs
+    You must inherit from the base class and specify the ``name`` property for the channel to be registered properly
+
+
+Notification Model
 -------------------
 
-The fields in the `args` dictionary map to the fields in the `Notification` model
+Django notifs includes an inbuilt notification model with the following fields:
 
 - **source: A ForeignKey to Django's User model (optional if it's not a User to User Notification).**
 - **source_display_name: A User Friendly name for the source of the notification.**
