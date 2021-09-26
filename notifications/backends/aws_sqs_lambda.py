@@ -33,7 +33,7 @@ class AwsSqsLambdaBackend(BaseBackend):
 class AwsSqsLambdaConsumer:
 
     @classmethod
-    def consume(cls, context, event):
+    def consume(cls, event, context):
         logger = AwsSqsLambdaBackend.logger
         for record in event['Records']:
             message = json.loads(record['body'])
