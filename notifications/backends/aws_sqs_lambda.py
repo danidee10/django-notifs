@@ -12,13 +12,13 @@ from notifications import default_settings as settings
 class AwsSqsLambdaBackend(BaseBackend):
     logger = logging.getLogger('django_notifs.backends.aws_sqs_lambda')
 
-    def produce(self, provider, provider_path, payload, context, countdown):
+    def produce(self, provider, provider_class, payload, context, countdown):
         QUEUE_URL = settings.NOTIFICATIONS_SQS_QUEUE_URL
         SQS = boto3.client('sqs')
 
         message = {
             'provider': provider,
-            'provider_path': provider_path,
+            'provider_class': provider_class,
             'payload': payload,
             'context': context
         }

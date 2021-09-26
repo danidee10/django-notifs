@@ -21,8 +21,8 @@ class BaseBackend(metaclass=abc.ABCMeta):
         return _import_class_string(provider_path)(context)
 
     @classmethod
-    def consume(cls, provider, provider_path, payload, context):
-        notification_channel = cls.get_notification_provider(provider_path, context)
+    def consume(cls, provider, provider_class, payload, context):
+        notification_channel = cls.get_notification_provider(provider_class, context)
         notification_channel.send(payload)
         cls.logger.info(
             'Sent notification with the %s channel. context: %s\n' % (provider, context)
