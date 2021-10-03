@@ -1,8 +1,8 @@
 import abc
 
-from django.utils.functional import classproperty
+from django.utils.module_loading import import_string
 
-from notifications.utils import _import_class_string
+from notifications.utils import classproperty
 from notifications import default_settings as settings
 
 from notifications.providers import BaseNotificationProvider
@@ -54,7 +54,7 @@ class BaseNotificationChannel(metaclass=abc.ABCMeta):
         return self.context
 
     def get_delivery_backend(self):
-        return _import_class_string(settings.NOTIFICATIONS_DELIVERY_BACKEND)
+        return import_string(settings.NOTIFICATIONS_DELIVERY_BACKEND)
 
     def notify(self, countdown=0):
         delivery_backend = self.get_delivery_backend()

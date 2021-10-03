@@ -4,6 +4,38 @@ Advanced usage
 .. _documentation: https://channels.readthedocs.io/en/stable/index.html
 .. _channels deployment documentation: https://channels.readthedocs.io/en/stable/deploying.html
 
+Tentative Notifications
+--------------------------------
+
+A tentative notification is a conditional notification that should only be sent if a criteria is met.
+
+An example is sending a notification if a user hasn't read a chat message in 30 minutes (as a reminder).
+
+You can acheive this by combining the ``countdown`` functionality with a custom provider::
+
+    # delay notification for 30 minutes
+    notify(**kwargs, countdown=1800)
+
+Custom provider::
+
+    from notifications.utils import get_notification_model
+    from notifications.providers import BaseNotificationProvider
+
+    class DelayedNotificationChannel(BaseNotificationProvider):
+
+        def send(self, payload):
+            notification_id = self.payload['notification_id']
+
+            notification = get_notification_model().objects.get(id=self.notification_id)
+            if notification.read:
+                return
+
+            # send the notification
+
+In this example, we abort the notification if the notification has been read but you're free
+to use any condition/custom logic
+
+
 WebSockets
 ---------------------
 
@@ -125,12 +157,10 @@ if you don't make use of the standard Authentication backend.
 Testing and Debugging
 ---------------------
 
-django-notifs comes with an inbuilt console delivery channel that just prints out the notification arguments::
+django-notifs comes with an inbuilt ``'console'`` provider that just prints out the notification payload::
 
-
-    NOTIFICATIONS_CHANNELS = {
-        'console': 'notifications.channels.ConsoleChannel'
-    }
-
+    class MyNotificationChannel:
+        providers = ['console']
+        ...
 
 This can be helpful during development where you don't want notifications to be delivered.

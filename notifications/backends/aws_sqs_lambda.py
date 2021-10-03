@@ -13,24 +13,24 @@ class AwsSqsLambdaBackend(BaseBackend):
     logger = logging.getLogger('django_notifs.backends.aws_sqs_lambda')
 
     def produce(self, provider, provider_class, payload, context, countdown):
-        QUEUE_URL = settings.NOTIFICATIONS_SQS_QUEUE_URL
-        SQS = boto3.client('sqs')
+        queue_url = settings.NOTIFICATIONS_SQS_QUEUE_URL
+        sqs = boto3.client('sqs')
 
         message = {
             'provider': provider,
             'provider_class': provider_class,
             'payload': payload,
-            'context': context
+            'context': context,
         }
 
-        SQS.send_message(
-            QueueUrl=QUEUE_URL,
+        sqs.send_message(
+            QueueUrl=queue_url,
             MessageBody=json.dumps(message),
+            DelaySeconds=countdown,
         )
 
 
 class AwsSqsLambdaConsumer:
-
     @classmethod
     def consume(cls, event, context):
         for record in event['Records']:

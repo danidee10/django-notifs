@@ -2,13 +2,14 @@
 
 import django
 from django.db import models
-from django.db.models import JSONField
+
+from django_jsonfield_backport.models import JSONField  # noqa
 
 django_version = django.get_version()
 django_version = float(django_version[::-1].replace('.', '', 1)[::-1])
 
-if django_version < 3.1:
-    from django_jsonfield_backport.models import JSONField  # noqa
+if django_version >= 3.1:
+    from django.db.models import JSONField  # noqa
 
 
 class ListField(models.CharField):

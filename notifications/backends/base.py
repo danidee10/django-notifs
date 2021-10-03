@@ -3,6 +3,7 @@
 import abc
 import logging
 
+from django.utils.module_loading import import_string
 from notifications.channels import BaseNotificationChannel
 
 
@@ -16,9 +17,7 @@ class BaseBackend(metaclass=abc.ABCMeta):
 
     @staticmethod
     def get_notification_provider(provider_path, context):
-        from ..utils import _import_class_string
-
-        return _import_class_string(provider_path)(context)
+        return import_string(provider_path)(context)
 
     @classmethod
     def consume(cls, provider, provider_class, payload, context):

@@ -1,7 +1,6 @@
 """General Tests."""
 
 import time
-import logging
 
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -55,8 +54,10 @@ class NotificationTestCase(TestCase):
 
         self.assertIsNone(
             BaseBackend.consume(
-                'console', 'notifications.providers.ConsoleNotificationProvider',
-                notification.to_json(), dict(),
+                'console',
+                'notifications.providers.ConsoleNotificationProvider',
+                notification.to_json(),
+                dict(),
             )
         )
 
@@ -155,10 +156,12 @@ class NotificationTestCase(TestCase):
         )
 
         self.assertRaises(
-            AttributeError,
+            ImportError,
             BaseBackend.consume,
-            'console', 'notifications.providers.InvalidNotificationProvider',
-            notification.to_json(), dict(),
+            'console',
+            'notifications.providers.InvalidNotificationProvider',
+            notification.to_json(),
+            dict(),
         )
 
     def test_queryset_methods(self):

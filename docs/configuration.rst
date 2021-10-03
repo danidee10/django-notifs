@@ -11,26 +11,6 @@ This setting is used override the default database Model for saving notification
 but it can be useful if you're trying to integrate django-notifs into an existing project that already has it's own Notificaiton model
 
 
-``NOTIFICATIONS_CHANNELS``
---------------------------
-
-``Default={}``
-
-A dictionary of notification channels.
-
-**Keys:** The softname of the notification channel which is used in your code
-
-**Values:**  The path to the notification channel's class.
-
-Example::
-
-    NOTIFICATIONS_CHANNELS = {
-        'console': 'notifications.channels.ConsoleChannel'
-    }
-
-django-notifs comes with an inbuilt console delivery channel that just prints out the notification arguments
-
-
 
 ``NOTIFICATIONS_DELIVERY_BACKEND``
 ----------------------------------

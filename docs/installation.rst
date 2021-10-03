@@ -24,7 +24,7 @@ You can also register the current Notification model in django admin::
 
     """admin.py file."""
     from django.contrib import admin
-    from .utils import get_notification_model
+    from notifications.utils import get_notification_model
 
 
     Notification = get_notification_model()

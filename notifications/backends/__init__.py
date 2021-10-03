@@ -16,7 +16,7 @@ except ImportError:
     pass
 
 try:
-    from .aws_sqs_lambda import AwsSqsLambdaBackend as AwsSqsLambda
+    from .aws_sqs_lambda import AwsSqsLambdaBackend as AwsSqsLambda  # noqa
 except ImportError:
     pass
 

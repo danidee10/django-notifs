@@ -1,6 +1,6 @@
 import abc
 
-from django.utils.functional import classproperty
+from notifications.utils import classproperty
 
 
 class BaseNotificationProvider(metaclass=abc.ABCMeta):

@@ -19,11 +19,15 @@ REQUIRED = [
     'requests>=2.25.1',
     'django-jsonfield-backport>=1.0.4',
 ]
-TEST_REQUIRES = ['coverage>=5.4', 'channels>=3.0.3']
+TEST_REQUIRES = ['coverage>=5.4', 'channels>=3.0.3', 'tox>=3.24.4']
 EXTRAS_REQUIRE = {
+    # Backend requirements
     'celery': ['celery>=4.1.0'],
     'rq': ['django-rq>=2.4.0'],
     'channels': ['channels>=3.0.3', 'channels-redis>=3.2.0'],
+    'sqs_lambda': ['boto3>=1.18.48'],
+
+    # Provider requirements
     'pusher': ['pusher>=3.0.0'],
 }
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
