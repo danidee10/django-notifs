@@ -56,7 +56,7 @@ class DjangoNotifsWebsocketConsumer(AsyncWebsocketConsumer):
         for bi-directional communication)
         """
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        message = text_data_json.get('message', {})
 
         # Send message to group
         await self.channel_layer.group_send(
@@ -73,6 +73,7 @@ async def __websocket_message(self, event):
     message = event['message']
 
     # Send message to WebSocket
+    print('Sending....', event)
     await self.send(message)
 
 

@@ -55,7 +55,8 @@ html_static_path = ['_static']
 
 
 # Cusotm settings
-source_suffix = ['.rst', '.md']
+source_suffix = '.rst'
 
 # Logo
 # html_logo = '_static/images/django-notifs.png'
+pygments_style = 'sphinx'

@@ -70,8 +70,8 @@ Notification Model
 
 Django notifs includes an inbuilt notification model with the following fields:
 
-- **source: A ForeignKey to Django's User model (optional if it's not a User to User Notification).**
-- **source_display_name: A User Friendly name for the source of the notification.**
+* **source: A ForeignKey to Django's User model (optional if it's not a User to User Notification).**
+* **source_display_name: A User Friendly name for the source of the notification.**
 - **recipient: The Recipient of the notification. It's a ForeignKey to Django's User model.**
 - **category: Arbitrary category that can be used to group messages.**
 - **action: Verbal action for the notification E.g Sent, Cancelled, Bought e.t.c**
@@ -79,8 +79,8 @@ Django notifs includes an inbuilt notification model with the following fields:
 - **short_description: The body of the notification.**
 - **url: The url of the object associated with the notification (optional).**
 - **silent: If this Value is set, the notification won't be persisted to the database.**
-- **extra_data: Arbitrary data as in a JSONField.**
-- **channels: Notification channels related to the notification (Tuple/List in a JSONField)**
+* **extra_data: Arbitrary data as in a JSONField.**
+* **channels: Notification channels related to the notification (Tuple/List in a JSONField)**
 
 The values of the fields can easily be used to construct the notification message.
 

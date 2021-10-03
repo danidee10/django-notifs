@@ -5,8 +5,7 @@ from django.db import migrations
 
 from django_jsonfield_backport.models import JSONField  # noqa
 
-django_version = django.get_version()
-django_version = float(django_version[::-1].replace('.', '', 1)[::-1])
+django_version = float(django.get_version()[:3])
 
 if django_version >= 3.1:
     from django.db.models import JSONField  # noqa

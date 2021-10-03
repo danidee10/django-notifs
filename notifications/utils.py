@@ -1,7 +1,5 @@
 """Utilities and helper functions."""
 
-import importlib
-
 from django.utils.module_loading import import_string
 from django.conf import settings as django_settings
 
@@ -87,6 +85,7 @@ class classproperty:
     Decorator that converts a method with a single cls argument into a property
     that can be accessed directly from the class.
     """
+
     def __init__(self, method=None):
         self.fget = method
 

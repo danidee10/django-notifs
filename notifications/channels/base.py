@@ -22,7 +22,7 @@ class BaseNotificationChannel(metaclass=abc.ABCMeta):
         return []
 
     @abc.abstractmethod
-    def build_payload(self, payload):
+    def build_payload(self, provider):
         """Constructs a paylod from the notification object."""
         raise NotImplementedError
 

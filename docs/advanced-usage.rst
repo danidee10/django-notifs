@@ -74,36 +74,21 @@ Notification channels
 ---------------------
 A simple WebSocket channel is provided:
 
-- notifications.channels.WebSocketChannel
-
-This channel simply delivers notifications to the ``settings.NOTIFICATIONS_WEBSOCKET_EVENT_NAME`` group.
-
-Add the channel to ``settings.NOTIFICATION_CHANNELS``::
-
-    NOTIFICATION_CHANNELS = {
-        'websocket': 'notifications.channels.WebSocketChannel'
-    }
+``notifications.channels.DjangoWebSocketChannel``
 
 Sample usage::
 
-    from notifications import default_settings as notifs_settings
-    ...
-
     notif_args = {
-        'source': user,
-        'source_display_name': user.get_full_name(),
-        'category': 'MESSAGE', 'action': 'Sent',
-        'obj': obj.id,
-        'short_description': 'You a new message', 'silent': True,
-        'extra_data': {
-            notifs_settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM: chat_session.uri,
-            'message': chat_session_message.to_json()
+        ...
+        extra_data: {
+            'context': {
+                'channel_layer': 'default',
+                'destination': 'group or channel_name',
+                'message': {'text': 'Hello world'}
+            }
         }
     }
     notify(**notif_args, channels=['websocket'])
-
-``notifs_settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM`` is a required key. You can also override it in ``settings.py``
-and reference it through ``django.conf.settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM``
 
 
 Running the WebSocket server
@@ -123,9 +108,9 @@ You listen to notifications by connecting to the WebSocket URL.
 
 The default URL is ``http://localhost:8000/<settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM>``
 
-To connect to a WebSocket room (via JavaScript) for a user ``danidee`` you'll need to connect to::
+To connect to a WebSocket room (via JavaScript) for a user ``john_doe`` you'll need to connect to::
 
-    var websocket = new WebSocket('ws://localhost:8000/danidee')
+    var websocket = new WebSocket('ws://localhost:8000/john_doe')
 
 You can always change the default route by Importing the ``notifications.consumers.DjangoNotifsWebsocketConsumer``
 consumer and declaring another route. If you decide to do that, make sure you use the
@@ -163,4 +148,4 @@ django-notifs comes with an inbuilt ``'console'`` provider that just prints out 
         providers = ['console']
         ...
 
-This can be helpful during development where you don't want notifications to be delivered.
+This can be helpful during development when it's used with the Synchronous backend.

@@ -157,7 +157,3 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-NOTIFICATIONS_QUEUE_NAME = 'django-notifs'
-NOTIFICATIONS_SQS_QUEUE_URL = os.getenv('NOTIFICATIONS_SQS_QUEUE_URL')

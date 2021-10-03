@@ -47,11 +47,21 @@ class BackendTests(TestCase):
         )
 
     @override_settings(CELERY_BROKER_URL='redis://localhost:6379/0')
-    def dont_test_celery_backend(self):
+    def test_celery_backend(self):
         delivery_backend = Celery(ConsoleNotificationChannel(self.notification))
 
         self.assertIsNone(delivery_backend.run(countdown=0))
 
+    @override_settings(
+        CHANNEL_LAYERS={
+            'django_notifs': {
+                'BACKEND': 'channels_redis.core.RedisChannelLayer',
+                'CONFIG': {
+                    "hosts": [('127.0.0.1', 6379)],
+                },
+            },
+        }
+    )
     def test_channels_backend(self):
         delivery_backend = Channels(ConsoleNotificationChannel(self.notification))
 

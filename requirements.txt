@@ -1,6 +1,7 @@
 celery==4.1.0
 channels==3.0.3
 channels-redis==3.2.0
+docutils<=0.16
 django-jsonfield-backport==1.0.4
 django-rq==2.4.0
 m2r2==0.2.7
