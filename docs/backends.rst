@@ -5,6 +5,7 @@ Backends
 .. _django-rq: https://github.com/rq/django-rq
 .. _django-rq documentation: https://github.com/rq/django-rq
 .. _Serverless documentation for AWS: https://www.serverless.com/framework/docs/providers/aws
+.. _lambda worker repository: https://github.com/danidee10/django-notifs-lambda-worker
 
 The primary function of **a delivery backend** is to execute the code of the delivery channels.
 *Unlike notification channels, you can only use one delivery backend at the same time.*
@@ -107,14 +108,14 @@ See the `django-rq documentation`_ for more details
 
 
 AwsLambda (with SQS)
---------------------
+-------------------
 
 The setup for this backend is more involved but it's probably the cheapest and most scalable backend to use in production
 because the heavylifting and execution environment is handled by AWS.
 
 set ``NOTIFICATIONS_DELIVERY_BACKEND`` to ``notifications.backends.AwsSqsLambda``
 
-Navigate to the ``sqs-lambda-worker`` folder and run::
+Clone the `lambda worker repository`_ and run::
 
     npm install
 

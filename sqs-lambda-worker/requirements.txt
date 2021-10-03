@@ -1,1 +1,0 @@
-git+git://github.com/danidee10/django-notifs@add-serverless#egg=django-notifs[pusher]
