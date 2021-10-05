@@ -21,7 +21,9 @@ Custom provider::
     from notifications.utils import get_notification_model
     from notifications.providers import BaseNotificationProvider
 
-    class DelayedNotificationChannel(BaseNotificationProvider):
+    class DelayedNotificationProvider(BaseNotificationProvider):
+
+        name = 'delayed_notifier'
 
         def send(self, payload):
             notification_id = self.payload['notification_id']
@@ -32,8 +34,7 @@ Custom provider::
 
             # send the notification
 
-In this example, we abort the notification if the notification has been read but you're free
-to use any condition/custom logic
+In this example, we abort the notification if the notification has been read when the provider is executed.
 
 
 WebSockets

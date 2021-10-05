@@ -71,9 +71,6 @@ class DjangoNotifsWebsocketConsumer(AsyncWebsocketConsumer):
 async def __websocket_message(self, event):
     """Receive messages from the group."""
     message = event['message']
-
-    # Send message to WebSocket
-    print('Sending....', event)
     await self.send(message)
 
 

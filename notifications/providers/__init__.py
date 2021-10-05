@@ -7,6 +7,11 @@ except ImportError:
     pass
 
 try:
+    from .push_notification import PushNotificationProvider  # noqa
+except ImportError:
+    pass
+
+try:
     from .django_channels import DjangoChannelsProvider  # noqa
 except ImportError:
     pass

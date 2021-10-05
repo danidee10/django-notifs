@@ -16,31 +16,30 @@ To Create/Send a notification import the notify function and call it with the fo
         **notification_kwargs,  # Notification kwargs that map to the current Notification model
         silent=True,  # Don't persist to the database
         countdown=0  # delay (in seconds) before sending the notification
-        channels=('email', 'websocket', 'slack'),
+        channels=('email', 'slack'),
         extra_data={
             'context': {}  # Context for the specified Notification channels
         }
     )
 
-This example creates a *silent* notification and delivers it via ``email``, ``websocket`` and ``slack``.
+This example creates a *silent* notification and delivers it via ``email`` and ``slack``.
 
 This assumes that you've implemented these channels
 
 A `NotificationChannel` is a class thats builds a payload from a Notification object and sends it to one or more providers.
-Below is an example of a console channel that prints the context, current provider and delivers it to the inbuilt Console provider::
+Below is an example of a channel that builds a payload containing the context and provider and then,
+delivers it to the inbuilt Console provider (which simply prints out any payload that it receives)::
 
     from notifications.channels import BaseNotificationChannel
 
-    class ConsoleNotificationChannel(BaseNotificationChannel):
-        name = 'console'
+
+    class CustomNotificationChannel(BaseNotificationChannel):
+        name = 'custom_notification_channel'
         providers = ['console']
 
         def build_payload(self, provider):
-            print(self.context, provider)
+            return {'context': self.context, 'payload': provider}
 
-
-To create a new ``NotificationChannel`` all you have to do is inherit from the BaseNotificationChannel class, provide the ``name`` and ``providers``
-attributes and implement the ``build_payload`` method.
 
 .. note::
     The ``build_payload`` method accepts the current provider as an argument so you can return a different payload
@@ -88,11 +87,12 @@ The values of the fields can easily be used to construct the notification messag
 Extra/Arbitrary Data
 --------------------
 
-Besides the standard fields, django-notifs allows you to attach arbitrary data to a notification.
+Besides the standard fields, django-notifs allows you to attach arbitrary data (as JSON) to a notification.
 Simply pass in a dictionary as the extra_data argument.
 
 .. note::
-    The dictionary is serialized using python's json module so make sure the dictionary contains objects that can be serialized by the json module
+    This field is only persisted to the database if you use use the default Notification model or a custom model
+    that provides an ``extra_data`` field.
 
 
 Sending notifications asynchronously

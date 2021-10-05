@@ -80,6 +80,6 @@ In most cases, you don't need to change this setting.
 
 ``Default = 'room_name'``
 
-The WebSocket URL param name. This setting **MUST** be used in the ``notify`` method's ``extra_data`` dictionary.
+The WebSocket URL param name.
 It's also used to construct the WebSocket URL.
 See the :ref:`Advanced usage <Notification channels>` section for more information.
