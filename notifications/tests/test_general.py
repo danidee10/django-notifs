@@ -1,7 +1,6 @@
 """General Tests."""
 
 import time
-import logging
 
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -10,7 +9,7 @@ from django.test import TestCase, override_settings
 from ..utils import notify, read, get_notification_model
 from .. import NotificationError
 from ..models import BaseNotificationModel
-from ..backends.utils import _send_notification
+from ..backends.base import BaseBackend
 
 
 Notification = get_notification_model()
@@ -32,11 +31,11 @@ class NotificationTestCase(TestCase):
             username='user2@gmail.com', password='password'
         )
 
-    def test_send_notification(self):
+    def test_consume(self):
         """
         This is the default method that's used by all backends
 
-         There's really nothing to assert here but `_send_notification`
+         There's really nothing to assert here but `consume`
          should run without any Exception.
          (This might change in the future)
         """
@@ -53,8 +52,14 @@ class NotificationTestCase(TestCase):
             channels=('console',),
         )
 
-        logger = logging.getLogger(__name__)
-        self.assertIsNone(_send_notification(notification.to_json(), 'console', logger))
+        self.assertIsNone(
+            BaseBackend.consume(
+                'console',
+                'notifications.providers.ConsoleNotificationProvider',
+                notification.to_json(),
+                dict(),
+            )
+        )
 
     def test_user_cant_read_others_notifications(self):
         """A user should only be able to read THEIR notifications."""
@@ -119,7 +124,7 @@ class NotificationTestCase(TestCase):
         self.assertEqual(notifications.count(), 0)
 
     def test_notify_invalid_channel(self):
-        """An invalid channel should raise an AttributeError."""
+        """An invalid channel should raise a AttributeError."""
         notification_kwargs = dict(
             source=self.user2,
             source_display_name='User 2',
@@ -135,8 +140,8 @@ class NotificationTestCase(TestCase):
 
         self.assertRaises(AttributeError, notify, **notification_kwargs)
 
-    def test_send_notification_invalid_channel(self):
-        """An invalid channel should raise an AttributeError."""
+    def test_send_invalid_provider(self):
+        """An invalid provider_path should raise an AttributeError."""
         notification = Notification(
             source=self.user2,
             source_display_name='User 2',
@@ -150,13 +155,13 @@ class NotificationTestCase(TestCase):
             channels=('invalid channel',),
         )
 
-        logger = logging.getLogger(__name__)
         self.assertRaises(
-            AttributeError,
-            _send_notification,
-            notification,
-            'invalid channel',
-            logger,
+            ImportError,
+            BaseBackend.consume,
+            'console',
+            'notifications.providers.InvalidNotificationProvider',
+            notification.to_json(),
+            dict(),
         )
 
     def test_queryset_methods(self):

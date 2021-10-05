@@ -1,10 +1,11 @@
 """General Tests."""
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
 
+from ..channels import ConsoleNotificationChannel
 from ..utils import get_notification_model
-from ..tasks import send_notification
+from ..tasks import consume
 from ..backends import Celery, Channels, RQ
 from ..consumers import DjangoNotifsConsumer
 
@@ -45,31 +46,51 @@ class BackendTests(TestCase):
             is_read=False,
         )
 
+    @override_settings(CELERY_BROKER_URL='redis://localhost:6379/0')
     def test_celery_backend(self):
-        delivery_backend = Celery(self.notification)
+        delivery_backend = Celery(ConsoleNotificationChannel(self.notification))
 
         self.assertIsNone(delivery_backend.run(countdown=0))
 
+    @override_settings(
+        CHANNEL_LAYERS={
+            'django_notifs': {
+                'BACKEND': 'channels_redis.core.RedisChannelLayer',
+                'CONFIG': {
+                    "hosts": [('127.0.0.1', 6379)],
+                },
+            },
+        }
+    )
     def test_channels_backend(self):
-        delivery_backend = Channels(self.notification)
+        delivery_backend = Channels(ConsoleNotificationChannel(self.notification))
 
         self.assertIsNone(delivery_backend.run(countdown=0))
 
     def test_rq_backend(self):
-        delivery_backend = RQ(self.notification)
+        delivery_backend = RQ(ConsoleNotificationChannel(self.notification))
 
         self.assertIsNone(delivery_backend.run(countdown=0))
 
     def test_celery_task(self):
         """This ensures that the Celery task runs without errors."""
-        self.assertIsNone(send_notification(self.notification.to_json(), 'console'))
+        self.assertIsNone(
+            consume(
+                'console',
+                'notifications.providers.ConsoleNotificationProvider',
+                self.notification.to_json(),
+                dict(),
+            )
+        )
 
     async def test_channels_consumer(self):
         """This ensures that the Channels consumer runs without errors."""
         consumer = DjangoNotifsConsumer()
         message = {
-            'notification': self.notification.to_json(),
-            'channel_alias': 'console',
+            'provider': 'console',
+            'provider_class': 'notifications.providers.ConsoleNotificationProvider',
+            'payload': self.notification.to_json(),
+            'context': {},
             'countdown': 0,
         }
         result = await consumer.notify(message)

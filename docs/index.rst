@@ -14,4 +14,5 @@ Contents
    usage
    configuration
    backends
+   providers
    advanced-usage

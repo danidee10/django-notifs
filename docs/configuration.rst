@@ -11,26 +11,6 @@ This setting is used override the default database Model for saving notification
 but it can be useful if you're trying to integrate django-notifs into an existing project that already has it's own Notificaiton model
 
 
-``NOTIFICATIONS_CHANNELS``
---------------------------
-
-``Default={}``
-
-A dictionary of notification channels.
-
-**Keys:** The softname of the notification channel which is used in your code
-
-**Values:**  The path to the notification channel's class.
-
-Example::
-
-    NOTIFICATIONS_CHANNELS = {
-        'console': 'notifications.channels.ConsoleChannel'
-    }
-
-django-notifs comes with an inbuilt console delivery channel that just prints out the notification arguments
-
-
 
 ``NOTIFICATIONS_DELIVERY_BACKEND``
 ----------------------------------
@@ -100,6 +80,6 @@ In most cases, you don't need to change this setting.
 
 ``Default = 'room_name'``
 
-The WebSocket URL param name. This setting **MUST** be used in the ``notify`` method's ``extra_data`` dictionary.
+The WebSocket URL param name.
 It's also used to construct the WebSocket URL.
 See the :ref:`Advanced usage <Notification channels>` section for more information.

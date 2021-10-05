@@ -11,3 +11,4 @@ htmlcov/
 .coverage.*
 coverage.xml
 *.cover
+node_modules/

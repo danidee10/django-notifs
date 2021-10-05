@@ -1,29 +1,39 @@
 """Utilities and helper functions."""
 
-import importlib
+from django.utils.module_loading import import_string
+from django.conf import settings as django_settings
 
 from . import NotificationError
-from django.conf import settings
 
 
-def notify(silent=False, countdown=0, **kwargs):
-    """Helper method to send a notification."""
+def notify(silent=False, countdown=0, extra_data=dict(), **kwargs):
+    """Helper method to send multiple notifications."""
     Notification = get_notification_model()
     notification = Notification(**kwargs)
 
+    # Save extra_data if the Notification model supports it
+    try:
+        notification.extra_data = extra_data
+    except AttributeError:
+        pass
+
     # Validate channels
-    for channel_alias in notification.channels:
-        _validate_channel_alias(channel_alias)
+    validated_channels = []
+    for name in notification.channels:
+        channel_path = _validate_channel_name(name)
+        validated_channels.append(channel_path)
 
     # If it's a not a silent notification, save the notification
     if not silent:
         notification.save()
 
-    # Send the notification asynchronously
-    notification_delivery_backend = _import_class_string(
-        settings.NOTIFICATIONS_DELIVERY_BACKEND
-    )
-    notification_delivery_backend(notification).run(countdown=countdown)
+    # Send the notifications asynchronously
+    context = extra_data.pop('context', {})
+    for channel_path in validated_channels:
+        notification_channel = import_string(channel_path)(
+            notification, context=context
+        )
+        notification_channel.notify(countdown)
 
 
 def read(notify_id, recipient):
@@ -42,34 +52,46 @@ def read(notify_id, recipient):
     notification.read()
 
 
-def _validate_channel_alias(channel_alias):
+def _validate_channel_name(name):
     """
     Validates a channel alias against settings.NOTIFICATION_CHANNELS.
 
     returns the channel's path (i.e the path to the Channel's class)
     raises an AttributeError for invalid aliases
     """
+    from notifications.channels import BaseNotificationChannel
+
     try:
-        channel_path = settings.NOTIFICATIONS_CHANNELS[channel_alias]
+        channel_path = BaseNotificationChannel.registered_channels[name]
     except KeyError:
         raise AttributeError(
             '"%s" is not a valid delivery channel alias. '
-            'Check your applications settings for NOTIFICATIONS_CHANNELS'
-            % channel_alias
+            'Ensure that the Notification was registered properly' % name
         )
 
     return channel_path
 
 
-def _import_class_string(path):
-    """helper to import classes from string paths."""
-    package, attr = path.rsplit('.', 1)
-
-    return getattr(importlib.import_module(package), attr)
-
-
 def get_notification_model():
     notification_model_path = getattr(
-        settings, 'NOTIFICATIONS_MODEL', 'notifications.models.Notification'
+        django_settings, 'NOTIFICATIONS_MODEL', 'notifications.models.Notification'
     )
-    return _import_class_string(notification_model_path)
+
+    return import_string(notification_model_path)
+
+
+class classproperty:
+    """
+    Decorator that converts a method with a single cls argument into a property
+    that can be accessed directly from the class.
+    """
+
+    def __init__(self, method=None):
+        self.fget = method
+
+    def __get__(self, instance, cls=None):
+        return self.fget(cls)
+
+    def getter(self, method):
+        self.fget = method
+        return self

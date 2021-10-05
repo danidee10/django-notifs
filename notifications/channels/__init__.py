@@ -1,8 +1,7 @@
-from .console import ConsoleChannel  # noqa
 from .base import BaseNotificationChannel  # noqa
+from .console import ConsoleNotificationChannel  # noqa
 
 try:
-    from .channels_websocket import WebSocketChannel  # noqa
+    from .django_channels import DjangoWebSocketChannel  # noqa
 except ImportError:
     pass
-from .push_notification import PushNotificationChannel  # noqa
