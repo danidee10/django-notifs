@@ -2,14 +2,11 @@
 
 from __future__ import absolute_import, unicode_literals
 
-
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
-from .base import BaseBackend
-from .utils import _send_notification
 from .. import default_settings as settings
-
+from .base import BaseBackend
 
 logger = get_task_logger(__name__)
 
@@ -23,16 +20,15 @@ if settings.NOTIFICATIONS_RETRY:
     retry_backoff=settings.NOTIFICATIONS_RETRY_INTERVAL,
     max_retries=settings.NOTIFICATIONS_MAX_RETRIES,
 )
-def send_notification(notification, channel_alias):
+def consume(alias, provider_class, payload, context):
     """Send notification via a channel to celery."""
-    _send_notification(notification, channel_alias, logger)
+    CeleryBackend.consume(alias, provider_class, payload, context)
 
 
 class CeleryBackend(BaseBackend):
-    def run(self, countdown):
-        for channel_alias in self.notification["channels"]:
-            send_notification.apply_async(
-                args=[self.notification, channel_alias],
-                queue=settings.NOTIFICATIONS_QUEUE_NAME,
-                countdown=countdown,
-            )
+    def produce(self, provider, provider_class, payload, context, countdown):
+        consume.apply_async(
+            args=[provider, provider_class, payload, context],
+            queue=settings.NOTIFICATIONS_QUEUE_NAME,
+            countdown=countdown,
+        )

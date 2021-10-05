@@ -1,12 +1,9 @@
 from .base import BaseNotificationChannel
 
 
-class ConsoleChannel(BaseNotificationChannel):
-    """Dummy channel that prints to the console."""
+class ConsoleNotificationChannel(BaseNotificationChannel):
+    name = 'console'
+    providers = ['console']
 
-    def construct_message(self):
-        """Stringify the notification kwargs."""
-        return str(self.notification_kwargs)
-
-    def notify(self, message):
-        print(message)
+    def build_payload(self, provider):
+        return {'context': self.context, 'payload': provider}

@@ -4,6 +4,39 @@ Advanced usage
 .. _documentation: https://channels.readthedocs.io/en/stable/index.html
 .. _channels deployment documentation: https://channels.readthedocs.io/en/stable/deploying.html
 
+Tentative Notifications
+--------------------------------
+
+A tentative notification is a conditional notification that should only be sent if a criteria is met.
+
+An example is sending a notification if a user hasn't read a chat message in 30 minutes (as a reminder).
+
+You can acheive this by combining the ``countdown`` functionality with a custom provider::
+
+    # delay notification for 30 minutes
+    notify(**kwargs, countdown=1800)
+
+Custom provider::
+
+    from notifications.utils import get_notification_model
+    from notifications.providers import BaseNotificationProvider
+
+    class DelayedNotificationProvider(BaseNotificationProvider):
+
+        name = 'delayed_notifier'
+
+        def send(self, payload):
+            notification_id = self.payload['notification_id']
+
+            notification = get_notification_model().objects.get(id=self.notification_id)
+            if notification.read:
+                return
+
+            # send the notification
+
+In this example, we abort the notification if the notification has been read when the provider is executed.
+
+
 WebSockets
 ---------------------
 
@@ -42,36 +75,21 @@ Notification channels
 ---------------------
 A simple WebSocket channel is provided:
 
-- notifications.channels.WebSocketChannel
-
-This channel simply delivers notifications to the ``settings.NOTIFICATIONS_WEBSOCKET_EVENT_NAME`` group.
-
-Add the channel to ``settings.NOTIFICATION_CHANNELS``::
-
-    NOTIFICATION_CHANNELS = {
-        'websocket': 'notifications.channels.WebSocketChannel'
-    }
+``notifications.channels.DjangoWebSocketChannel``
 
 Sample usage::
 
-    from notifications import default_settings as notifs_settings
-    ...
-
     notif_args = {
-        'source': user,
-        'source_display_name': user.get_full_name(),
-        'category': 'MESSAGE', 'action': 'Sent',
-        'obj': obj.id,
-        'short_description': 'You a new message', 'silent': True,
-        'extra_data': {
-            notifs_settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM: chat_session.uri,
-            'message': chat_session_message.to_json()
+        ...
+        extra_data: {
+            'context': {
+                'channel_layer': 'default',
+                'destination': 'group or channel_name',
+                'message': {'text': 'Hello world'}
+            }
         }
     }
     notify(**notif_args, channels=['websocket'])
-
-``notifs_settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM`` is a required key. You can also override it in ``settings.py``
-and reference it through ``django.conf.settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM``
 
 
 Running the WebSocket server
@@ -91,9 +109,9 @@ You listen to notifications by connecting to the WebSocket URL.
 
 The default URL is ``http://localhost:8000/<settings.NOTIFICATIONS_WEBSOCKET_URL_PARAM>``
 
-To connect to a WebSocket room (via JavaScript) for a user ``danidee`` you'll need to connect to::
+To connect to a WebSocket room (via JavaScript) for a user ``john_doe`` you'll need to connect to::
 
-    var websocket = new WebSocket('ws://localhost:8000/danidee')
+    var websocket = new WebSocket('ws://localhost:8000/john_doe')
 
 You can always change the default route by Importing the ``notifications.consumers.DjangoNotifsWebsocketConsumer``
 consumer and declaring another route. If you decide to do that, make sure you use the
@@ -125,12 +143,10 @@ if you don't make use of the standard Authentication backend.
 Testing and Debugging
 ---------------------
 
-django-notifs comes with an inbuilt console delivery channel that just prints out the notification arguments::
+django-notifs comes with an inbuilt ``'console'`` provider that just prints out the notification payload::
 
+    class MyNotificationChannel:
+        providers = ['console']
+        ...
 
-    NOTIFICATIONS_CHANNELS = {
-        'console': 'notifications.channels.ConsoleChannel'
-    }
-
-
-This can be helpful during development where you don't want notifications to be delivered.
+This can be helpful during development when it's used with the Synchronous backend.

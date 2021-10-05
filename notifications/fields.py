@@ -1,8 +1,14 @@
 """Custom model fields."""
 
+import django
 from django.db import models
 
 from django_jsonfield_backport.models import JSONField  # noqa
+
+django_version = float(django.get_version()[:3])
+
+if django_version >= 3.1:
+    from django.db.models import JSONField  # noqa
 
 
 class ListField(models.CharField):

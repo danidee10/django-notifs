@@ -84,3 +84,7 @@ deploy:
     tags: true
     distributions: sdist bdist_wheel
     repo: danidee10/django-notifs
+
+
+services:
+  - redis

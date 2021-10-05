@@ -4,12 +4,11 @@ import logging
 from datetime import timedelta
 
 import django_rq
+
 from rq import Retry
 
-from .base import BaseBackend
-from .utils import _send_notification
 from .. import default_settings as settings
-
+from .base import BaseBackend
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('django_notifs.backends.rq')
@@ -23,14 +22,14 @@ if settings.NOTIFICATIONS_RETRY:
 
 
 class RQBackend(BaseBackend):
-    def run(self, countdown):
-        for channel_alias in self.notification['channels']:
-            queue = django_rq.get_queue(settings.NOTIFICATIONS_QUEUE_NAME)
-            queue.enqueue_in(
-                timedelta(seconds=countdown),
-                _send_notification,
-                self.notification,
-                channel_alias,
-                logger,
-                retry=retry,
-            )
+    def produce(self, provider, provider_class, payload, context, countdown):
+        queue = django_rq.get_queue(settings.NOTIFICATIONS_QUEUE_NAME)
+        queue.enqueue_in(
+            timedelta(seconds=countdown),
+            self.consume,
+            provider,
+            provider_class,
+            payload,
+            context,
+            retry=retry,
+        )
