@@ -1,4 +1,4 @@
-from notifications.channels import BaseNotificationChannel
+from .base import BaseNotificationChannel
 
 
 class ConsoleNotificationChannel(BaseNotificationChannel):
