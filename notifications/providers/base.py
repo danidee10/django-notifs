@@ -22,6 +22,6 @@ class BaseNotificationProvider(metaclass=abc.ABCMeta):
     def send(self, payload):
         raise NotImplementedError
 
-    @abc.abstractmethod
     def send_bulk(self, payloads):
-        raise NotImplementedError
+        for payload in payloads:
+            self.send(payload)
