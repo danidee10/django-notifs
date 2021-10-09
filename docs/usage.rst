@@ -67,9 +67,7 @@ and decide how each individual notification should be sent
 Bulk sending
 ------------
 
-You can send bulk notifications by using the context dictionary::
-
-To send bulk notifications, simply pass the ``bulk``::
+You can send bulk notifications by setting the ``bulk`` property to ``True`` in the context dictionary::
 
     console_notification = ConsoleNotificationChannel(
         notification: Notification, context={'bulk': True, 'arbitrary_data': 'data'}
@@ -90,7 +88,7 @@ or::
 
 .. note::
     The provider takes care of sending the payload in the most efficient way.
-    (Some providers like ``pusher`` have a bulk api for delivery multiple notifications in a single batch).
+    (Some providers like ``pusher`` have a bulk api for delivering multiple notifications in a single batch).
 
 
 Notification Model
