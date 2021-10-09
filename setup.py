@@ -29,7 +29,8 @@ EXTRAS_REQUIRE = {
 
     # Provider requirements
     'pusher': ['pusher>=3.0.0'],
-    'slack': ['slack_sdk>=3.11.2']
+    'slack': ['slack_sdk>=3.11.2'],
+    'anymail': ['django-anymail>=8.4']
 }
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
 

@@ -1,13 +1,14 @@
 from .base import BaseNotificationProvider  # noqa
 from .console import ConsoleNotificationProvider  # noqa
+from .email import EmailNotificationProvider  # noqa
 
 try:
-    from .pusher import PusherNotificationProvider  # noqa
+    from .pusher_channels import PusherChannelsNotificationProvider  # noqa
 except ImportError:
     pass
 
 try:
-    from .push_notification import PushNotificationProvider  # noqa
+    from .fcm import FCMWebNotificationProvider  # noqa
 except ImportError:
     pass
 

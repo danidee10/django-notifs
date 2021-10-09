@@ -7,22 +7,22 @@ from . import BaseNotificationProvider
 import requests
 
 
-class PushNotificationProvider(BaseNotificationProvider):
-    """Google FCM Provider."""
+class FCMWebNotificationProvider(BaseNotificationProvider):
+    """Google FCM Web Provider."""
 
-    name = 'push_notification_fcm'
+    name = 'fcm_web'
 
     def send(self, payload):
         requests.post(
             'https://fcm.googleapis.com/fcm/send',
             json={
                 'notification': {
-                    'title': payload['subject'],
+                    'title': payload['title'],
                     'body': payload['body'],
-                    'click_action': payload['url'],
+                    'click_action': payload['click_action'],
                     'icon': payload['icon'],
                 },
-                'to': payload['token'],
+                'to': payload['to'],
             },
             headers={'Authorization': 'key={}'.format(settings.NOTIFICATIONS_FCM_KEY)},
         )
