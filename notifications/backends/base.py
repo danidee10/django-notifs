@@ -22,7 +22,13 @@ class BaseBackend(metaclass=abc.ABCMeta):
     @classmethod
     def consume(cls, provider, provider_class, payload, context):
         notification_channel = cls.get_notification_provider(provider_class, context)
-        notification_channel.send(payload)
+
+        bulk = context.get('bulk', False)
+        if bulk is True:
+            notification_channel.send_bulk(payload)
+        else:
+            notification_channel.send(payload)
+
         cls.logger.info(
             'Sent notification with the %s channel. context: %s\n' % (provider, context)
         )

@@ -64,8 +64,37 @@ and decide how each individual notification should be sent
     You must inherit from the base class and specify the ``name`` property for the channel to be properly registered
 
 
+Bulk sending
+------------
+
+You can send bulk notifications by using the context dictionary::
+
+To send bulk notifications, simply pass the ``bulk``::
+
+    console_notification = ConsoleNotificationChannel(
+        notification: Notification, context={'bulk': True, 'arbitrary_data': 'data'}
+    )
+    console_notification.notify()
+    console_notification.notify(countdown=60)
+
+or::
+
+    notify(
+        ...,
+        extra_data={
+            'context': {
+                'bulk': True,
+            }
+        }
+    )
+
+.. note::
+    The provider takes care of sending the payload in the most efficient way.
+    (Some providers like ``pusher`` have a bulk api for delivery multiple notifications in a single batch).
+
+
 Notification Model
--------------------
+-----------------
 
 Django notifs includes an inbuilt notification model with the following fields:
 
