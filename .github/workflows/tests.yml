@@ -1,0 +1,72 @@
+name: Tests
+
+on:
+  push:
+   branches:
+   - main
+  pull_request:
+
+jobs:
+  tests:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.6, 3.7, 3.8, 3.9, 4.0]
+
+    services:
+      redis:
+        image: redis:alpine
+        ports:
+         - 6379:6379
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip wheel setuptools tox
+      - name: Run tox targets for ${{ matrix.python-version }}
+        run: |
+          ENV_PREFIX=$(tr -C -d "0-9" <<< "${{ matrix.python-version }}")
+          TOXENV=$(tox --listenvs | grep "^py$ENV_PREFIX" | tr '\n' ',') python -m tox
+  coverage:
+    needs: [ tests ]
+    name: coverage
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip wheel setuptools tox
+    - name: Generate coverage report
+      run: |
+        coverage run manage.py test -v 3
+    - uses: paambaati/codeclimate-action@v2.2.4
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_TEST_REPORTER_ID }}
+      with:
+        coverageCommand: coverage xml
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip tox
+      - name: Run lint
+        run: tox -e lint
