@@ -9,7 +9,20 @@ and contain the logic for delivery that payload to an external service.
 
 Below are the list of supported providers:
 
-Slack,
+``Slack``
+---------
+
+settings::
+
+    NOTIFICATIONS_SLACK_BOT_TOKEN  # Slack notification bot token
+
+Single payload::
+
+    {
+        'channel': '#slack-channel-name',
+        'text': 'message',
+    }
+
 Pusher,
 Google FCM,
 django-channels,

@@ -15,3 +15,8 @@ try:
     from .django_channels import DjangoChannelsProvider  # noqa
 except ImportError:
     pass
+
+try:
+    from .slack import SlackNotificationProvider  # noqa
+except ImportError:
+    pass

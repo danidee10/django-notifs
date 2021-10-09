@@ -29,6 +29,7 @@ EXTRAS_REQUIRE = {
 
     # Provider requirements
     'pusher': ['pusher>=3.0.0'],
+    'slack': ['slack_sdk>=3.11.2']
 }
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
 

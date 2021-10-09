@@ -8,5 +8,6 @@ m2r2==0.2.7
 pusher==3.0.0
 pytz==2017.2
 requests==2.25.1
+slack_sdk==3.11.2
 Sphinx==3.5.1
 sphinx-rtd-theme==0.5.1
