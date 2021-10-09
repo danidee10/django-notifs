@@ -13,8 +13,8 @@ Below are the list of supported providers:
 Email
 =====
 
-The email provider uses the standard ``django.core.mail``.
-This opens up support for multiple email ESP's (Mailjet, Mailchimp, sendgrid etc)
+The email provider uses the standard ``django.core.mail`` module.
+This opens up support for multiple ESP's (Mailjet, Mailchimp, sendgrid etc)
 
 name: ``'email'``
 
@@ -22,9 +22,7 @@ name: ``'email'``
 Installation
 ------------
 
-Optional dependency for django-anymail
-
-::
+Optional dependency for django-anymail::
 
     pip install django-notifs[anymail]
 
@@ -106,14 +104,14 @@ Installation
 
 ::
 
-    pip install django-notifs[pusher]
+    pip install django-notifs[pusher_channels]
 
 Settings
 --------
 
 ::
 
-    NOTIFICATIONS_PUSHER_URL=https://<app_id>:<app_secret>@api-eu.pusher.com/apps/0000000
+    NOTIFICATIONS_PUSHER_CHANNELS_URL=https://<app_id>:<app_secret>@api-eu.pusher.com/apps/0000000
 
 Payload
 -------
@@ -125,17 +123,6 @@ Single::
         'name': 'event_name',
         'data': {},
     }
-
-Bulk::
-
-    [
-        {
-            'channel': 'channel_name',
-            'name': 'event_name',
-            'data': {},
-        },
-        ...
-    ]
 
 |
 |

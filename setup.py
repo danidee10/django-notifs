@@ -28,7 +28,7 @@ EXTRAS_REQUIRE = {
     'sqs_lambda': ['boto3>=1.18.48'],
 
     # Provider requirements
-    'pusher': ['pusher>=3.0.0'],
+    'pusher_channels': ['pusher>=3.0.0'],
     'slack': ['slack_sdk>=3.11.2'],
     'anymail': ['django-anymail>=8.4']
 }
