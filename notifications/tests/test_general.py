@@ -1,6 +1,7 @@
 """General Tests."""
 
 import time
+from unittest import mock
 
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -10,6 +11,7 @@ from ..utils import notify, read, get_notification_model
 from .. import NotificationError
 from ..models import BaseNotificationModel
 from ..backends.base import BaseBackend
+from ..channels import ConsoleNotificationChannel
 
 
 Notification = get_notification_model()
@@ -122,6 +124,51 @@ class NotificationTestCase(TestCase):
         notifications = Notification.objects.all()
 
         self.assertEqual(notifications.count(), 0)
+
+    @mock.patch('notifications.providers.ConsoleNotificationProvider.send_bulk')
+    def test_bulk_notification_notify(self, send_bulk):
+        notify(
+            source=self.user2,
+            source_display_name='User 2',
+            recipient=self.user1,
+            action='Notified',
+            category='Silent notification',
+            obj=self.user2,
+            url='http://example.com',
+            short_description='Short Description',
+            is_read=False,
+            channels=('console',),
+            extra_data={
+                'context': {
+                    'bulk': True,
+                }
+            },
+        )
+
+        send_bulk.assert_called_once_with(
+            {'context': {'bulk': True}, 'payload': 'console'}
+        )
+
+    @mock.patch('notifications.providers.ConsoleNotificationProvider.send_bulk')
+    def test_bulk_notification_direct(self, send_bulk):
+        notification = Notification.objects.create(
+            source=self.user2,
+            source_display_name='User 2',
+            recipient=self.user1,
+            action='Notified',
+            category='Silent notification',
+            obj=self.user2,
+            url='http://example.com',
+            short_description='Short Description',
+            is_read=False,
+        )
+        console_notification = ConsoleNotificationChannel(
+            notification, context={'bulk': True}
+        )
+        payload = console_notification.build_payload('console')
+        console_notification.notify()
+
+        send_bulk.assert_called_once_with(payload)
 
     def test_notify_invalid_channel(self):
         """An invalid channel should raise a AttributeError."""
