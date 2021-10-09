@@ -73,7 +73,6 @@ You can send bulk notifications by setting the ``bulk`` property to ``True`` in 
         notification: Notification, context={'bulk': True, 'arbitrary_data': 'data'}
     )
     console_notification.notify()
-    console_notification.notify(countdown=60)
 
 or::
 
