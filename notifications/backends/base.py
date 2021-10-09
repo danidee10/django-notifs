@@ -30,7 +30,8 @@ class BaseBackend(metaclass=abc.ABCMeta):
             notification_channel.send(payload)
 
         cls.logger.info(
-            'Sent notification with the %s provider with context: %s\n' % (provider, context)
+            'Sent notification with the %s provider with context: %s\n'
+            % (provider, context)
         )
 
     @abc.abstractclassmethod
