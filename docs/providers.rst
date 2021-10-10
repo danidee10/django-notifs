@@ -68,7 +68,7 @@ SMS (with django-sms)
 
 name: ``'django_sms'``
 
-The SMS provider uses a third-party app called `django-sms`_ this also, opens up support for multiple SMS providers:
+The SMS provider uses a third-party app called `django-sms`_ this also opens up support for multiple SMS providers.
 
 Supported providers are:
 
@@ -91,7 +91,7 @@ Settings
 --------
 
 See the `django-sms documentation`_ for more information on how to configure your preferred backend. Once it is configured,
-django-notifs should pick it up
+``django-notifs`` should pick it up
 
 Payload
 -------
