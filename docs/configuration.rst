@@ -61,25 +61,4 @@ The retry interval (in seconds) between each retry
 
 ``Default=5``
 
-The maximum number of retries for a notification.
-
-
-
-``NOTIFICATIONS_WEBSOCKET_EVENT_NAME``
---------------------------------------
-
-``Default='notifs_websocket_message'``
-
-The ``type`` value of the messages that are going to received by the django notifs websocket consumer.
-In most cases, you don't need to change this setting.
-
-
-
-``NOTIFICATIONS_WEBSOCKET_URL_PARAM``
---------------------------------------
-
-``Default = 'room_name'``
-
-The WebSocket URL param name.
-It's also used to construct the WebSocket URL.
-See the :ref:`Advanced usage <Notification channels>` section for more information.
+The maximum number of retries for a notification

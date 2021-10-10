@@ -87,7 +87,7 @@ or::
 
 .. note::
     The provider takes care of sending the payload in the most efficient way.
-    (Some providers like ``pusher`` have a bulk api for delivering multiple notifications in a single batch).
+    (Some providers like ``pusher_channels`` have a bulk api for delivering multiple notifications in a single batch).
 
 
 Notification Model
