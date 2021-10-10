@@ -57,8 +57,6 @@ jobs:
     - uses: paambaati/codeclimate-action@v3.0.0
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_TEST_REPORTER_ID }}
-      with:
-        coverageCommand: coverage xml
 
   lint:
     name: Lint
