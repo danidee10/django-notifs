@@ -1,11 +1,13 @@
 Providers
 **************
 
-.. _documentation: https://channels.readthedocs.io/en/stable/index.html
-.. _channels deployment documentation: https://channels.readthedocs.io/en/stable/deploying.html
+.. module:: notifications.providers
+
+.. _django-sms: https://django-sms.readthedocs.io/en/stable/
+.. _django-sms documentation: https://django-sms.readthedocs.io/en/stable/
 
 Django notifs comes with a set of inbuilt providers. These providers are typically classes that accept a payload
-and contain the logic for delivery that payload to an external service.
+and contain the logic for delivering the payload to an external service.
 
 Below are the list of supported providers:
 
@@ -13,10 +15,12 @@ Below are the list of supported providers:
 Email
 =====
 
-The email provider uses the standard ``django.core.mail`` module.
-This opens up support for multiple ESP's (Mailjet, Mailchimp, sendgrid etc)
+.. autoclass:: EmailNotificationProvider
 
 name: ``'email'``
+
+The email provider uses the standard ``django.core.mail`` module.
+This opens up support for multiple ESP's (Mailjet, Mailchimp, sendgrid etc)
 
 
 Installation
@@ -30,7 +34,7 @@ Optional dependency for django-anymail::
 Settings
 --------
 
-If you use ``django-anymail`` or a custom Email backend, all you have to do configure the settings as you'd
+If you use ``django-anymail`` or a custom Email backend, all you have to do configure the settings and dependencies as you'd
 normally do and the email provider should pick it up.
 
 
@@ -55,13 +59,57 @@ Single::
 
 ``extra_esp`` is any extra data that you want to pass to your custom Email backend.
 
-
-|
 |
 
+SMS (with django-sms)
+=====================
+
+.. autoclass:: DjangoSMSNotificationProvider
+
+name: ``'django_sms'``
+
+The SMS provider uses a third-party app called `django-sms`_ this also, opens up support for multiple SMS providers:
+
+Supported providers are:
+
+* Twilio
+* Message bird
+
+
+Installation
+------------
+
+::
+
+    pip install django-notifs[sms]
+
+Extra dependencies can be installed by::
+
+    pip install django-sms[twilio,messagebird]
+
+Settings
+--------
+
+See the `django-sms documentation`_ for more information on how to configure your preferred backend. Once it is configured,
+django-notifs should pick it up
+
+Payload
+-------
+
+Single::
+
+    {
+        'body': 'Sample message',
+        'originator': '+10000000000',
+        'recipients': ['+20000000000', '+30000000000']  # list of recipients
+    }
+
+|
 
 Slack
 =====
+
+.. autoclass:: SlackNotificationProvider
 
 name: ``'slack'``
 
@@ -90,12 +138,12 @@ Single::
         'text': 'message',
     }
 
-
-|
 |
 
 Pusher Channels
 ===============
+
+.. autoclass:: PusherChannelsNotificationProvider
 
 name: ``'pusher_channels'``
 
@@ -125,10 +173,11 @@ Single::
     }
 
 |
-|
 
 FCM (Firebase Web push)
 =======================
+
+.. autoclass:: FCMWebNotificationProvider
 
 name: ``'fcm_web'``
 
@@ -153,10 +202,11 @@ Single::
     }
 
 |
-|
 
 django-channels
 ===============
+
+.. autoclass:: DjangoChannelsNotificationProvider
 
 name: ``'django_channels'``
 
@@ -205,6 +255,9 @@ Single::
         'type': settings.NOTIFICATIONS_WEBSOCKET_EVENT_NAME,  # or a custom event name
         'message': {},
     }
+
+|
+|
 
 Writing custom Providers
 ========================

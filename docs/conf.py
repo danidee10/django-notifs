@@ -17,12 +17,18 @@
 
 # -- Project information -----------------------------------------------------
 
+import os
+import sys
+
+import django
+
 project = 'django-notifs'
 copyright = '2021, Daniel Osaetin'
 author = 'Daniel Osaetin'
 
-# The full version, including alpha/beta/rc tags
-release = '2.6.4'
+sys.path.append(os.path.abspath('../../'))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'notifs.settings')
+django.setup()
 
 
 # -- General configuration ---------------------------------------------------
@@ -30,7 +36,12 @@ release = '2.6.4'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['m2r2', 'sphinx_rtd_theme', 'sphinx.ext.autosectionlabel']
+extensions = [
+    'm2r2',
+    'sphinx_rtd_theme',
+    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.autodoc',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
