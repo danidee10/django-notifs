@@ -1,11 +1,9 @@
 import os
 
+from channels.routing import ChannelNameRouter, ProtocolTypeRouter
 from django.core.asgi import get_asgi_application
 
-from channels.routing import ProtocolTypeRouter, ChannelNameRouter
-
 from notifications import consumers
-
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'notifs.settings')
 

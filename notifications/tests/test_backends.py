@@ -1,14 +1,13 @@
 """General Tests."""
 
-from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
+from django.test import TestCase, override_settings
 
+from ..backends import RQ, Celery, Channels
 from ..channels import ConsoleNotificationChannel
-from ..utils import get_notification_model
-from ..tasks import consume
-from ..backends import Celery, Channels, RQ
 from ..consumers import DjangoNotifsConsumer
-
+from ..tasks import consume
+from ..utils import get_notification_model
 
 Notification = get_notification_model()
 

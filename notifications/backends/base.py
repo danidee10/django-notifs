@@ -4,6 +4,7 @@ import abc
 import logging
 
 from django.utils.module_loading import import_string
+
 from notifications.channels import BaseNotificationChannel
 
 

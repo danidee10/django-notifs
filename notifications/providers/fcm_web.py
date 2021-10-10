@@ -1,10 +1,9 @@
 """Adpaters to send notifications through various meduiums."""
 
+import requests
 from django.conf import settings
 
 from . import BaseNotificationProvider
-
-import requests
 
 
 class FCMWebNotificationProvider(BaseNotificationProvider):
