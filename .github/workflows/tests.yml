@@ -50,7 +50,7 @@ jobs:
     - name: Generate coverage report
       run: |
         coverage run manage.py test -v 3
-    - uses: paambaati/codeclimate-action@v2.2.4
+    - uses: paambaati/codeclimate-action@v3.0.0
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMATE_TEST_REPORTER_ID }}
       with:
