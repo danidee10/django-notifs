@@ -24,7 +24,7 @@ class FCMWebNotificationProvider(BaseNotificationProvider):
                 },
                 'to': payload['to'],
             },
-            headers={'Authorization': 'key={}'.format(settings.NOTIFICATIONS_FCM_KEY)},
+            headers={'Authorization': 'key={}'.format(settings.NOTIFICATIONS_FCM_WEB_KEY)},
         )
 
     def send_bulk(self, payloads):

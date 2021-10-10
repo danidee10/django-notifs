@@ -9,7 +9,7 @@ class PusherChannelsNotificationProvider(BaseNotificationProvider):
     name = 'pusher_channels'
 
     def __init__(self, context=dict()):
-        self.pusher_client = Pusher.from_url(settings.NOTIFICATIONS_PUSHER_URL)
+        self.pusher_client = Pusher.from_url(settings.NOTIFICATIONS_PUSHER_CHANNELS_URL)
         super().__init__(context=context)
 
     def send(self, payload):
