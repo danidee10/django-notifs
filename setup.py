@@ -30,6 +30,7 @@ EXTRAS_REQUIRE = {
     'pusher_channels': ['pusher>=3.0.0'],
     'slack': ['slack_sdk>=3.11.2'],
     'anymail': ['django-anymail>=8.4'],
+    'sms': ['django-sms>=0.5.0'],
 }
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
 
