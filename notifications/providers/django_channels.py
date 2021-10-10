@@ -6,7 +6,7 @@ from channels.layers import get_channel_layer
 from .base import BaseNotificationProvider
 
 
-class DjangoChannelsProvider(BaseNotificationProvider):
+class DjangoChannelsNotificationProvider(BaseNotificationProvider):
     """django-channels websocket provider"""
 
     name = 'django_channels'
