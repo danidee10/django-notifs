@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from os import path
-from setuptools import find_packages, setup
 
+from setuptools import find_packages, setup
 
 # Package meta-data.
 NAME = 'django-notifs'
@@ -26,11 +26,10 @@ EXTRAS_REQUIRE = {
     'rq': ['django-rq>=2.4.0'],
     'channels': ['channels>=3.0.3', 'channels-redis>=3.2.0'],
     'sqs_lambda': ['boto3>=1.18.48'],
-
     # Provider requirements
     'pusher_channels': ['pusher>=3.0.0'],
     'slack': ['slack_sdk>=3.11.2'],
-    'anymail': ['django-anymail>=8.4']
+    'anymail': ['django-anymail>=8.4'],
 }
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
 

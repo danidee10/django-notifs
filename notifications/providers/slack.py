@@ -1,8 +1,8 @@
-from . import BaseNotificationProvider
+from slack_sdk import WebClient
 
 from notifications import default_settings as settings
 
-from slack_sdk import WebClient
+from . import BaseNotificationProvider
 
 
 class SlackNotificationProvider(BaseNotificationProvider):

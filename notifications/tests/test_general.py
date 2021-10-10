@@ -3,16 +3,15 @@
 import time
 from unittest import mock
 
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 from django.test import TestCase, override_settings
 
-from ..utils import notify, read, get_notification_model
 from .. import NotificationError
-from ..models import BaseNotificationModel
 from ..backends.base import BaseBackend
 from ..channels import ConsoleNotificationChannel
-
+from ..models import BaseNotificationModel
+from ..utils import get_notification_model, notify, read
 
 Notification = get_notification_model()
 
