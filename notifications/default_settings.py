@@ -2,7 +2,6 @@
 
 from django.conf import settings
 
-
 NOTIFICATIONS_DELIVERY_BACKEND = getattr(
     settings,
     'NOTIFICATIONS_DELIVERY_BACKEND',

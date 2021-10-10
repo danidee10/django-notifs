@@ -4,7 +4,6 @@ import logging
 from datetime import timedelta
 
 import django_rq
-
 from rq import Retry
 
 from .. import default_settings as settings

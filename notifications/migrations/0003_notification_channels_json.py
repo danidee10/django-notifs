@@ -2,7 +2,6 @@
 
 import django
 from django.db import migrations
-
 from django_jsonfield_backport.models import JSONField  # noqa
 
 django_version = float(django.get_version()[:3])

@@ -1,7 +1,7 @@
 """Utilities and helper functions."""
 
-from django.utils.module_loading import import_string
 from django.conf import settings as django_settings
+from django.utils.module_loading import import_string
 
 from . import NotificationError
 

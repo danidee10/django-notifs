@@ -2,10 +2,9 @@ import abc
 
 from django.utils.module_loading import import_string
 
-from notifications.utils import classproperty
 from notifications import default_settings as settings
-
 from notifications.providers import BaseNotificationProvider
+from notifications.utils import classproperty
 
 
 class BaseNotificationChannel(metaclass=abc.ABCMeta):

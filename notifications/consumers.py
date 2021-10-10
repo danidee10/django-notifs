@@ -1,16 +1,16 @@
 """Channels consumers."""
 
-import json
 import asyncio
+import json
 import logging
 
 from channels.consumer import AsyncConsumer
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from . import default_settings as settings
 from notifications.backends.django_channels import ChannelsBackend
 
+from . import default_settings as settings
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('django_notifs.backends.channels')

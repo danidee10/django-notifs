@@ -1,8 +1,8 @@
-from . import BaseNotificationProvider
+from pusher import Pusher
 
 from notifications import default_settings as settings
 
-from pusher import Pusher
+from . import BaseNotificationProvider
 
 
 class PusherChannelsNotificationProvider(BaseNotificationProvider):

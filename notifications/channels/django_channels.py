@@ -1,6 +1,7 @@
 """Notification channels for django-notifs."""
 
 import json
+
 from notifications import default_settings as settings
 from notifications.channels import BaseNotificationChannel
 

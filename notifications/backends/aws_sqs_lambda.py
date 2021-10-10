@@ -1,12 +1,13 @@
 """AWS SQS backend"""
 
-import logging
 import json
+import logging
 
 import boto3
 
-from .base import BaseBackend
 from notifications import default_settings as settings
+
+from .base import BaseBackend
 
 
 class AwsSqsLambdaBackend(BaseBackend):

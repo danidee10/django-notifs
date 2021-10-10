@@ -2,9 +2,9 @@
 
 import django
 from django.db import migrations
-import notifications.fields
-
 from django_jsonfield_backport.models import JSONField  # noqa
+
+import notifications.fields
 
 django_version = float(django.get_version()[:3])
 
