@@ -20,15 +20,14 @@
 import os
 import sys
 
-import django
+from django.conf import settings
 
 project = 'django-notifs'
 copyright = '2021, Daniel Osaetin'
 author = 'Daniel Osaetin'
 
 sys.path.append(os.path.abspath('../../'))
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'notifs.settings')
-django.setup()
+settings.configure()
 
 
 # -- General configuration ---------------------------------------------------
