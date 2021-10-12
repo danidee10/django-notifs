@@ -12,7 +12,7 @@ URL = 'https://github.com/danidee10/django-notifs'
 EMAIL = 'osaetindaniel@gmail.com'
 AUTHOR = 'Osaetin Daniel'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '3.0.5'
+VERSION = '4.0.0'
 
 REQUIRED = [
     'django>=2.2',
