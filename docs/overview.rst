@@ -22,5 +22,6 @@ Supported providers
     * :ref:`SMS <SMS (with django-sms)>`: (Twilio, Messagebird) with `django-sms <https://django-sms.readthedocs.io/en/latest/>`_
     * :ref:`Slack <Slack>`
     * :ref:`Pusher Channels <Pusher Channels>`
+    * :ref:`Twitter (Status updates) <Twitter status update>`
     * :ref:`FCM - Web push notifications (*deprecated*) <FCM (Firebase Web push)>`
     * :ref:`Django channels <django-channels>`

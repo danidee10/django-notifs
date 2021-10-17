@@ -9,8 +9,8 @@ except ImportError:
 
 try:
     from .fcm_web import FCMWebNotificationProvider  # noqa
-except ImportError as e:
-    raise Exception(e)
+except ImportError:
+    pass
 
 try:
     from .django_channels import DjangoChannelsNotificationProvider  # noqa
@@ -24,5 +24,10 @@ except ImportError:
 
 try:
     from .django_sms import DjangoSMSNotificationProvider  # noqa
+except ImportError:
+    pass
+
+try:
+    from .twitter import TwitterStatusUpdateNotificationProvider  # noqa
 except ImportError:
     pass

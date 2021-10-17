@@ -14,3 +14,4 @@ requests==2.25.1
 slack_sdk==3.11.2
 Sphinx==3.5.1
 sphinx-rtd-theme==0.5.1
+tweepy==4.1.0

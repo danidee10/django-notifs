@@ -47,4 +47,10 @@ class BaseBackend(metaclass=abc.ABCMeta):
             payload = self.notification_channel.build_payload(provider)
             context = self.notification_channel.get_context(provider)
 
+            self.logger.info(
+                'Calling provider `%s`(%s) with args:'
+                'payload: %s, context: %s, countdown %s'
+                % (provider, provider_class, payload, context, countdown)
+            )
+
             self.produce(provider, provider_class, payload, context, countdown)
