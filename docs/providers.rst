@@ -203,6 +203,73 @@ Single::
 
 |
 
+Twitter status update
+=====================
+
+django-notifs uses `tweepy <https://docs.tweepy.org/en/stable>`_ to deliver twitter notifiations
+
+.. autoclass:: TwitterStatusUpdateNotificationProvider
+
+name: ``'twitter_status_update'``
+
+Installation
+------------
+
+::
+
+    pip install django-notifs[twitter]
+
+Settings
+--------
+
+``NOTIFICATIONS_TWITTER_CONSUMER_KEY``
+--------------------------------------
+
+Twitter consumer key
+
+``NOTIFICATIONS_TWITTER_CONSUMER_SECRET``
+-----------------------------------------
+
+Twitter consumer secret
+
+``NOTIFICATIONS_TWITTER_ACCESS_TOKEN``
+--------------------------------------
+
+Twitter access token
+
+``NOTIFICATIONS_TWITTER_ACCESS_TOKEN_SECRET``
+---------------------------------------------
+
+Twitter access token secret
+
+
+Payload
+-------
+
+Single::
+
+    {
+        'status': 'Hello world!',
+        'in_reply_to_status_id': '123456789',
+        'auto_populate_reply_metadata': False,
+        'exclude_reply_user_ids': [],
+        'attachment_url': '',
+        'media_ids': [],
+        'possibly_sensitive': False,
+        'lat': '',
+        'long': '',
+        'place_id': '',
+        'display_coordinates': False,
+        'trim_user': False,
+        'card_uri': ''
+    }
+
+See the `tweepy documentation <https://docs.tweepy.org/en/stable/api.html?highlight=status_update#tweepy.API.update_status>`_
+for more information on these parameters
+
+|
+|
+
 django-channels
 ===============
 
