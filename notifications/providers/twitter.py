@@ -23,5 +23,7 @@ class TwitterStatusUpdateNotificationProvider(BaseNotificationProvider):
     def send(self, payload):
         try:
             self.twitter_client.update_status(**payload)
+        except tweepy.errors.Forbidden as e:
+            print('Rate limit reached', e)
         except tweepy.errors.TooManyRequests as e:
-            print('Rate limit', e)
+            print('Too many requests', e)
