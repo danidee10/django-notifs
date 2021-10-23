@@ -1,7 +1,15 @@
 """Notification channels for django-notifs."""
 
+from notifications import ImproperlyInstalledProvider
+
+try:
+    from channels.layers import get_channel_layer
+except ImportError:
+    raise ImproperlyInstalledProvider(
+        missing_package='channels', provider='django_channels'
+    )
+
 from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
 
 from .base import BaseNotificationProvider
 

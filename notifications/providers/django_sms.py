@@ -1,4 +1,9 @@
-from sms import Message, get_connection
+from notifications import ImproperlyInstalledProvider
+
+try:
+    from sms import Message, get_connection
+except ImportError:
+    raise ImproperlyInstalledProvider(missing_package='django_sms', provider='sms')
 
 from . import BaseNotificationProvider
 

@@ -1,4 +1,11 @@
-from slack_sdk import WebClient
+from notifications import ImproperlyInstalledProvider
+
+try:
+    from slack_sdk import WebClient
+except ImportError as err:
+    raise ImproperlyInstalledProvider(
+        missing_package='slack_sdk', provider='slack'
+    ) from err
 
 from notifications import default_settings as settings
 

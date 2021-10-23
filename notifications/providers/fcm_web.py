@@ -1,6 +1,12 @@
 """Adpaters to send notifications through various meduiums."""
 
-import requests
+from notifications import ImproperlyInstalledProvider
+
+try:
+    import requests
+except ImportError:
+    raise ImproperlyInstalledProvider(missing_package='requests', provider='fcm_web')
+
 from django.conf import settings
 
 from . import BaseNotificationProvider
