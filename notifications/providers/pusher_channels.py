@@ -1,4 +1,11 @@
-from pusher import Pusher
+from notifications import ImproperlyInstalledProvider
+
+try:
+    from pusher import Pusher
+except ImportError:
+    raise ImproperlyInstalledProvider(
+        missing_package='pusher', provider='pusher_channels'
+    )
 
 from notifications import default_settings as settings
 

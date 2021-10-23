@@ -28,6 +28,6 @@ except ImportError:
     pass
 
 try:
-    from .twitter import TwitterStatusUpdateNotificationProvider  # noqa
+    from .twitter_status_update import TwitterStatusUpdateNotificationProvider  # noqa
 except ImportError:
     pass
