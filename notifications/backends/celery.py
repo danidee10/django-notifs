@@ -20,15 +20,15 @@ if settings.NOTIFICATIONS_RETRY:
     retry_backoff=settings.NOTIFICATIONS_RETRY_INTERVAL,
     max_retries=settings.NOTIFICATIONS_MAX_RETRIES,
 )
-def consume(alias, provider_class, payload, context):
+def consume(provider, payload, context):
     """Send notification via a channel to celery."""
-    CeleryBackend.consume(alias, provider_class, payload, context)
+    CeleryBackend.consume(provider, payload, context)
 
 
 class CeleryBackend(BaseBackend):
-    def produce(self, provider, provider_class, payload, context, countdown):
+    def produce(self, provider, payload, context, countdown):
         consume.apply_async(
-            args=[provider, provider_class, payload, context],
+            args=[provider, payload, context],
             queue=settings.NOTIFICATIONS_QUEUE_NAME,
             countdown=countdown,
         )

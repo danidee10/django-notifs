@@ -1,9 +1,11 @@
-from notifications import ImproperlyInstalledProvider
+from notifications import ImproperlyInstalledNotificationProvider
 
 try:
     import tweepy
 except ImportError:
-    raise ImproperlyInstalledProvider(missing_package='tweepy', provider='twitter')
+    raise ImproperlyInstalledNotificationProvider(
+        missing_package='tweepy', provider='twitter'
+    )
 
 from notifications import default_settings as settings
 

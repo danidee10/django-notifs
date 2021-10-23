@@ -1,5 +1,4 @@
 import abc
-import importlib
 
 from django.utils.module_loading import import_string
 
@@ -36,22 +35,8 @@ class BaseNotificationChannel(metaclass=abc.ABCMeta):
     @property
     def provider_paths(self):
         provider_paths = dict()
-        registered_providers = BaseNotificationProvider.providers
         for name in self.providers:
-            try:
-                class_path = registered_providers[name]
-            except KeyError:
-                # Generate helpful error if the provider is valid
-                # but it's dependencies are missing
-                try:
-                    importlib.import_module(f'notifications.providers.{name}')
-                except ModuleNotFoundError:
-                    raise KeyError(
-                        f'{name} is not a valid notification provider.\n'
-                        f'Registered providers: {registered_providers}'
-                    )
-
-            provider_paths[name] = class_path
+            provider_paths[name] = BaseNotificationProvider.get_provider_class(name)
 
         return provider_paths
 

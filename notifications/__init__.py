@@ -7,7 +7,7 @@ class NotificationError(Exception):
     pass
 
 
-class ImproperlyInstalledProvider(ImportError):
+class ImproperlyInstalledNotificationProvider(ImportError):
     """Exception for missing provider dependencies"""
 
     def __init__(self, missing_package, provider):
@@ -17,6 +17,10 @@ class ImproperlyInstalledProvider(ImportError):
             f'(Be sure to use `pip install django-notifs[{provider}]`)'
         )
         super().__init__(message)
+
+
+class InvalidNotificationProvider(Exception):
+    pass
 
 
 default_app_config = 'notifications.apps.NotificationsConfig'
