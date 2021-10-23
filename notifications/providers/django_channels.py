@@ -1,11 +1,11 @@
 """Notification channels for django-notifs."""
 
-from notifications import ImproperlyInstalledProvider
+from notifications import ImproperlyInstalledNotificationProvider
 
 try:
     from channels.layers import get_channel_layer
 except ImportError:
-    raise ImproperlyInstalledProvider(
+    raise ImproperlyInstalledNotificationProvider(
         missing_package='channels', provider='django_channels'
     )
 

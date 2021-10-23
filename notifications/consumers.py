@@ -28,7 +28,6 @@ class DjangoNotifsConsumer(AsyncConsumer):
 
         await database_sync_to_async(ChannelsBackend.consume)(
             message['provider'],
-            message['provider_class'],
             message['payload'],
             message['context'],
         )

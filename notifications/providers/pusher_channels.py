@@ -1,9 +1,9 @@
-from notifications import ImproperlyInstalledProvider
+from notifications import ImproperlyInstalledNotificationProvider
 
 try:
     from pusher import Pusher
 except ImportError:
-    raise ImproperlyInstalledProvider(
+    raise ImproperlyInstalledNotificationProvider(
         missing_package='pusher', provider='pusher_channels'
     )
 

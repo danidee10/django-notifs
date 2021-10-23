@@ -1,9 +1,9 @@
-from notifications import ImproperlyInstalledProvider
+from notifications import ImproperlyInstalledNotificationProvider
 
 try:
     from slack_sdk import WebClient
 except ImportError as err:
-    raise ImproperlyInstalledProvider(
+    raise ImproperlyInstalledNotificationProvider(
         missing_package='slack_sdk', provider='slack'
     ) from err
 

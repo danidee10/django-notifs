@@ -73,21 +73,13 @@ class BackendTests(TestCase):
 
     def test_celery_task(self):
         """This ensures that the Celery task runs without errors."""
-        self.assertIsNone(
-            consume(
-                'console',
-                'notifications.providers.ConsoleNotificationProvider',
-                self.notification.to_json(),
-                dict(),
-            )
-        )
+        self.assertIsNone(consume('console', self.notification.to_json(), dict()))
 
     async def test_channels_consumer(self):
         """This ensures that the Channels consumer runs without errors."""
         consumer = DjangoNotifsConsumer()
         message = {
             'provider': 'console',
-            'provider_class': 'notifications.providers.ConsoleNotificationProvider',
             'payload': self.notification.to_json(),
             'context': {},
             'countdown': 0,
