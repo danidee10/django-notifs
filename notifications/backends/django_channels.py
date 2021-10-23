@@ -10,7 +10,7 @@ from .base import BaseBackend
 
 
 class ChannelsBackend(BaseBackend):
-    def produce(self, provider, provider_class, payload, context, countdown):
+    def produce(self, provider, payload, context, countdown):
         channel_layer = channels.layers.get_channel_layer(
             settings.NOTIFICATIONS_QUEUE_NAME
         )
@@ -18,7 +18,6 @@ class ChannelsBackend(BaseBackend):
             settings.NOTIFICATIONS_QUEUE_NAME,
             {
                 'provider': provider,
-                'provider_class': provider_class,
                 'payload': payload,
                 'context': context,
                 'countdown': countdown,

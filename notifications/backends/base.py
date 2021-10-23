@@ -6,6 +6,7 @@ import logging
 from django.utils.module_loading import import_string
 
 from notifications.channels import BaseNotificationChannel
+from notifications.providers import BaseNotificationProvider
 
 
 class BaseBackend(metaclass=abc.ABCMeta):
@@ -17,12 +18,14 @@ class BaseBackend(metaclass=abc.ABCMeta):
         self.notification_channel = notification_channel
 
     @staticmethod
-    def get_notification_provider(provider_path, context):
-        return import_string(provider_path)(context)
+    def get_notification_provider(provider, context):
+        provider_class = BaseNotificationProvider.get_provider_class(provider)
+
+        return import_string(provider_class)(context)
 
     @classmethod
-    def consume(cls, provider, provider_class, payload, context):
-        notification_channel = cls.get_notification_provider(provider_class, context)
+    def consume(cls, provider, payload, context):
+        notification_channel = cls.get_notification_provider(provider, context)
 
         bulk = context.get('bulk', False)
         if bulk is True:
@@ -53,4 +56,4 @@ class BaseBackend(metaclass=abc.ABCMeta):
                 % (provider, provider_class, payload, context, countdown)
             )
 
-            self.produce(provider, provider_class, payload, context, countdown)
+            self.produce(provider, payload, context, countdown)

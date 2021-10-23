@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.test import TestCase, override_settings
 
-from .. import NotificationError
+from .. import InvalidNotificationProvider, NotificationError
 from ..backends.base import BaseBackend
 from ..channels import ConsoleNotificationChannel
 from ..models import BaseNotificationModel
@@ -54,12 +54,7 @@ class NotificationTestCase(TestCase):
         )
 
         self.assertIsNone(
-            BaseBackend.consume(
-                'console',
-                'notifications.providers.ConsoleNotificationProvider',
-                notification.to_json(),
-                dict(),
-            )
+            BaseBackend.consume('console', notification.to_json(), dict())
         )
 
     def test_user_cant_read_others_notifications(self):
@@ -187,7 +182,7 @@ class NotificationTestCase(TestCase):
         self.assertRaises(AttributeError, notify, **notification_kwargs)
 
     def test_send_invalid_provider(self):
-        """An invalid provider_path should raise an AttributeError."""
+        """An invalid provider should raise a KeyError."""
         notification = Notification(
             source=self.user2,
             source_display_name='User 2',
@@ -202,10 +197,9 @@ class NotificationTestCase(TestCase):
         )
 
         self.assertRaises(
-            ImportError,
+            InvalidNotificationProvider,
             BaseBackend.consume,
-            'console',
-            'notifications.providers.InvalidNotificationProvider',
+            'invalid provider',
             notification.to_json(),
             dict(),
         )
