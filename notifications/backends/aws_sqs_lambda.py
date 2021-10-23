@@ -35,4 +35,8 @@ class AwsSqsLambdaConsumer:
     def consume(cls, event, context):
         for record in event['Records']:
             message = json.loads(record['body'])
-            AwsSqsLambdaBackend.consume(**message)
+
+            provider = message['provider']
+            payload = message['payload']
+            context = message['context']
+            AwsSqsLambdaBackend.consume(provider, payload, context)
