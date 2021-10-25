@@ -1,4 +1,4 @@
-"""Initilize properties."""
+from pydantic import ValidationError
 
 
 class NotificationError(Exception):
@@ -20,6 +20,10 @@ class ImproperlyInstalledNotificationProvider(ImportError):
 
 
 class InvalidNotificationProvider(Exception):
+    pass
+
+
+class InvalidNotificationProviderPayload(ValidationError):
     pass
 
 

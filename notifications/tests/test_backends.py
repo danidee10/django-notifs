@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 
 from ..backends import RQ, Celery, Channels
-from ..channels import ConsoleNotificationChannel
+from ..channels import DjangoWebSocketChannel
 from ..consumers import DjangoNotifsConsumer
 from ..tasks import consume
 from ..utils import get_notification_model
@@ -47,7 +47,10 @@ class BackendTests(TestCase):
 
     @override_settings(CELERY_BROKER_URL='redis://localhost:6379/0')
     def test_celery_backend(self):
-        delivery_backend = Celery(ConsoleNotificationChannel(self.notification))
+        websocket_channel = DjangoWebSocketChannel(
+            self.notification, context={'message': {'text': 'Hello world'}}
+        )
+        delivery_backend = Celery(websocket_channel)
 
         self.assertIsNone(delivery_backend.run(countdown=0))
 
@@ -62,26 +65,38 @@ class BackendTests(TestCase):
         }
     )
     def test_channels_backend(self):
-        delivery_backend = Channels(ConsoleNotificationChannel(self.notification))
+        websocket_channel = DjangoWebSocketChannel(
+            self.notification, context={'message': {'text': 'Hello world'}}
+        )
+        delivery_backend = Channels(websocket_channel)
 
         self.assertIsNone(delivery_backend.run(countdown=0))
 
     def test_rq_backend(self):
-        delivery_backend = RQ(ConsoleNotificationChannel(self.notification))
+        websocket_channel = DjangoWebSocketChannel(
+            self.notification, context={'message': {'text': 'Hello world'}}
+        )
+        delivery_backend = RQ(websocket_channel)
 
         self.assertIsNone(delivery_backend.run(countdown=0))
 
     def test_celery_task(self):
         """This ensures that the Celery task runs without errors."""
-        self.assertIsNone(consume('console', self.notification.to_json(), dict()))
+        self.assertIsNone(
+            consume(
+                'django_channels',
+                {'type': 'celery', 'message': 'Hello world'},
+                context={'destination': 'celery_users'},
+            )
+        )
 
     async def test_channels_consumer(self):
         """This ensures that the Channels consumer runs without errors."""
         consumer = DjangoNotifsConsumer()
         message = {
-            'provider': 'console',
-            'payload': self.notification.to_json(),
-            'context': {},
+            'provider': 'django_channels',
+            'payload': {'type': 'celery', 'message': 'Hello world'},
+            'context': {'destination': 'celery_users'},
             'countdown': 0,
         }
         result = await consumer.notify(message)

@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 from notifications import ImproperlyInstalledNotificationProvider
 
 try:
@@ -7,13 +9,39 @@ except ImportError:
         missing_package='tweepy', provider='twitter'
     )
 
+from pydantic import BaseModel, Field
+
 from notifications import default_settings as settings
 
 from . import BaseNotificationProvider
 
 
+class TwitterStatusUpdateSchema(BaseModel):
+    status: str = Field(description='The text of your status update')
+    in_reply_to_status_id: str = Field(
+        description='The ID of an existing status that the update is in reply to.'
+        'Note: This parameter will be ignored unless the author of the Tweet this'
+        'parameter references is mentioned within the status text.'
+        'Therefore, you must include @username, where username'
+        'is the author of the referenced Tweet, within the update.'
+    )
+
+    auto_populate_reply_metadata: Optional[bool]
+    exclude_reply_user_ids: Optional[List[str]]
+    attachment_url: Optional[str]
+    media_ids: Optional[List[str]]
+    possibly_sensitive: Optional[bool]
+    lat: Optional[str]
+    long: Optional[str]
+    place_id: Optional[str]
+    display_coordinates: Optional[bool]
+    trim_user: Optional[bool]
+    card_uri: Optional[str]
+
+
 class TwitterStatusUpdateNotificationProvider(BaseNotificationProvider):
     name = 'twitter_status_update'
+    validator = TwitterStatusUpdateSchema
 
     def __init__(self, context=dict()):
         auth = tweepy.OAuthHandler(
