@@ -1,13 +1,11 @@
 """Notification channels for django-notifs."""
 
-from notifications import ImproperlyInstalledNotificationProvider
-
 try:
     from channels.layers import get_channel_layer
+
+    HAS_DEPENDENCIES = True
 except ImportError:
-    raise ImproperlyInstalledNotificationProvider(
-        missing_package='channels', provider='django_channels'
-    )
+    HAS_DEPENDENCIES = False
 
 from asgiref.sync import async_to_sync
 from pydantic import BaseModel
@@ -26,6 +24,9 @@ class DjangoChannelsNotificationProvider(BaseNotificationProvider):
     """django-channels websocket provider"""
 
     name = 'django_channels'
+    package = 'channels'
+
+    HAS_DEPENDENCIES = HAS_DEPENDENCIES
 
     @property
     def channel_layer(self):

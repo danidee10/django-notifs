@@ -6,6 +6,7 @@ from typing import List
 from pydantic import BaseModel, ValidationError
 
 from notifications import (
+    ImproperlyInstalledNotificationProvider,
     InvalidNotificationProvider,
     InvalidNotificationProviderPayload,
 )
@@ -13,12 +14,25 @@ from notifications.utils import classproperty
 
 
 class BaseNotificationProvider(metaclass=abc.ABCMeta):
+
+    HAS_DEPENDENCIES = True
+
     def __init__(self, context=dict()):
+
+        if self.HAS_DEPENDENCIES is False:
+            raise ImproperlyInstalledNotificationProvider(
+                missing_package=self.package, provider=self.name
+            )
+
         self.logger = logging.getLogger(f'{self.name}_provider')
         self.context = context
 
     @abc.abstractproperty
     def name(self):
+        raise NotImplementedError
+
+    @abc.abstractproperty
+    def package(self):
         raise NotImplementedError
 
     @classproperty

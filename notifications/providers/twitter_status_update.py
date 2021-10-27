@@ -1,13 +1,11 @@
 from typing import List, Optional
 
-from notifications import ImproperlyInstalledNotificationProvider
-
 try:
     import tweepy
+
+    HAS_DEPENDENCIES = True
 except ImportError:
-    raise ImproperlyInstalledNotificationProvider(
-        missing_package='tweepy', provider='twitter'
-    )
+    HAS_DEPENDENCIES = False
 
 from pydantic import BaseModel, Field
 
@@ -42,6 +40,9 @@ class TwitterStatusUpdateSchema(BaseModel):
 class TwitterStatusUpdateNotificationProvider(BaseNotificationProvider):
     name = 'twitter_status_update'
     validator = TwitterStatusUpdateSchema
+    package = 'tweepy'
+
+    HAS_DEPENDENCIES = HAS_DEPENDENCIES
 
     def __init__(self, context=dict()):
         auth = tweepy.OAuthHandler(

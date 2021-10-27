@@ -1,11 +1,9 @@
-from notifications import ImproperlyInstalledNotificationProvider
-
 try:
     from slack_sdk import WebClient
-except ImportError as err:
-    raise ImproperlyInstalledNotificationProvider(
-        missing_package='slack_sdk', provider='slack'
-    ) from err
+
+    HAS_DEPENDENCIES = True
+except ImportError:
+    HAS_DEPENDENCIES = False
 
 from pydantic import BaseModel, Field
 
@@ -15,17 +13,20 @@ from . import BaseNotificationProvider
 
 
 class SlackSchema(BaseModel):
-    channel: str = Field(description=' The #slack-channel-name')
+    channel: str = Field(description='The #slack-channel-name')
     text: str = Field(description='The message body')
 
 
 class SlackNotificationProvider(BaseNotificationProvider):
     name = 'slack'
     validator = SlackSchema
+    package = 'slack_sdk'
+
+    HAS_DEPENDENCIES = HAS_DEPENDENCIES
 
     def __init__(self, context=dict()):
-        self.slack_client = WebClient(token=settings.NOTIFICATIONS_SLACK_BOT_TOKEN)
         super().__init__(context=context)
+        self.slack_client = WebClient(token=settings.NOTIFICATIONS_SLACK_BOT_TOKEN)
 
     def send(self, payload):
         self.slack_client.chat_postMessage(**payload)

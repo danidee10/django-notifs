@@ -34,6 +34,7 @@ class EmailSchema(BaseModel):
 class EmailNotificationProvider(BaseNotificationProvider):
     name = 'email'
     validator = EmailSchema
+    package = None
 
     @staticmethod
     def _get_email_message(payload):

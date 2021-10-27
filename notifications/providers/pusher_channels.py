@@ -1,13 +1,11 @@
-from typing import Dict
-
-from notifications import ImproperlyInstalledNotificationProvider
+from typing import Dict, List, Union
 
 try:
     from pusher import Pusher
+
+    HAS_DEPENDENCIES = True
 except ImportError:
-    raise ImproperlyInstalledNotificationProvider(
-        missing_package='pusher', provider='pusher_channels'
-    )
+    HAS_DEPENDENCIES = False
 
 from pydantic import BaseModel, Field
 
@@ -17,14 +15,17 @@ from . import BaseNotificationProvider
 
 
 class PusherChannelsSchema(BaseModel):
-    channel: str = Field(description='The pusher channel name')
-    name: str = Field(description='The event name')
+    channels: Union[str, List] = Field(description='The pusher channel name')
+    event_name: str = Field(description='The event name')
     data: Dict = Field(description='The message data')
 
 
 class PusherChannelsNotificationProvider(BaseNotificationProvider):
     name = 'pusher_channels'
     validator = PusherChannelsSchema
+    package = 'pusher'
+
+    HAS_DEPENDENCIES = HAS_DEPENDENCIES
 
     def __init__(self, context=dict()):
         self.pusher_client = Pusher.from_url(settings.NOTIFICATIONS_PUSHER_CHANNELS_URL)

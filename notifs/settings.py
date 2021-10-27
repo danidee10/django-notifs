@@ -129,6 +129,9 @@ NOTIFICATIONS_USE_WEBSOCKET = False
 NOTIFICATIONS_RABBIT_MQ_URL = 'amqp://guest:guest@localhost:5672'
 NOTIFICATIONS_DELIVERY_BACKEND = 'notifications.backends.Synchronous'
 NOTIFICATIONS_RETRY = False
+NOTIFICATIONS_PUSHER_CHANNELS_URL = (
+    'https://12345:secret@api-eu.pusher.com/apps/0000000'
+)
 
 RQ_QUEUES = {
     'django_notifs': {

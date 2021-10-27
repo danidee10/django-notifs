@@ -3,7 +3,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 
-from ..backends import RQ, Celery, Channels
+from ..backends import RQ, Celery, Channels, Console
 from ..channels import DjangoWebSocketChannel
 from ..consumers import DjangoNotifsConsumer
 from ..tasks import consume
@@ -45,7 +45,17 @@ class BackendTests(TestCase):
             is_read=False,
         )
 
-    @override_settings(CELERY_BROKER_URL='redis://localhost:6379/0')
+    def test_console_backend(self):
+        websocket_channel = DjangoWebSocketChannel(
+            self.notification, context={'message': {'text': 'Hello world'}}
+        )
+        delivery_backend = Console(websocket_channel)
+
+        self.assertIsNone(delivery_backend.run(countdown=0))
+
+    @override_settings(
+        CELERY_BROKER_URL='redis://localhost:6379/0', NOTIFICATIONS_RETRY=True
+    )
     def test_celery_backend(self):
         websocket_channel = DjangoWebSocketChannel(
             self.notification, context={'message': {'text': 'Hello world'}}
@@ -72,6 +82,7 @@ class BackendTests(TestCase):
 
         self.assertIsNone(delivery_backend.run(countdown=0))
 
+    @override_settings(NOTIFICATIONS_RETRY=True)
     def test_rq_backend(self):
         websocket_channel = DjangoWebSocketChannel(
             self.notification, context={'message': {'text': 'Hello world'}}
