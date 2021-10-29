@@ -25,13 +25,14 @@ class BaseBackend(metaclass=abc.ABCMeta):
 
     @classmethod
     def consume(cls, provider, payload, context):
-        notification_channel = cls.get_notification_provider(provider, context)
+        notification_provider = cls.get_notification_provider(provider, context)
+        notification_provider.validate(payload)
 
         bulk = context.get('bulk', False)
         if bulk is True:
-            notification_channel.send_bulk(payload)
+            notification_provider.send_bulk(payload)
         else:
-            notification_channel.send(payload)
+            notification_provider.send(payload)
 
         cls.logger.info(
             'Sent notification with the %s provider with context: %s\n'
@@ -49,6 +50,7 @@ class BaseBackend(metaclass=abc.ABCMeta):
         ) in self.notification_channel.provider_paths.items():
             payload = self.notification_channel.build_payload(provider)
             context = self.notification_channel.get_context(provider)
+            self.get_notification_provider(provider, context).validate(payload)
 
             self.logger.info(
                 'Calling provider `%s`(%s) with args:'

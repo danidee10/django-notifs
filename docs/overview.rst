@@ -23,5 +23,5 @@ Supported providers
     * :ref:`Slack <Slack>`
     * :ref:`Pusher Channels <Pusher Channels>`
     * :ref:`Twitter (Status updates) <Twitter status update>`
-    * :ref:`FCM - Web push notifications (*deprecated*) <FCM (Firebase Web push)>`
+    * :ref:`FCM - Web push notifications (*deprecated*) <FCM (Firebase Web push) (Deprecated)>`
     * :ref:`Django channels <django-channels>`

@@ -1,3 +1,4 @@
+autodoc-pydantic==1.5.0
 celery==4.1.0
 channels==3.0.3
 channels-redis==3.2.0
@@ -7,8 +8,10 @@ docutils<=0.16
 django-jsonfield-backport==1.0.4
 django-rq==2.4.0
 m2r2==0.2.7
+moto==2.2.11
 pre-commit==2.15.0
 pusher==3.0.0
+pydantic==1.8.2
 pytz==2017.2
 requests==2.25.1
 slack_sdk==3.11.2

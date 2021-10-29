@@ -18,8 +18,9 @@ REQUIRED = [
     'django>=2.2',
     'requests>=2.25.1',
     'django-jsonfield-backport>=1.0.4',
+    'pydantic>=1.8.2',
 ]
-TEST_REQUIRES = ['coverage>=5.4', 'channels>=3.0.3', 'tox>=3.24.4']
+TEST_REQUIRES = ['coverage>=5.4', 'channels>=3.0.3', 'tox>=3.24.4', 'moto[sqs]>=2.2.11']
 EXTRAS_REQUIRE = {
     # Backend requirements
     'celery': ['celery>=4.1.0'],

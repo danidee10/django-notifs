@@ -1,5 +1,6 @@
 """General Tests."""
 
+import json
 import time
 from unittest import mock
 
@@ -7,9 +8,9 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.test import TestCase, override_settings
 
-from .. import InvalidNotificationProvider, NotificationError
 from ..backends.base import BaseBackend
-from ..channels import ConsoleNotificationChannel
+from ..channels import DjangoWebSocketChannel
+from ..exceptions import InvalidNotificationProvider, NotificationError
 from ..models import BaseNotificationModel
 from ..utils import get_notification_model, notify, read
 
@@ -40,7 +41,7 @@ class NotificationTestCase(TestCase):
          should run without any Exception.
          (This might change in the future)
         """
-        notification = Notification(
+        Notification(
             source=self.user2,
             source_display_name='User 2',
             recipient=self.user1,
@@ -50,11 +51,15 @@ class NotificationTestCase(TestCase):
             url='http://example.com',
             short_description='Short Description',
             is_read=False,
-            channels=('console',),
+            channels=('websocket',),
         )
 
         self.assertIsNone(
-            BaseBackend.consume('console', notification.to_json(), dict())
+            BaseBackend.consume(
+                'django_channels',
+                {'type': 'celery', 'message': 'Hello world'},
+                context={'destination': 'celery_users'},
+            )
         )
 
     def test_user_cant_read_others_notifications(self):
@@ -101,6 +106,7 @@ class NotificationTestCase(TestCase):
 
     def test_silent_notification(self):
         """Test Silent notifications."""
+        message = {'text': 'Hello world'}
         notify(
             source=self.user2,
             source_display_name='User 2',
@@ -112,15 +118,18 @@ class NotificationTestCase(TestCase):
             short_description='Short Description',
             is_read=False,
             silent=True,
-            channels=('console',),
+            channels=('websocket',),
+            extra_data={'context': {'destination': 'celery_users', 'message': message}},
         )
 
         notifications = Notification.objects.all()
 
         self.assertEqual(notifications.count(), 0)
 
-    @mock.patch('notifications.providers.ConsoleNotificationProvider.send_bulk')
+    @mock.patch('notifications.providers.DjangoChannelsNotificationProvider.send_bulk')
     def test_bulk_notification_notify(self, send_bulk):
+        message = {'text': 'Hello world'}
+
         notify(
             source=self.user2,
             source_display_name='User 2',
@@ -131,19 +140,21 @@ class NotificationTestCase(TestCase):
             url='http://example.com',
             short_description='Short Description',
             is_read=False,
-            channels=('console',),
+            channels=('websocket',),
             extra_data={
                 'context': {
                     'bulk': True,
+                    'destination': 'celery_users',
+                    'message': message,
                 }
             },
         )
 
         send_bulk.assert_called_once_with(
-            {'context': {'bulk': True}, 'payload': 'console'}
+            {'type': 'notifs_websocket_message', 'message': json.dumps(message)}
         )
 
-    @mock.patch('notifications.providers.ConsoleNotificationProvider.send_bulk')
+    @mock.patch('notifications.providers.DjangoChannelsNotificationProvider.send_bulk')
     def test_bulk_notification_direct(self, send_bulk):
         notification = Notification.objects.create(
             source=self.user2,
@@ -156,10 +167,15 @@ class NotificationTestCase(TestCase):
             short_description='Short Description',
             is_read=False,
         )
-        console_notification = ConsoleNotificationChannel(
-            notification, context={'bulk': True}
+        console_notification = DjangoWebSocketChannel(
+            notification,
+            context={
+                'bulk': True,
+                'destination': 'celery_users',
+                'message': "{'text': 'Hello world'}",
+            },
         )
-        payload = console_notification.build_payload('console')
+        payload = console_notification.build_payload('django_channels')
         console_notification.notify()
 
         send_bulk.assert_called_once_with(payload)
@@ -268,6 +284,7 @@ class NotificationTestCase(TestCase):
 
         the specified countdown.
         """
+        message = {'text': 'Hello world!'}
         start_time = time.time()
         notify(
             source=self.user2,
@@ -279,8 +296,15 @@ class NotificationTestCase(TestCase):
             url='http://example.com',
             short_description='Short Description',
             is_read=False,
-            channels=('console',),
+            channels=('websocket',),
             countdown=3,
+            extra_data={
+                'context': {
+                    'bulk': True,
+                    'destination': 'celery_users',
+                    'message': message,
+                }
+            },
         )
         total_time = time.time() - start_time
 
@@ -335,7 +359,7 @@ class CustomNotificationTestCase(TestCase):
             url='http://example.com',
             short_description='Short Description',
             is_read=False,
-            channels=('console',),
+            channels=('websocket',),
         )
 
         self.assertEqual(notification.to_json(), 'custom notification model')

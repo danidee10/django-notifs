@@ -41,23 +41,10 @@ normally do and the email provider should pick it up.
 Payload
 -------
 
-Single::
+.. autopydantic_model:: notifications.providers.email.EmailSchema
 
-    {
-        'subject': 'The subject line of the email',
-        'body': 'The body text. This should be a plain text message',
-        'from_email': 'The sender’s address',
-        'to': 'A list or tuple of recipient addresses',
-        'bcc': 'A list or tuple of addresses used in the “Bcc” header when sending the email',
-        'attachments': 'A list of attachments to put on the message',
-        'headers': 'A dictionary of extra headers to put on the message'.
-        'cc': 'A list or tuple of recipient addresses used in the “Cc” header when sending the email',
-        'reply_to': 'A list or tuple of recipient addresses used in the “Reply-To” header when sending the email',
-        **extra_esp,
-
-    }
-
-``extra_esp`` is any extra data that you want to pass to your custom Email backend.
+You can still pass extra keyword arguments like ``tags`` (*depending on the ESP that you use.*)
+See the ``django-anymail`` `documentation <https://anymail.readthedocs.io/>`_ for more information.
 
 |
 
@@ -96,13 +83,7 @@ See the `django-sms documentation`_ for more information on how to configure you
 Payload
 -------
 
-Single::
-
-    {
-        'body': 'Sample message',
-        'originator': '+10000000000',
-        'recipients': ['+20000000000', '+30000000000']  # list of recipients
-    }
+.. autopydantic_model:: notifications.providers.django_sms.DjangoSmsSchema
 
 |
 
@@ -131,12 +112,7 @@ Settings
 Payload
 -------
 
-Single::
-
-    {
-        'channel': '#slack-channel-name',
-        'text': 'message',
-    }
+.. autopydantic_model:: notifications.providers.slack.SlackSchema
 
 |
 
@@ -164,18 +140,12 @@ Settings
 Payload
 -------
 
-Single::
-
-    {
-        'channel': 'channel_name',
-        'name': 'event_name',
-        'data': {},
-    }
+.. autopydantic_model:: notifications.providers.pusher_channels.PusherChannelsSchema
 
 |
 
-FCM (Firebase Web push)
-=======================
+FCM (Firebase Web push) (Deprecated)
+====================================
 
 .. autoclass:: FCMWebNotificationProvider
 
@@ -246,23 +216,7 @@ Twitter access token secret
 Payload
 -------
 
-Single::
-
-    {
-        'status': 'Hello world!',
-        'in_reply_to_status_id': '123456789',
-        'auto_populate_reply_metadata': False,
-        'exclude_reply_user_ids': [],
-        'attachment_url': '',
-        'media_ids': [],
-        'possibly_sensitive': False,
-        'lat': '',
-        'long': '',
-        'place_id': '',
-        'display_coordinates': False,
-        'trim_user': False,
-        'card_uri': ''
-    }
+.. autopydantic_model:: notifications.providers.twitter_status_update.TwitterStatusUpdateSchema
 
 See the `tweepy documentation <https://docs.tweepy.org/en/stable/api.html?highlight=status_update#tweepy.API.update_status>`_
 for more information on these parameters
@@ -309,6 +263,7 @@ Context
 ::
 
     {
+        'channel_layer': "Custom django channels layer or 'default'",
         'destination': 'Group/channel name'
     }
 
@@ -316,12 +271,7 @@ Context
 Payload
 -------
 
-Single::
-
-    {
-        'type': settings.NOTIFICATIONS_WEBSOCKET_EVENT_NAME,  # or a custom event name
-        'message': {},
-    }
+.. autopydantic_model:: notifications.providers.django_channels.DjangoChannelsSchema
 
 |
 |
@@ -332,14 +282,41 @@ Writing custom Providers
 Sometimes, the inbuilt providers are not sufficient to handle every use case.
 
 You can create a custom provider by inheriting from the Base provider class or an existing Provider and Implementing the
-``send`` and ``send_bulk`` method.
+``get_validator``/``validate``, ``send`` and ``send_bulk`` method.
 
 The Notification context is also available as a property (``self.context``)::
 
+    from typing import Dict, List
+
+    from pydantic import BaseModel
+
     from notifications.providers import BaseNotificationProvider
+
+
+    class CustomProviderSchema(BaseModel):
+        event: str
+        message: Dict
+
+    
+    class BulkCustomProviderSchema(BaseModel):
+        group: str
+        messages: List[CustomProviderSchema]
+
 
     class CustomNotificationProvider(BaseNotificationProvider):
         name = 'custom_provider'
+        validator = CustomProviderSchema
+
+        def get_validator(self):
+            """Return a custom validator based on the context."""
+            if context.get('bulk', False) is True:
+                return BulkCustomProviderSchema
+
+            return CustomProviderSchema
+
+        def validate(self, payload):
+            """Validate without pydantic."""
+            pass
 
         def send(self, payload):
             # call an external API?

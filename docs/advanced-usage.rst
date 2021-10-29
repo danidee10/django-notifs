@@ -143,10 +143,8 @@ if you don't make use of the standard Authentication backend.
 Testing and Debugging
 ---------------------
 
-django-notifs comes with an inbuilt ``'console'`` provider that just prints out the notification payload::
+django-notifs comes with an inbuilt ``'console'`` delivery backend provider that just prints out the notification payload::
 
-    class MyNotificationChannel:
-        providers = ['console']
-        ...
+    settings.NOTIFICATIONS_DELIVERY_BACKEND = 'notifications.backends.Console'
 
-This can be helpful during development when it's used with the Synchronous backend.
+This can be helpful during development
