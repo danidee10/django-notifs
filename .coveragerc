@@ -13,3 +13,5 @@ exclude_lines =
     raise AssertionError
     raise NotImplementedError
     class ListField
+    except ImportError:
+        HAS_DEPENDENCIES = False

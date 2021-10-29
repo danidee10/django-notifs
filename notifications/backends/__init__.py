@@ -20,4 +20,5 @@ try:
 except ImportError:
     pass
 
+from .console import ConsoleBackend as Console  # noqa
 from .synchronous import SynchronousBackend as Synchronous  # noqa

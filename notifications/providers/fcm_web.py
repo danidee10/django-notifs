@@ -10,6 +10,7 @@ class FCMWebNotificationProvider(BaseNotificationProvider):
     """Google FCM Web Provider."""
 
     name = 'fcm_web'
+    package = None
 
     def send(self, payload):
         requests.post(
@@ -27,7 +28,3 @@ class FCMWebNotificationProvider(BaseNotificationProvider):
                 'Authorization': 'key={}'.format(settings.NOTIFICATIONS_FCM_WEB_KEY)
             },
         )
-
-    def send_bulk(self, payloads):
-        for payload in payloads:
-            self.send(payload)

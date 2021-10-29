@@ -1,5 +1,4 @@
 from .base import BaseNotificationProvider  # noqa
-from .console import ConsoleNotificationProvider  # noqa
 from .email import EmailNotificationProvider  # noqa
 
 try:

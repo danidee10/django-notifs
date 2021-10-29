@@ -35,7 +35,7 @@ delivers it to the inbuilt Console provider (which simply prints out any payload
 
     class CustomNotificationChannel(BaseNotificationChannel):
         name = 'custom_notification_channel'
-        providers = ['console']
+        providers = ['email']
 
         def build_payload(self, provider):
             return {'context': self.context, 'payload': provider}

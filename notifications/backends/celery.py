@@ -10,19 +10,19 @@ from .base import BaseBackend
 
 logger = get_task_logger(__name__)
 
-autoretry_for = []
-if settings.NOTIFICATIONS_RETRY:
-    autoretry_for.append(Exception)
-
 
 @shared_task(
-    autoretry_for=autoretry_for,
+    bind=True,
     retry_backoff=settings.NOTIFICATIONS_RETRY_INTERVAL,
     max_retries=settings.NOTIFICATIONS_MAX_RETRIES,
 )
-def consume(provider, payload, context):
+def consume(self, provider, payload, context):
     """Send notification via a channel to celery."""
-    CeleryBackend.consume(provider, payload, context)
+    try:
+        CeleryBackend.consume(provider, payload, context)
+    except Exception as e:
+        if settings.NOTIFICATIONS_RETRY:
+            self.retry(exc=e)
 
 
 class CeleryBackend(BaseBackend):

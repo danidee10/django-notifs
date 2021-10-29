@@ -1,4 +1,5 @@
 import abc
+from typing import List
 
 from django.utils.module_loading import import_string
 
@@ -13,12 +14,12 @@ class BaseNotificationChannel(metaclass=abc.ABCMeta):
         self.context = context
 
     @abc.abstractproperty
-    def name(self):
+    def name(self) -> str:
         raise NotImplementedError
 
     @abc.abstractproperty
-    def providers(self):
-        return []
+    def providers(self) -> List:
+        raise NotImplementedError
 
     @abc.abstractmethod
     def build_payload(self, provider):

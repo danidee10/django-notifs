@@ -1,17 +1,27 @@
-from notifications import ImproperlyInstalledNotificationProvider
+from typing import List
+
+from pydantic import BaseModel, Field
 
 try:
     from sms import Message, get_connection
+
+    HAS_DEPENDENCIES = True
 except ImportError:
-    raise ImproperlyInstalledNotificationProvider(
-        missing_package='django_sms', provider='sms'
-    )
+    HAS_DEPENDENCIES = False
 
 from . import BaseNotificationProvider
 
 
+class DjangoSmsSchema(BaseModel):
+    body: str = Field(description='The message body')
+    originator: str = Field(description='The originating phone number')
+    recipients: List[str] = Field(description='The list of recipient phone numbers')
+
+
 class DjangoSMSNotificationProvider(BaseNotificationProvider):
     name = 'django_sms'
+    validator = DjangoSmsSchema
+    package = 'django_sms'
 
     @staticmethod
     def _get_sms_message(payload):
