@@ -2,7 +2,7 @@ from typing import List
 
 from pydantic import BaseModel, Field
 
-from notifications import ImproperlyInstalledNotificationProvider
+from notifications.exceptions import ImproperlyInstalledNotificationProvider
 
 try:
     from sms import Message, get_connection

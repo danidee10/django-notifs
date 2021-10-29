@@ -12,16 +12,16 @@ from .base import BaseBackend
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('django_notifs.backends.rq')
 
-retry = None
-if settings.NOTIFICATIONS_RETRY:
-    retry = Retry(
-        max=settings.NOTIFICATIONS_MAX_RETRIES,
-        interval=settings.NOTIFICATIONS_RETRY_INTERVAL,
-    )
-
 
 class RQBackend(BaseBackend):
     def produce(self, provider, payload, context, countdown):
+        retry = None
+        if settings.NOTIFICATIONS_RETRY:
+            retry = Retry(
+                max=settings.NOTIFICATIONS_MAX_RETRIES,
+                interval=settings.NOTIFICATIONS_RETRY_INTERVAL,
+            )
+
         queue = django_rq.get_queue(settings.NOTIFICATIONS_QUEUE_NAME)
         queue.enqueue_in(
             timedelta(seconds=countdown),

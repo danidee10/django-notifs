@@ -3,8 +3,8 @@ from unittest.mock import Mock, patch
 from django.test import SimpleTestCase
 from tweepy.errors import Forbidden, TooManyRequests
 
-from notifications import ImproperlyInstalledNotificationProvider
 from notifications.channels import BaseNotificationChannel
+from notifications.exceptions import ImproperlyInstalledNotificationProvider
 
 
 class FakeTweepyResponse:

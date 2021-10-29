@@ -8,9 +8,9 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.test import TestCase, override_settings
 
-from .. import InvalidNotificationProvider, NotificationError
 from ..backends.base import BaseBackend
 from ..channels import DjangoWebSocketChannel
+from ..exceptions import InvalidNotificationProvider, NotificationError
 from ..models import BaseNotificationModel
 from ..utils import get_notification_model, notify, read
 

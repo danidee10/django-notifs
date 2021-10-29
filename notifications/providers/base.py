@@ -5,7 +5,7 @@ from typing import List
 
 from pydantic import BaseModel, ValidationError
 
-from notifications import (
+from notifications.exceptions import (
     ImproperlyInstalledNotificationProvider,
     InvalidNotificationProvider,
     InvalidNotificationProviderPayload,

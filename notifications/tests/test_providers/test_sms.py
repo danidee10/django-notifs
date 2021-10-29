@@ -2,8 +2,8 @@ from unittest.mock import patch
 
 from django.test import SimpleTestCase, override_settings
 
-from notifications import ImproperlyInstalledNotificationProvider
 from notifications.channels import BaseNotificationChannel
+from notifications.exceptions import ImproperlyInstalledNotificationProvider
 
 
 class SMSNotificationChannel(BaseNotificationChannel):

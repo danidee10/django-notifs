@@ -3,7 +3,7 @@
 from django.conf import settings as django_settings
 from django.utils.module_loading import import_string
 
-from . import NotificationError
+from .exceptions import NotificationError
 
 
 def notify(silent=False, countdown=0, extra_data=dict(), **kwargs):
