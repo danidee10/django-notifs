@@ -7,7 +7,7 @@ class NotificationError(Exception):
     pass
 
 
-class ImproperlyInstalledNotificationProvider(ImportError):
+class ImproperlyConfiguredProvider(ImportError):
     """Exception for missing provider dependencies"""
 
     def __init__(self, missing_package, provider):

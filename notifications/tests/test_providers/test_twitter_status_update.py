@@ -4,7 +4,7 @@ from django.test import SimpleTestCase
 from tweepy.errors import Forbidden, TooManyRequests
 
 from notifications.channels import BaseNotificationChannel
-from notifications.exceptions import ImproperlyInstalledNotificationProvider
+from notifications.exceptions import ImproperlyConfiguredProvider
 
 
 class FakeTweepyResponse:
@@ -43,7 +43,7 @@ class TestTwitterStatusUpdateProvider(SimpleTestCase):
             TwitterStatusUpdateNotificationChannel({})
         )
 
-        with self.assertRaises(ImproperlyInstalledNotificationProvider):
+        with self.assertRaises(ImproperlyConfiguredProvider):
             twitter_status_update_notification_channel.notify()
 
     @patch('tweepy.API.update_status', Mock(side_effect=Forbidden(FakeTweepyResponse)))

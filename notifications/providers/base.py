@@ -6,7 +6,7 @@ from typing import List
 from pydantic import BaseModel, ValidationError
 
 from notifications.exceptions import (
-    ImproperlyInstalledNotificationProvider,
+    ImproperlyConfiguredProvider,
     InvalidNotificationProvider,
     InvalidNotificationProviderPayload,
 )
@@ -20,7 +20,7 @@ class BaseNotificationProvider(metaclass=abc.ABCMeta):
     def __init__(self, context=dict()):
 
         if self.HAS_DEPENDENCIES is False:
-            raise ImproperlyInstalledNotificationProvider(
+            raise ImproperlyConfiguredProvider(
                 missing_package=self.package, provider=self.name
             )
 

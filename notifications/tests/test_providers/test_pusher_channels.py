@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 from django.test import SimpleTestCase
 
 from notifications.channels import BaseNotificationChannel
-from notifications.exceptions import ImproperlyInstalledNotificationProvider
+from notifications.exceptions import ImproperlyConfiguredProvider
 
 
 class PusherNotificationChannel(BaseNotificationChannel):
@@ -31,7 +31,7 @@ class TestPusherChannelsProvider(SimpleTestCase):
     def test_pusher_dependency(self):
         slack_notification_channel = PusherNotificationChannel({})
 
-        with self.assertRaises(ImproperlyInstalledNotificationProvider):
+        with self.assertRaises(ImproperlyConfiguredProvider):
             slack_notification_channel.notify()
 
     @patch('pusher.Pusher.trigger')

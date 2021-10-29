@@ -3,7 +3,7 @@ from unittest.mock import patch
 from django.test import SimpleTestCase, override_settings
 
 from notifications.channels import BaseNotificationChannel
-from notifications.exceptions import ImproperlyInstalledNotificationProvider
+from notifications.exceptions import ImproperlyConfiguredProvider
 
 
 class SMSNotificationChannel(BaseNotificationChannel):
@@ -31,7 +31,7 @@ class TestSMSProvider(SimpleTestCase):
     def test_sms_dependency(self):
         slack_notification_channel = SMSNotificationChannel({})
 
-        with self.assertRaises(ImproperlyInstalledNotificationProvider):
+        with self.assertRaises(ImproperlyConfiguredProvider):
             slack_notification_channel.notify()
 
     def test_sms_channels(self):

@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 from django.test import SimpleTestCase
 
 from notifications.channels import BaseNotificationChannel
-from notifications.exceptions import ImproperlyInstalledNotificationProvider
+from notifications.exceptions import ImproperlyConfiguredProvider
 
 
 class SlackNotificationChannel(BaseNotificationChannel):
@@ -27,7 +27,7 @@ class TestSlackProvider(SimpleTestCase):
     def test_slack_dependency(self):
         slack_notification_channel = SlackNotificationChannel({})
 
-        with self.assertRaises(ImproperlyInstalledNotificationProvider):
+        with self.assertRaises(ImproperlyConfiguredProvider):
             slack_notification_channel.notify()
 
     @patch('slack_sdk.WebClient.chat_postMessage')
