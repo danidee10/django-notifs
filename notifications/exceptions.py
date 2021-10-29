@@ -1,6 +1,3 @@
-from pydantic import ValidationError
-
-
 class NotificationError(Exception):
     """Custom error type for the app."""
 
@@ -23,7 +20,7 @@ class InvalidNotificationProvider(Exception):
     pass
 
 
-class InvalidNotificationProviderPayload(ValidationError):
+class InvalidNotificationProviderPayload(ValueError):
     pass
 
 

@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
 
 from django.core.mail import EmailMessage, get_connection
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, conlist
 
 from . import BaseNotificationProvider
 
@@ -9,7 +9,9 @@ from . import BaseNotificationProvider
 class EmailSchema(BaseModel):
     subject: str = Field(description='The subject line of the email')
     body: str = Field(description='The body text. This should be a plain text message')
-    to: List[str] = Field(description='A list or tuple of recipient addresses')
+    to: conlist(str, min_items=1) = Field(
+        description='A list or tuple of recipient addresses'
+    )
 
     bcc: Optional[List[str]] = Field(
         default=[],
