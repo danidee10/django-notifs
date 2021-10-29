@@ -29,10 +29,10 @@ class TestSMSProvider(SimpleTestCase):
         False,
     )
     def test_sms_dependency(self):
-        slack_notification_channel = SMSNotificationChannel({})
+        sms_notification_channel = SMSNotificationChannel({})
 
         with self.assertRaises(ImproperlyConfiguredProvider):
-            slack_notification_channel.notify()
+            sms_notification_channel.notify()
 
     def test_sms_channels(self):
         sms_notification_channel = SMSNotificationChannel({})

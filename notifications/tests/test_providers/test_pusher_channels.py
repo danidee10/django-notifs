@@ -29,10 +29,10 @@ class TestPusherChannelsProvider(SimpleTestCase):
         False,
     )
     def test_pusher_dependency(self):
-        slack_notification_channel = PusherNotificationChannel({})
+        pusher_notification_channel = PusherNotificationChannel({})
 
         with self.assertRaises(ImproperlyConfiguredProvider):
-            slack_notification_channel.notify()
+            pusher_notification_channel.notify()
 
     @patch('pusher.Pusher.trigger')
     def test_pusher_channels(self, mocked_trigger):

@@ -2,12 +2,12 @@ from typing import List
 
 from pydantic import BaseModel, Field
 
-from notifications.exceptions import ImproperlyConfiguredProvider
-
 try:
     from sms import Message, get_connection
+
+    HAS_DEPENDENCIES = True
 except ImportError:
-    raise ImproperlyConfiguredProvider(missing_package='django_sms', provider='sms')
+    HAS_DEPENDENCIES = False
 
 from . import BaseNotificationProvider
 
@@ -21,7 +21,7 @@ class DjangoSmsSchema(BaseModel):
 class DjangoSMSNotificationProvider(BaseNotificationProvider):
     name = 'django_sms'
     validator = DjangoSmsSchema
-    package = None
+    package = 'django_sms'
 
     @staticmethod
     def _get_sms_message(payload):
