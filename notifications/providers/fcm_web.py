@@ -37,7 +37,7 @@ class FCMWebNotificationProvider(BaseNotificationProvider):
         super().__init__(context=context)
         self.fcm_client = FCMNotification(
             api_key=settings.NOTIFICATIONS_FCM_WEB_API_KEY,
-            proxy=settings.NOTIFICATIONS_FCM_WEB_PROXY,
+            proxy_dict=settings.NOTIFICATIONS_FCM_WEB_PROXY,
         )
 
     def get_validator(self):
