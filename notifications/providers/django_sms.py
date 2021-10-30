@@ -21,7 +21,9 @@ class DjangoSmsSchema(BaseModel):
 class DjangoSMSNotificationProvider(BaseNotificationProvider):
     name = 'django_sms'
     validator = DjangoSmsSchema
-    package = 'django_sms'
+    package = 'django-sms'
+
+    HAS_DEPENDENCIES = HAS_DEPENDENCIES
 
     @staticmethod
     def _get_sms_message(payload):
