@@ -22,3 +22,6 @@ class InvalidNotificationProvider(Exception):
 
 class InvalidNotificationProviderPayload(ValueError):
     pass
+
+
+default_app_config = 'notifications.apps.NotificationsConfig'

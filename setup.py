@@ -28,11 +28,10 @@ EXTRAS_REQUIRE = {
     'channels': ['channels>=3.0.3', 'channels-redis>=3.2.0'],
     'sqs_lambda': ['boto3>=1.18.48'],
     # Provider requirements
-    'fcm_web': ['pyfcm>=1.5.4'],
     'pusher_channels': ['pusher>=3.0.0'],
     'slack': ['slack_sdk>=3.11.2'],
     'anymail': ['django-anymail>=8.4'],
-    'django_sms': ['django-sms>=0.5.0'],
+    'sms': ['django-sms>=0.5.0'],
     'twitter': ['tweepy>=4.1.0'],
 }
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
