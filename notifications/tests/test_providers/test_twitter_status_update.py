@@ -33,7 +33,6 @@ class TwitterStatusUpdateNotificationChannel(BaseNotificationChannel):
 
 
 class TestTwitterStatusUpdateProvider(SimpleTestCase):
-    @patch('tweepy.API.update_status', Mock())
     @patch(
         'notifications.providers.TwitterStatusUpdateNotificationProvider.HAS_DEPENDENCIES',  # noqa
         False,
