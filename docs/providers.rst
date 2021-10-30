@@ -68,7 +68,7 @@ Installation
 
 ::
 
-    pip install django-notifs[django_sms]
+    pip install django-notifs[sms]
 
 Extra dependencies can be installed by::
 
@@ -144,8 +144,8 @@ Payload
 
 |
 
-FCM (Firebase Web push)
-=======================
+FCM (Firebase Web push) (Deprecated)
+====================================
 
 .. autoclass:: FCMWebNotificationProvider
 
@@ -156,19 +156,20 @@ Settings
 
 ::
 
-    NOTIFICATIONS_FCM_WEB_API_KEY=xxxxxxx  # FCM Api key
-    NOTIFICATIONS_FCM_WEB_PROXY = {}  # FCM proxy
+    NOTIFICATIONS_FCM_KEY=xxxxxxx
 
 Payload
 -------
 
-Single:
+Single::
 
-.. autopydantic_model:: notifications.providers.fcm_web.FCMWebSchema
-
-Bulk:
-
-.. autopydantic_model:: notifications.providers.fcm_web.BulkFCMWebSchema
+    {
+        'title': 'notification title',
+        'body': 'body',
+        'click_action': 'https://example.com',
+        'icon': 'icon,
+        'to': 'user_token',
+    }
 
 |
 
@@ -308,7 +309,7 @@ The Notification context is also available as a property (``self.context``)::
 
         def get_validator(self):
             """Return a custom validator based on the context."""
-            if self.context.get('bulk', False) is True:
+            if context.get('bulk', False) is True:
                 return BulkCustomProviderSchema
 
             return CustomProviderSchema
