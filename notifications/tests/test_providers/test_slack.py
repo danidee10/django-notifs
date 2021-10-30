@@ -1,4 +1,4 @@
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 from django.test import SimpleTestCase
 
@@ -22,7 +22,6 @@ class SlackNotificationChannel(BaseNotificationChannel):
 
 
 class TestSlackProvider(SimpleTestCase):
-    @patch('slack_sdk.WebClient.chat_postMessage', Mock())
     @patch('notifications.providers.SlackNotificationProvider.HAS_DEPENDENCIES', False)
     def test_slack_dependency(self):
         slack_notification_channel = SlackNotificationChannel({})
