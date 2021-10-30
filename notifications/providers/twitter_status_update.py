@@ -45,6 +45,7 @@ class TwitterStatusUpdateNotificationProvider(BaseNotificationProvider):
     HAS_DEPENDENCIES = HAS_DEPENDENCIES
 
     def __init__(self, context=dict()):
+        super().__init__(context=context)
         auth = tweepy.OAuthHandler(
             settings.NOTIFICATIONS_TWITTER_CONSUMER_KEY,
             settings.NOTIFICATIONS_TWITTER_CONSUMER_SECRET,
@@ -54,7 +55,6 @@ class TwitterStatusUpdateNotificationProvider(BaseNotificationProvider):
             settings.NOTIFICATIONS_TWITTER_ACCESS_TOKEN_SECRET,
         )
         self.twitter_client = tweepy.API(auth)
-        super().__init__(context=context)
 
     def send(self, payload):
         try:
