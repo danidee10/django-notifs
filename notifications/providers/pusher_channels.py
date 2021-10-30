@@ -28,8 +28,8 @@ class PusherChannelsNotificationProvider(BaseNotificationProvider):
     HAS_DEPENDENCIES = HAS_DEPENDENCIES
 
     def __init__(self, context=dict()):
-        super().__init__(context=context)
         self.pusher_client = Pusher.from_url(settings.NOTIFICATIONS_PUSHER_CHANNELS_URL)
+        super().__init__(context=context)
 
     def send(self, payload):
         self.pusher_client.trigger(**payload)

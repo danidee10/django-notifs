@@ -12,7 +12,6 @@ moto==2.2.11
 pre-commit==2.15.0
 pusher==3.0.0
 pydantic==1.8.2
-pyfcm==1.5.4
 pytz==2017.2
 requests==2.25.1
 slack_sdk==3.11.2
