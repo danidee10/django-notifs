@@ -1,4 +1,4 @@
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 from django.test import SimpleTestCase
 
@@ -23,7 +23,6 @@ class PusherNotificationChannel(BaseNotificationChannel):
 
 
 class TestPusherChannelsProvider(SimpleTestCase):
-    @patch('pusher.Pusher.trigger', Mock())
     @patch(
         'notifications.providers.PusherChannelsNotificationProvider.HAS_DEPENDENCIES',
         False,
