@@ -1,3 +1,5 @@
+from typing import Dict, Optional
+
 from pydantic import BaseModel, conlist
 
 try:
@@ -15,6 +17,9 @@ from . import BaseNotificationProvider
 class BaseFCMSchema(BaseModel):
     message_title: str
     message_body: str
+    message_icon: Optional[str]
+    sound: str = 'default'
+    data_message: Optional[Dict]
 
 
 class FCMWebSchema(BaseFCMSchema):
