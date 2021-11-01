@@ -11,6 +11,7 @@ from notifications.providers import BaseNotificationProvider
 
 class BaseBackend(metaclass=abc.ABCMeta):
 
+    logging.getLogger().setLevel(logging.INFO)
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger('django_notifs.backends.base')
 

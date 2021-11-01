@@ -24,6 +24,7 @@ class BaseNotificationProvider(metaclass=abc.ABCMeta):
                 missing_package=self.package, provider=self.name
             )
 
+        logging.getLogger().setLevel(logging.INFO)
         self.logger = logging.getLogger(f'{self.name}_provider')
         self.context = context
 
