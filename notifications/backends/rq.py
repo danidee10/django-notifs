@@ -9,11 +9,11 @@ from rq import Retry
 from .. import default_settings as settings
 from .base import BaseBackend
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger('django_notifs.backends.rq')
-
 
 class RQBackend(BaseBackend):
+
+    logger = logging.getLogger('django_notifs.backends.base')
+
     def produce(self, provider, payload, context, countdown):
         retry = None
         if settings.NOTIFICATIONS_RETRY:
