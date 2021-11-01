@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import logging
+
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
@@ -26,6 +28,9 @@ def consume(self, provider, payload, context):
 
 
 class CeleryBackend(BaseBackend):
+
+    logger = logging.getLogger('django_notifs.backends.celery')
+
     def produce(self, provider, payload, context, countdown):
         consume.apply_async(
             args=[provider, payload, context],

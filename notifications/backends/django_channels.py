@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, unicode_literals
 
+import logging
+
 import channels.layers
 from asgiref.sync import async_to_sync
 
@@ -10,6 +12,9 @@ from .base import BaseBackend
 
 
 class ChannelsBackend(BaseBackend):
+
+    logger = logging.getLogger('django_notifs.backends.channels')
+
     def produce(self, provider, payload, context, countdown):
         channel_layer = channels.layers.get_channel_layer(
             settings.NOTIFICATIONS_QUEUE_NAME
