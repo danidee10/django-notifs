@@ -7,6 +7,7 @@ from django.utils.module_loading import import_string
 
 from notifications.channels import BaseNotificationChannel
 from notifications.providers import BaseNotificationProvider
+from notifications.signals import post_bulk_send, post_send, pre_bulk_send, pre_send
 
 
 class BaseBackend(metaclass=abc.ABCMeta):
@@ -27,13 +28,25 @@ class BaseBackend(metaclass=abc.ABCMeta):
     @classmethod
     def consume(cls, provider, payload, context):
         notification_provider = cls.get_notification_provider(provider, context)
+        provider_class = notification_provider.__class__
         notification_provider.validate(payload)
 
         bulk = context.get('bulk', False)
         if bulk is True:
-            notification_provider.send_bulk(payload)
+            pre_bulk_send.send(sender=provider_class, context=context, payload=payload)
+            response = notification_provider.send_bulk(payload)
+            post_bulk_send.send(
+                send=provider_class, context=context, payload=payload, response=response
+            )
         else:
-            notification_provider.send(payload)
+            pre_send.send(sender=provider_class, context=context, payload=payload)
+            response = notification_provider.send(payload)
+            post_send.send(
+                sender=provider_class,
+                context=context,
+                payload=payload,
+                response=response,
+            )
 
         cls.logger.info(
             'Sent notification with the %s provider with context: %s\n'

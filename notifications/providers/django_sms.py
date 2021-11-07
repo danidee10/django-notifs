@@ -35,9 +35,11 @@ class DjangoSMSNotificationProvider(BaseNotificationProvider):
 
     def send(self, payload):
         sms_message = self._get_sms_message(payload)
-        sms_message.send()
+
+        return sms_message.send()
 
     def send_bulk(self, payloads):
         messages = (self._get_sms_message(payload) for payload in payloads)
         connection = get_connection()
-        connection.send_messages(messages)
+
+        return connection.send_messages(messages)

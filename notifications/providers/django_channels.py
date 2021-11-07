@@ -41,7 +41,3 @@ class DjangoChannelsNotificationProvider(BaseNotificationProvider):
 
     def send(self, payload):
         async_to_sync(self.channel_layer.group_send)(self.destination, payload)
-
-    def send_bulk(self, payloads):
-        for payload in payloads:
-            self.send(payload)

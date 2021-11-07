@@ -15,8 +15,8 @@ from . import BaseNotificationProvider
 
 
 class BaseFCMSchema(BaseModel):
-    message_title: str
-    message_body: str
+    message_title: Optional[str]
+    message_body: Optional[str]
     message_icon: Optional[str]
     sound: str = 'default'
     data_message: Optional[Dict]
@@ -56,7 +56,11 @@ class FCMWebNotificationProvider(BaseNotificationProvider):
         if response['failure'] != 0:
             self.logger.error(response)
 
+        return response
+
     def send_bulk(self, payloads):
         response = self.fcm_client.notify_multiple_devices(**payloads)
         if response['failure'] != 0:
             self.logger.error(response)
+
+        return response
