@@ -36,7 +36,10 @@ class BaseBackend(metaclass=abc.ABCMeta):
             pre_bulk_send.send(sender=provider_class, context=context, payload=payload)
             response = notification_provider.send_bulk(payload)
             post_bulk_send.send(
-                send=provider_class, context=context, payload=payload, response=response
+                sender=provider_class,
+                context=context,
+                payload=payload,
+                response=response,
             )
         else:
             pre_send.send(sender=provider_class, context=context, payload=payload)
