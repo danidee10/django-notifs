@@ -202,7 +202,7 @@ This signal is sent after a notification is sent
 +--------------+--------------------------------+
 
 pre_bulk_send
----------
+-------------
 
 This signal is sent before a bulk notification is sent
 
