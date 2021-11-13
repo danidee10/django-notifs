@@ -48,9 +48,11 @@ class EmailNotificationProvider(BaseNotificationProvider):
 
     def send(self, payload):
         email_message = self._get_email_message(payload)
-        email_message.send()
+
+        return email_message.send()
 
     def send_bulk(self, payloads):
         messages = (self._get_email_message(payload) for payload in payloads)
         connection = get_connection()
-        connection.send_messages(messages)
+
+        return connection.send_messages(messages)

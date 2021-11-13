@@ -1,12 +1,12 @@
 Usage
-************
+*****
 
 .. _you'd normally do: http://docs.celeryproject.org/en/latest/django/first-steps-with-django.html
 .. _Celery settings in the repo: https://github.com/danidee10/django-notifs/blob/master/notifs/settings.py
 
 
 Quick start
------------
+===========
 
 To Create/Send a notification import the notify function and call it with the following arguments::
 
@@ -65,7 +65,7 @@ and decide how each individual notification should be sent
 
 
 Bulk sending
-------------
+============
 
 You can send bulk notifications by setting the ``bulk`` property to ``True`` in the context dictionary::
 
@@ -91,7 +91,7 @@ or::
 
 
 Notification Model
-------------------
+==================
 
 Django notifs includes an inbuilt notification model with the following fields:
 
@@ -113,7 +113,7 @@ The values of the fields can easily be used to construct the notification messag
 
 
 Extra/Arbitrary Data
---------------------
+====================
 
 Besides the standard fields, django-notifs allows you to attach arbitrary data (as JSON) to a notification.
 Simply pass in a dictionary as the extra_data argument.
@@ -124,7 +124,7 @@ Simply pass in a dictionary as the extra_data argument.
 
 
 Sending notifications asynchronously
-------------------------------------
+====================================
 
 ``django-notifs`` is designed to support different backends for delivering notifications.
 By default it uses the ``Synchronous`` backend which delivers notifications synchronously.
@@ -136,7 +136,8 @@ By default it uses the ``Synchronous`` backend which delivers notifications sync
 
 
 Delayed notifications
--------------------------------
+=====================
+
 You can delay a notification by passing the ``countdown`` (in seconds) parameter to the ``notify`` function::
 
     # delay notification for one minute
@@ -144,7 +145,7 @@ You can delay a notification by passing the ``countdown`` (in seconds) parameter
 
 
 Reading notifications
----------------------
+=====================
 
 To read a notification use the read method::
 
@@ -163,3 +164,71 @@ To read a notification use the read method::
     Internally,it's used to check if the user has the right to read the notification.
     If you pass in the wrong recipient or you omit it entirely, ``django-notifs`` will raise a
     ``NotificationError``
+
+
+Signals
+=======
+
+pre_send
+--------
+
+This signal is sent before a notification is sent
+
++-------------+--------------------------+
+| Argument    | Value                    |
++=============+==========================+
+| ``sender``  | The provider class       |
++-------------+--------------------------+
+| ``context`` | The Notification context |
++-------------+--------------------------+
+| ``payload`` | The Notification payload |
++-------------+--------------------------+
+
+post_send
+---------
+
+This signal is sent after a notification is sent
+
++--------------+--------------------------------+
+| Argument     | Value                          |
++==============+================================+
+| ``sender``   | The provider class             |
++--------------+--------------------------------+
+| ``context``  | The Notification context       |
++--------------+--------------------------------+
+| ``payload``  | The Notification payload       |
++--------------+--------------------------------+
+| ``response`` | The Response from the provider |
++--------------+--------------------------------+
+
+pre_bulk_send
+-------------
+
+This signal is sent before a bulk notification is sent
+
++-------------+--------------------------+
+| Argument    | Value                    |
++=============+==========================+
+| ``sender``  | The provider class       |
++-------------+--------------------------+
+| ``context`` | The Notification context |
++-------------+--------------------------+
+| ``payload`` | The Notification payload |
++-------------+--------------------------+
+
+post_bulk_send
+--------------
+
+This signal is sent after a bulk notification is sent
+
++--------------+--------------------------------+
+| Argument     | Value                          |
++==============+================================+
+| ``sender``   | The provider class             |
++--------------+--------------------------------+
+| ``context``  | The Notification context       |
++--------------+--------------------------------+
+| ``payload``  | The Notification payload       |
++--------------+--------------------------------+
+| ``response`` | The Response from the provider |
++--------------+--------------------------------+

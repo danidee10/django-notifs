@@ -29,4 +29,4 @@ class SlackNotificationProvider(BaseNotificationProvider):
         self.slack_client = WebClient(token=settings.NOTIFICATIONS_SLACK_BOT_TOKEN)
 
     def send(self, payload):
-        self.slack_client.chat_postMessage(**payload)
+        return self.slack_client.chat_postMessage(**payload)

@@ -32,7 +32,7 @@ class PusherChannelsNotificationProvider(BaseNotificationProvider):
         self.pusher_client = Pusher.from_url(settings.NOTIFICATIONS_PUSHER_CHANNELS_URL)
 
     def send(self, payload):
-        self.pusher_client.trigger(**payload)
+        return self.pusher_client.trigger(**payload)
 
     def send_bulk(self, payloads):
-        self.pusher_client.trigger_batch(payloads)
+        return self.pusher_client.trigger_batch(payloads)

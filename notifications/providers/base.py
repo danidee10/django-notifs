@@ -94,5 +94,9 @@ class BaseNotificationProvider(metaclass=abc.ABCMeta):
             raise InvalidNotificationProviderPayload from err
 
     def send_bulk(self, payloads):
+        responses = []
         for payload in payloads:
-            self.send(payload)
+            response = self.send(payload)
+            responses.append(response)
+
+        return responses
