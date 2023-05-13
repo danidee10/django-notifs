@@ -144,8 +144,36 @@ Payload
 
 |
 
-FCM (Firebase Web push)
-=======================
+FCM (Firebase Cloud messaging)
+==============================
+
+.. autoclass:: FCMNotificationProvider
+
+name: ``'fcm'``
+
+Settings
+--------
+
+::
+
+    NOTIFICATIONS_FCM_API_KEY=xxxxxxx  # FCM Api key
+    NOTIFICATIONS_FCM_PROXY = {}  # FCM proxy
+
+Payload
+-------
+
+Single:
+
+.. autopydantic_model:: notifications.providers.fcm.FCMWebSchema
+
+Bulk:
+
+.. autopydantic_model:: notifications.providers.fcm.BulkFCMWebSchema
+
+|
+
+FCM (Firebase Web push) (Deprecated use the new fcm backend)
+============================================================
 
 .. autoclass:: FCMWebNotificationProvider
 
@@ -156,21 +184,20 @@ Settings
 
 ::
 
-    NOTIFICATIONS_FCM_WEB_API_KEY=xxxxxxx  # FCM Api key
-    NOTIFICATIONS_FCM_WEB_PROXY = {}  # FCM proxy
+    NOTIFICATIONS_FCM_KEY=xxxxxxx
 
 Payload
 -------
 
-Single:
+Single::
 
-.. autopydantic_model:: notifications.providers.fcm_web.FCMWebSchema
-
-Bulk:
-
-.. autopydantic_model:: notifications.providers.fcm_web.BulkFCMWebSchema
-
-|
+    {
+        'title': 'notification title',
+        'body': 'body',
+        'click_action': 'https://example.com',
+        'icon': 'icon,
+        'to': 'user_token',
+    }
 
 Twitter status update
 =====================

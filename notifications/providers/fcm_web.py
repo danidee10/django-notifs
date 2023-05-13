@@ -1,13 +1,8 @@
-from typing import Dict, Optional
+"""Deprecated FCM Adapter. Use the new 'fcm' backend"""
+
+from typing import Dict
 
 from pydantic import BaseModel, conlist
-
-try:
-    from pyfcm import FCMNotification
-
-    HAS_DEPENDENCIES = True
-except ImportError:
-    HAS_DEPENDENCIES = False
 
 from notifications import default_settings as settings
 
@@ -15,35 +10,28 @@ from . import BaseNotificationProvider
 
 
 class BaseFCMSchema(BaseModel):
-    message_title: Optional[str]
-    message_body: Optional[str]
-    message_icon: Optional[str]
-    sound: str = 'default'
-    data_message: Optional[Dict]
+    pass
 
 
 class FCMWebSchema(BaseFCMSchema):
-    registration_id: str
+    pass
 
 
 class BulkFCMWebSchema(BaseFCMSchema):
-    registration_ids: conlist(str, min_items=1)
+    registration_ids: conlist(Dict, min_items=1)
+
+
+import requests
+from django.conf import settings
+
+from . import BaseNotificationProvider
 
 
 class FCMWebNotificationProvider(BaseNotificationProvider):
     """Google FCM Web Provider."""
 
     name = 'fcm_web'
-    package = 'pyfcm'
-
-    HAS_DEPENDENCIES = HAS_DEPENDENCIES
-
-    def __init__(self, context=dict()):
-        super().__init__(context=context)
-        self.fcm_client = FCMNotification(
-            api_key=settings.NOTIFICATIONS_FCM_WEB_API_KEY,
-            proxy_dict=settings.NOTIFICATIONS_FCM_WEB_PROXY,
-        )
+    HAS_DEPENDENCIES = True
 
     def get_validator(self):
         if self.context.get('bulk', False) is True:
@@ -52,15 +40,22 @@ class FCMWebNotificationProvider(BaseNotificationProvider):
         return FCMWebSchema
 
     def send(self, payload):
-        response = self.fcm_client.notify_single_device(**payload)
-        if response['failure'] != 0:
-            self.logger.error(response)
-
-        return response
+        requests.post(
+            'https://fcm.googleapis.com/fcm/send',
+            json={
+                'notification': {
+                    'title': payload['title'],
+                    'body': payload['body'],
+                    'click_action': payload['click_action'],
+                    'icon': payload['icon'],
+                },
+                'to': payload['to'],
+            },
+            headers={
+                'Authorization': 'key={}'.format(settings.NOTIFICATIONS_FCM_WEB_KEY)
+            },
+        )
 
     def send_bulk(self, payloads):
-        response = self.fcm_client.notify_multiple_devices(**payloads)
-        if response['failure'] != 0:
-            self.logger.error(response)
-
-        return response
+        for payload in payloads:
+            self.send(payload)

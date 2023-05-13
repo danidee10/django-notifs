@@ -17,23 +17,23 @@ VERSION = '4.0.0'
 REQUIRED = [
     'django>=2.2',
     'requests>=2.25.1',
-    'django-jsonfield-backport>=1.0.4',
+    'django-jsonfield-backport<=1.0.4',
     'pydantic<=1.8.2',
 ]
-TEST_REQUIRES = ['coverage>=5.4', 'channels>=3.0.3', 'tox>=3.24.4', 'moto[sqs]>=2.2.11']
+TEST_REQUIRES = ['coverage>=5.4', 'channels<=3.0.3', 'tox<=3.24.4', 'moto[sqs]<=2.2.11']
 EXTRAS_REQUIRE = {
     # Backend requirements
-    'celery': ['celery>=4.1.0'],
-    'rq': ['django-rq>=2.4.0'],
-    'channels': ['channels>=3.0.3', 'channels-redis>=3.2.0'],
-    'sqs_lambda': ['boto3>=1.18.48'],
+    'celery': ['celery<=4.1.0'],
+    'rq': ['django-rq<=2.4.0'],
+    'channels': ['channels<=3.0.3', 'channels-redis<=3.2.0'],
+    'sqs_lambda': ['boto3<=1.18.48'],
     # Provider requirements
-    'fcm_web': ['pyfcm>=1.5.4'],
-    'pusher_channels': ['pusher>=3.0.0'],
-    'slack': ['slack_sdk>=3.11.2'],
-    'anymail': ['django-anymail>=8.4'],
-    'django_sms': ['django-sms>=0.5.0'],
-    'twitter': ['tweepy>=4.1.0'],
+    'fcm_web': ['pyfcm<=1.5.4'],
+    'pusher_channels': ['pusher<=3.0.0'],
+    'slack': ['slack_sdk<=3.11.2'],
+    'anymail': ['django-anymail<=8.4'],
+    'django_sms': ['django-sms<=0.5.0'],
+    'twitter': ['tweepy<=4.1.0'],
 }
 EXCLUDE = ['notifs', 'tests', '*.tests', '*.tests.*', 'tests.*']
 
