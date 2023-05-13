@@ -31,6 +31,7 @@ class FCMWebNotificationProvider(BaseNotificationProvider):
     """Google FCM Web Provider."""
 
     name = 'fcm_web'
+    package = ''
     HAS_DEPENDENCIES = True
 
     def get_validator(self):
